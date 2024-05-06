@@ -1,0 +1,7 @@
+$TableApi # Header
+AUTOWAIT TRUE 20
+User1 take_seat > {"side":"red"}
+User2 take_seat > {"side":"blue"}
+User1 set_readiness > {"value":true}
+User2 set_readiness > {"value":true}
+AUTOWAIT FALSE
