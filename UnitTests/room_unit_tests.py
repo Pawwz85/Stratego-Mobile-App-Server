@@ -1,5 +1,3 @@
-import cProfile
-import re
 import unittest
 
 from UnitTests.TestUtil.GameplayScenarioGenerator import GameplayScenarioGenerator
@@ -27,7 +25,7 @@ class MyTestCase(unittest.TestCase):
     def test_expected_behaviour(self):
         main_loop = MainLoopStub()
         event_man = Eventmanager(main_loop.get_resource_manager())
-        room = Room.Builder(main_loop.get_resource_manager()).set_table_builder(
+        room = Room.Builder(main_loop.get_resource_manager(), lambda: None).set_table_builder(
             Table.Builder(main_loop.get_resource_manager()).
             set_start_timer(100).
             set_setup_time(300)

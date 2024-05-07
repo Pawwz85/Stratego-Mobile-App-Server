@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from typing import Callable
 import uuid
 
 from src.ResourceManager import ResourceManager, DelayedTask, ResourceManagerJob
@@ -8,14 +8,15 @@ from src.stratego import Side
 from src.table import Table, TableApi, TableGamePhase
 from src.chat import Chat, ChatApi
 
-# todo: Create a room job that checks if room is empty or c
+
 class Room:
     class Builder:
-        def __init__(self, resource_manager: ResourceManager):
+        def __init__(self, resource_manager: ResourceManager, mark_for_deletion: Callable[[str], any]):
             self.resourceManager = resource_manager
             self.table_builder = Table.Builder(resource_manager)
             self.chat_cap = 1024
             self.password: str | None = None
+            self.mark_for_deletion: Callable = mark_for_deletion
 
         def set_table_builder(self, table_builder: Table.Builder):
             self.table_builder = table_builder
@@ -35,10 +36,11 @@ class Room:
             result._password = self.password
             return result
 
-    def __init__(self, resource_manager: ResourceManager, table_builder: Table.Builder):
+    def __init__(self, resource_manager: ResourceManager, table_builder: Table.Builder, mark_for_deletion: Callable[[str], any]):
         self.users: dict[int, User] = dict()
         self.user_list_updates = 0
         self.resourceManager = resource_manager
+        self.__mark_self_for_deletion = mark_for_deletion
         self._table = (table_builder.
                        set_seat_observer(self.__on_seat_change).
                        set_event_channels({None: self.__spectator_channel,
@@ -47,6 +49,7 @@ class Room:
                        build())
         self._chat = Chat(self.event_broadcast)
         self._password = None
+        self._job: None | ResourceManagerJob = None
         self._id = uuid.uuid4().hex  # TODO: replace uuid with something more memorable
 
     def player_set(self):
@@ -54,10 +57,11 @@ class Room:
 
     def add_user(self, user: User):
         self.users[user.id] = user
-
+        if self._job is not None:
+            self._job = ResourceManagerJob(lambda : self.__empty_check())
+            self.resourceManager.add_job(self._job)
         welcome_event = {"type": "room_welcome_event", "room_id": self._id, "password": self._password}
         user.session.receive(welcome_event)
-
         self.user_list_updates += 1
         add_user_event = {
             "type": "room_user_event",
@@ -71,6 +75,11 @@ class Room:
         }
 
         self.event_broadcast(add_user_event)
+
+    def __empty_check(self):
+        if len(self.users) == 0:
+            self.kill()
+            self.__mark_self_for_deletion()
 
     def delete_user(self, user: User):
         if user.id in self.player_set():
@@ -89,6 +98,9 @@ class Room:
 
     def get_password(self):
         return self._password
+
+    def get_id(self):
+        return self._id
 
     def get_table_api(self):
         return TableApi(self._table)
@@ -145,6 +157,11 @@ class Room:
 
     def get_table(self):
         return self._table
+
+    def kill(self):
+        self._table.kill()
+        if self._job is not None:
+            self._job.cancel()
 
 
 class RoomApi:
