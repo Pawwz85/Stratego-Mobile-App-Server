@@ -7,12 +7,13 @@ from src.User import User
 from src.stratego import Side
 from src.table import Table, TableApi, TableGamePhase
 from src.chat import Chat, ChatApi
-
+from src.Events import EventLogicalEndpoint, Eventmanager
 
 class Room:
     class Builder:
         def __init__(self, resource_manager: ResourceManager, mark_for_deletion: Callable[[str], any]):
             self.resourceManager = resource_manager
+            self.event_manager: Eventmanager = Eventmanager(resource_manager)
             self.table_builder = Table.Builder(resource_manager)
             self.chat_cap = 1024
             self.password: str | None = None
@@ -30,13 +31,18 @@ class Room:
             self.password = password
             return self
 
+        def set_event_manager(self, event_manager: Eventmanager):
+            self.event_manager = event_manager
+            return self
+
         def build(self) -> Room:
-            result: Room = Room(self.resourceManager, self.table_builder)
+            result: Room = Room(self.resourceManager, self.event_manager, self.table_builder, self.mark_for_deletion)
             result._chat = Chat(result.event_broadcast, self.chat_cap)
             result._password = self.password
             return result
 
-    def __init__(self, resource_manager: ResourceManager, table_builder: Table.Builder, mark_for_deletion: Callable[[str], any]):
+    def __init__(self, resource_manager: ResourceManager, event_manager: Eventmanager,
+                 table_builder: Table.Builder, mark_for_deletion: Callable[[str], any]):
         self.users: dict[int, User] = dict()
         self.user_list_updates = 0
         self.resourceManager = resource_manager
@@ -51,6 +57,7 @@ class Room:
         self._password = None
         self._job: None | ResourceManagerJob = None
         self._id = uuid.uuid4().hex  # TODO: replace uuid with something more memorable
+        self.event_manager = event_manager
 
     def player_set(self):
         return self._table.get_seat_manager().seats.values()
@@ -115,22 +122,24 @@ class Room:
     def __spectator_channel(self, event_body: dict):
         player_set = self.player_set()
         event_body["room_id"] = self._id
-        for user in self.users.values():
-            if user.id is not player_set:
-                user.session.receive(event_body)
+
+        sessions = [user.session for user in self.users.values() if user.id not in player_set]
+        multiCastEndpoint = EventLogicalEndpoint.merge(sessions, self.event_manager)
+        multiCastEndpoint.receive(event_body)
+
+    def event_broadcast(self, event: dict):
+        event["room_id"] = self._id
+        sessions = [user.session for user in self.users.values()]
+        multiCastEndpoint = EventLogicalEndpoint.merge(sessions, self.event_manager)
+        multiCastEndpoint.receive(event)
 
     def __players_channel(self, event_body: dict, side: Side):
+        # We can send this directly to users, as mplayer numbers is always small (1 or 0)
         player_id = self._table.get_seat_manager().seats.get(side, None)
         player = self.users.get(player_id)
         event_body["room_id"] = self._id
         if player is not None:
             player.session.receive(event_body)
-
-    def event_broadcast(self, event: dict):
-
-        event["room_id"] = self._id
-        for u in self.users.values():
-            u.session.receive(event)
 
     def get_chat(self):
         return self._chat
@@ -167,6 +176,22 @@ class Room:
 class RoomApi:
     def __init__(self, room: Room):
         self.room = room
+        self.strategies: dict[str, Callable[[User, dict], tuple[bool, str | None] | dict]] = {
+            "exit_room": lambda user, req: self.exit_room(user),
+            "get_room_users": lambda user, req: self.get_room_users(user),
+            "get_board": lambda user, req: self.get_board(user),
+            "claim_seat": lambda user, req: self.claim_seat(user, req),
+            "release_seat": lambda user, req: self.release_seat(user),
+            "set_ready": lambda user, req: self.set_readiness(user, req),
+            "get_chat_metadata": lambda user, req: self.get_chat_metadata(user),
+            "get_chat_messages": lambda user, req: self.get_chat_messages(user, request),
+            "send_chat_message": lambda  user, req: self.post_message(user, req),
+            "send_setup": lambda user, req: self.send_setup(user, req),
+            "send_move": lambda user, req: self.make_move(user, req),
+            "leave_room": lambda user, req: self.exit_room(user),
+            "set_rematch_willingess": lambda user, req: self.set_rematch_willingness(user, req)
+        }
+
 
     def join(self, user: User, request: dict) -> tuple[bool, str | None]:
         if user.id in self.room.users:
@@ -255,3 +280,12 @@ class RoomApi:
         if user.id not in self.room.users.keys():
             return False, "You must join room to access this command"
         return self.room.get_table_api().set_rematch_willingness(user, request)
+
+    def __call__(self, user: User, request: dict) -> tuple[bool, str | None] | dict:
+        request_type: str = request.get("type", None)
+        if type(request_type) is not str:
+            return False, f'Field "type" should have type str, found {type(request_type)}'
+        strategy = self.strategies.get(request_type, None)
+        if strategy is None:
+            return False, f"Can not found room command associatted with type {request_type}"
+        return strategy(user, request)

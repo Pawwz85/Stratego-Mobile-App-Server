@@ -70,11 +70,29 @@ class EventLogicalEndpoint:
     it will receive it in all of its mailboxes.
     """
 
-    def __init__(self, event_man: Eventmanager):
+    def __init__(self, event_man: Eventmanager, signature: str | list[str]):
         self.endpoints: set[IEventReceiver] = set()
         self._event_manager = event_man
+        self.signature = signature
 
     def receive(self, event: dict):
+        ev_copy = event.copy()
+        ev_copy["signature"] = self.signature
         for mailbox in self.endpoints:
-            e = UniCastEvent(event)
+            e = UniCastEvent(ev_copy)
             self._event_manager.start_delivery(e, mailbox)
+
+    @staticmethod
+    def merge(logical_endpoints: list[EventLogicalEndpoint], event_manager: Eventmanager) -> EventLogicalEndpoint:
+        result_endpoint = set()
+        result_signature = []
+        for endpoint in logical_endpoints:
+            result_endpoint = result_endpoint.union(endpoint.endpoints)
+            if type(endpoint.signature) is not list:
+                result_signature += [endpoint.signature]
+            else:
+                result_signature += endpoint.signature
+
+        result = EventLogicalEndpoint(event_manager, result_signature)
+        result.endpoints = result_endpoint
+        return result
