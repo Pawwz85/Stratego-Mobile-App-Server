@@ -2,8 +2,8 @@ import unittest
 from TestUtil.MainLoopStub import MainLoopStub
 from TestUtil.UserSimulation import UserSimulationInterpreter
 from TestUtil.GameplayScenarioGenerator import GameplayScenarioGenerator
-from src.table import *
-from src.Events import Eventmanager
+from src.Core.table import *
+from src.Events.Events import Eventmanager
 
 
 class MyTestCase(unittest.TestCase):

@@ -1,4 +1,4 @@
-from src.Events import EventLogicalEndpoint, Eventmanager
+from src.Events.Events import EventLogicalEndpoint, Eventmanager
 
 
 class User:
@@ -7,6 +7,7 @@ class User:
         self.username = username
         self.id = user_id
         self.password = password
+        self.room_count = 0
         self.session: EventLogicalEndpoint =\
             EventLogicalEndpoint(event_man, username if signature is None else signature)
 

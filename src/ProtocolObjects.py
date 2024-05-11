@@ -3,7 +3,7 @@
 """
 from __future__ import annotations
 
-from src.stratego import PieceType, _piece_type_to_str
+from src.Core.stratego import PieceType, _piece_type_to_str
 
 
 class ParsingException(Exception):

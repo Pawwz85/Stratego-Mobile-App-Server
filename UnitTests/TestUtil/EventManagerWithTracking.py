@@ -1,4 +1,4 @@
-from src.Events import Eventmanager, ResourceManager, UniCastEvent, IEventReceiver
+from src.Events.Events import Eventmanager, ResourceManager, UniCastEvent, IEventReceiver
 #  TODO: Make this work
 
 

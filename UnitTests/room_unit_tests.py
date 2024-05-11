@@ -4,9 +4,8 @@ from UnitTests.TestUtil.GameplayScenarioGenerator import GameplayScenarioGenerat
 from UnitTests.TestUtil.MainLoopStub import MainLoopStub
 from UnitTests.TestUtil.UserSimulation import UserSimulationInterpreter, convert_script
 from UnitTests.TestUtil.EventManagerWithTracking import EvenManagerWithTracking as Eventmanager
-from src.ResourceManager import DelayedTask
-from src.Room import Room, RoomApi
-from src.table import Table
+from src.Core.Room import Room, RoomApi
+from src.Core.table import Table
 
 
 class MyTestCase(unittest.TestCase):

@@ -2,8 +2,8 @@
     This file is a Stratego game that can be played in console
 """
 
-from src.stratego import *
-from src.stratego import _piece_type_setup_count, _lake_set
+from src.Core.stratego import *
+from src.Core.stratego import _piece_type_setup_count, _lake_set
 import random
 
 

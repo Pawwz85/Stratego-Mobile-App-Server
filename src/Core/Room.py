@@ -2,12 +2,13 @@ from __future__ import annotations
 from typing import Callable
 import uuid
 
-from src.ResourceManager import ResourceManager, DelayedTask, ResourceManagerJob
-from src.User import User
-from src.stratego import Side
-from src.table import Table, TableApi, TableGamePhase
-from src.chat import Chat, ChatApi
-from src.Events import EventLogicalEndpoint, Eventmanager
+from src.Core.ResourceManager import ResourceManager, ResourceManagerJob
+from src.Core.User import User
+from src.Core.stratego import Side
+from src.Core.table import Table, TableApi
+from src.Core.chat import Chat, ChatApi
+from src.Events.Events import EventLogicalEndpoint, Eventmanager
+
 
 class Room:
     class Builder:
@@ -64,8 +65,9 @@ class Room:
 
     def add_user(self, user: User):
         self.users[user.id] = user
+        user.room_count += 1
         if self._job is not None:
-            self._job = ResourceManagerJob(lambda : self.__empty_check())
+            self._job = ResourceManagerJob(lambda: self.__empty_check())
             self.resourceManager.add_job(self._job)
         welcome_event = {"type": "room_welcome_event", "room_id": self._id, "password": self._password}
         user.session.receive(welcome_event)
@@ -86,13 +88,14 @@ class Room:
     def __empty_check(self):
         if len(self.users) == 0:
             self.kill()
-            self.__mark_self_for_deletion()
+            self.__mark_self_for_deletion(self._id)
 
     def delete_user(self, user: User):
         if user.id in self.player_set():
             self.get_table_api().leave_table(user)
 
         if user.id in self.users.keys():
+            user.room_count -= 1
             self.users.pop(user.id)
             self.user_list_updates += 1
             del_user_event = {
@@ -124,14 +127,14 @@ class Room:
         event_body["room_id"] = self._id
 
         sessions = [user.session for user in self.users.values() if user.id not in player_set]
-        multiCastEndpoint = EventLogicalEndpoint.merge(sessions, self.event_manager)
-        multiCastEndpoint.receive(event_body)
+        multi_cast_endpoint = EventLogicalEndpoint.merge(sessions, self.event_manager)
+        multi_cast_endpoint.receive(event_body)
 
     def event_broadcast(self, event: dict):
         event["room_id"] = self._id
         sessions = [user.session for user in self.users.values()]
-        multiCastEndpoint = EventLogicalEndpoint.merge(sessions, self.event_manager)
-        multiCastEndpoint.receive(event)
+        multi_cast_endpoint = EventLogicalEndpoint.merge(sessions, self.event_manager)
+        multi_cast_endpoint.receive(event)
 
     def __players_channel(self, event_body: dict, side: Side):
         # We can send this directly to users, as mplayer numbers is always small (1 or 0)
@@ -184,14 +187,13 @@ class RoomApi:
             "release_seat": lambda user, req: self.release_seat(user),
             "set_ready": lambda user, req: self.set_readiness(user, req),
             "get_chat_metadata": lambda user, req: self.get_chat_metadata(user),
-            "get_chat_messages": lambda user, req: self.get_chat_messages(user, request),
-            "send_chat_message": lambda  user, req: self.post_message(user, req),
+            "get_chat_messages": lambda user, req: self.get_chat_messages(user, req),
+            "send_chat_message": lambda user, req: self.post_message(user, req),
             "send_setup": lambda user, req: self.send_setup(user, req),
             "send_move": lambda user, req: self.make_move(user, req),
             "leave_room": lambda user, req: self.exit_room(user),
-            "set_rematch_willingess": lambda user, req: self.set_rematch_willingness(user, req)
+            "set_rematch_willingness": lambda user, req: self.set_rematch_willingness(user, req)
         }
-
 
     def join(self, user: User, request: dict) -> tuple[bool, str | None]:
         if user.id in self.room.users:
@@ -282,10 +284,10 @@ class RoomApi:
         return self.room.get_table_api().set_rematch_willingness(user, request)
 
     def __call__(self, user: User, request: dict) -> tuple[bool, str | None] | dict:
-        request_type: str = request.get("type", None)
+        request_type: str | None = request.get("type", None)
         if type(request_type) is not str:
             return False, f'Field "type" should have type str, found {type(request_type)}'
         strategy = self.strategies.get(request_type, None)
         if strategy is None:
-            return False, f"Can not found room command associatted with type {request_type}"
+            return False, f"Can not found room command associated with type {request_type}"
         return strategy(user, request)

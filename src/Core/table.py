@@ -5,12 +5,12 @@
 """
 from __future__ import annotations
 
-from typing import Callable, Tuple
+from typing import Callable
 
 from src.ProtocolObjects import ParsingException, PieceToken, Move
-from src.ResourceManager import ResourceManagerJob, DelayedTask, ResourceManager, process_time_ms
-from src.User import User
-from src.stratego import *
+from src.Core.ResourceManager import ResourceManagerJob, DelayedTask, ResourceManager, process_time_ms
+from src.Core.User import User
+from src.Core.stratego import *
 
 
 class UserTableRole(Enum):

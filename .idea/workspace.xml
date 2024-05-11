@@ -7,13 +7,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="">
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Now rooms will delete themselves when empty they are empty, unless they were just created&#10;- BackendApi will now verify time controls proposed by a user&#10;- Added a field signature in EventLogicalEndpoint to allow shared endpoints&#10;- EventLogicalEndpoints can now be merged in order to reduce amount of events being delivered">
+      <change afterPath="$PROJECT_DIR$/src/Core/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Events/RedisEventReceiver.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Events/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StrategoCLI.py" beforeDir="false" afterPath="$PROJECT_DIR$/StrategoCLI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/EventManagerWithTracking.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/EventManagerWithTracking.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/GameplayScenarioGenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/GameplayScenarioGenerator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/MainLoopStub.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/MainLoopStub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/UserSimulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/UserSimulation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UnitTests/room_unit_tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/room_unit_tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/table_unit_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/table_unit_test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BackendSystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/BackendSystem.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Events.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Events.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Room.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Room.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/User.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Events.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Events/Events.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ProtocolObjects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ProtocolObjects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ResourceManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/ResourceManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Room.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Room.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/User.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chat.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/chat.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/stratego.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,10 +50,10 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib/pyclbr.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/Room.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/Room.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -66,6 +81,7 @@
     &quot;Python tests.Python tests in BlackRedTreeTest.py.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests in room_unit_tests.py.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests in table_unit_test.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.BackendSystem.executor&quot;: &quot;Run&quot;,
     &quot;Python.GameplayScenarioGenerator.executor&quot;: &quot;Run&quot;,
     &quot;Python.Room.executor&quot;: &quot;Run&quot;,
     &quot;Python.StrategoCLI.executor&quot;: &quot;Run&quot;,
@@ -92,14 +108,36 @@
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\DataStructures" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Core" />
+      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Events" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\UnitTests\TestUtil" />
-      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\DataStructures" />
-      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\UnitTests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for room_unit_tests.MyTestCase.test_expected_behaviour">
+  <component name="RunManager" selected="Python.BackendSystem">
+    <configuration name="BackendSystem" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="pythonProject" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/BackendSystem.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
@@ -152,21 +190,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for table_unit_test.MyTestCase.test_gameplay_timeout" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="pythonProject" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;table_unit_test.MyTestCase.test_gameplay_timeout&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="Python tests for table_unit_test.MyTestCase.test_resign" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
@@ -199,18 +222,18 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.BackendSystem" />
         <item itemvalue="Python tests.Python tests for room_unit_tests.MyTestCase.test_expected_behaviour" />
         <item itemvalue="Python tests.Python tests in room_unit_tests.py" />
         <item itemvalue="Python tests.Python tests for table_unit_test.MyTestCase.test_expected_behavior" />
         <item itemvalue="Python tests.Python tests for table_unit_test.MyTestCase.test_resign" />
-        <item itemvalue="Python tests.Python tests for table_unit_test.MyTestCase.test_gameplay_timeout" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-5a2391486177-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13763.11" />
+        <option value="bundled-python-sdk-09665e90c3a7-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.15026.15" />
       </set>
     </attachedChunks>
   </component>
@@ -239,7 +262,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715085919676</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="- Now rooms will delete themselves when empty they are empty, unless they were just created&#10;- BackendApi will now verify time controls proposed by a user&#10;- Added a field signature in EventLogicalEndpoint to allow shared endpoints&#10;- EventLogicalEndpoints can now be merged in order to reduce amount of events being delivered">
+      <option name="closed" value="true" />
+      <created>1715368042497</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1715368042497</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -256,7 +287,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="A moderately massive commit, which defines business logic of the server. That includes:&#10;- Implementation of Stratago&#10;- Chat&#10;- Rooms&#10;- Server Events" />
     <MESSAGE value="- Now rooms will delete themselves when empty they are empty, unless they were just created&#10;- BackendApi will now verify time controls proposed by a user" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Now rooms will delete themselves when empty they are empty, unless they were just created&#10;- BackendApi will now verify time controls proposed by a user" />
+    <MESSAGE value="- Now rooms will delete themselves when empty they are empty, unless they were just created&#10;- BackendApi will now verify time controls proposed by a user&#10;- Added a field signature in EventLogicalEndpoint to allow shared endpoints&#10;- EventLogicalEndpoints can now be merged in order to reduce amount of events being delivered" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Now rooms will delete themselves when empty they are empty, unless they were just created&#10;- BackendApi will now verify time controls proposed by a user&#10;- Added a field signature in EventLogicalEndpoint to allow shared endpoints&#10;- EventLogicalEndpoints can now be merged in order to reduce amount of events being delivered" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -6,8 +6,7 @@ from __future__ import annotations
 import json
 import random
 
-from src.ProtocolObjects import PieceToken
-from src.stratego import _piece_type_setup_count, _piece_type_to_str, GameState, Side, game_state_from_setups
+from src.Core.stratego import _piece_type_setup_count, _piece_type_to_str, GameState, Side, game_state_from_setups
 from typing import Callable
 
 

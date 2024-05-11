@@ -2,7 +2,7 @@ from __future__ import annotations
 import json
 from abc import ABC, abstractmethod
 from typing import Callable
-from src.ResourceManager import DelayedTask, ResourceManager
+from src.Core.ResourceManager import DelayedTask, ResourceManager
 import uuid
 
 

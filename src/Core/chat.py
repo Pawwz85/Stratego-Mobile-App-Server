@@ -1,6 +1,6 @@
 from typing import Callable
 
-from src.User import User
+from src.Core.User import User
 
 
 class _ChatMessage:

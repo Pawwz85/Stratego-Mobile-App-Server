@@ -1,4 +1,4 @@
-from src.ResourceManager import *
+from src.Core.ResourceManager import *
 
 
 class MainLoopStub:

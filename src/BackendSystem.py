@@ -2,28 +2,28 @@
     This file defines a backend system, which is a main class of a worker thread.
     It controls lifecycle of other components, listens to redis pubs
 
-    TODO: Make that every user session is a set of IEventReceivers that are associated with valid frontend channel
     TODO: Add a commend to documentation that allows player to get room time control
-
+    TODO: Add a job to BackendSystem to remove users that are not in any room
 """
 from __future__ import annotations
 import json
 import math
-from typing import Callable
 
-import redis.asyncio as redis
+import redis as redis
 
-from ResourceManager import ResourceManager
-from Events import Eventmanager, IEventReceiver
-from Room import Room, RoomApi
-from src.User import User, UserDto
-from src.table import Table
+from src.Core.ResourceManager import ResourceManager, DelayedTask, ResourceManagerJob
+from src.Events.Events import Eventmanager
+from src.Events.RedisEventReceiver import RedisPubSubEventReceiver
+from src.Core.Room import Room, RoomApi
+from src.Core.User import User, UserDto
+from src.Core.table import Table
 from collections import deque
 
 
 class BackendSystem:
 
     def __init__(self):
+        self.api = BackendApi(self)
         self.resource_manager = ResourceManager()
         self.event_manager = Eventmanager(self.resource_manager)
         self.rooms: dict[str, Room] = dict()
@@ -33,16 +33,24 @@ class BackendSystem:
         self.redis = redis.from_url(self.config["redis_url"])
         self.pub_sub = self.redis.pubsub()
         self.pub_sub.subscribe(self.config["backend_api_channel_name"])
+        self.eventReceiver = RedisPubSubEventReceiver(lambda: None, self.event_manager, self.redis,
+                                                      self.config["frontend_api_channel_name"])
 
     def register_user(self, user: UserDto):
-        # Todo: pass some object that would allow to push events to the user
-        user_obj = User(user.username, user.password, user.user_id, self.event_manager)
-
-        user_obj.session.endpoints.add()
-        self.users_connected[user.user_id] = user_obj
+        if user.user_id not in self.users_connected.keys():
+            user_obj = User(user.username, user.password, user.user_id, self.event_manager)
+            user_obj.session.endpoints.add(self.eventReceiver)
+            self.users_connected[user.user_id] = user_obj
 
     def get_room_builder(self):
         return Room.Builder(self.resource_manager, lambda _id: self.rooms.pop(_id))
+
+    def __user_garbage_collector(self):
+        for id_, user in self.users_connected.items():
+            if user.room_count == 0:
+                self.users_connected.pop(id_)
+        next_check = DelayedTask(self.__user_garbage_collector, 60 * 1000)
+        self.resource_manager.add_delayed_task(next_check)
 
     def __scans_for_pubs(self):
         new_messages: deque[str] = deque()
@@ -71,6 +79,23 @@ class BackendSystem:
         user_dto = UserDto(user_json["username"], user_json["password"], user_json["user_id"])
         request: dict = js["request"]
         return user_dto, request
+
+    def iterate_requests(self):
+        reqs = self.__check_requests()
+        for req in reqs:
+            user_dto, request_body = BackendSystem.parse_request(req)
+            self.register_user(user_dto)
+            user = self.users_connected[user_dto.user_id]
+            response = self.api(user, request_body)
+            response["response_id"] = request_body["message_id"]
+            self.redis.publish(self.config["frontend_api_channel_name"], json.dumps(response))
+
+    def run(self):
+        self.resource_manager.add_delayed_task(DelayedTask(self.__user_garbage_collector, 60 * 1000))
+        self.resource_manager.add_job(ResourceManagerJob(self.iterate_requests))
+
+        while True:
+            self.resource_manager.iteration_of_job_execution()
 
 
 class BackendApi:
@@ -166,3 +191,8 @@ class BackendApi:
         return BackendApi.__produce_api_response(
             self.resolve_command(user, request)
         )
+
+
+if __name__ == "__main__":
+    sys = BackendSystem()
+    sys.run()

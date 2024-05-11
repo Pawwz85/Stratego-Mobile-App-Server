@@ -28,10 +28,11 @@ import json
 from enum import Enum
 from pyclbr import Class, readmodule_ex
 from collections import deque
-from src.User import User
-from src.ResourceManager import ResourceManager, DelayedTask
-from src.Events import Eventmanager, IEventReceiver
-from typing import Callable
+from src.Core.User import User
+from src.Core.ResourceManager import ResourceManager, DelayedTask
+from src.Events.Events import Eventmanager, IEventReceiver
+
+
 # TODO: add feature to allow casting ApiType to another ApiType
 
 
