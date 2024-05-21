@@ -7,14 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Created a primitive interface between websockets clients and our Backend Nodes Api.&#10;- Added a few unit test">
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- small bugfixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BackendSystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/BackendSystem.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/IStrategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/IStrategy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/IUserRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/IUserRepository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/chat.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/chat.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/Room.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Room.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/Frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/Frontend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FrontendBackendBridge/WebsocketBackendCaller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/FrontendBackendBridge/WebsocketBackendCaller.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -290,7 +286,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716321082193</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="- small bugfixes">
+      <option name="closed" value="true" />
+      <created>1716330531214</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1716330531214</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -310,7 +314,8 @@
     <MESSAGE value="- Now rooms will delete themselves when empty they are empty, unless they were just created&#10;- BackendApi will now verify time controls proposed by a user&#10;- Added a field signature in EventLogicalEndpoint to allow shared endpoints&#10;- EventLogicalEndpoints can now be merged in order to reduce amount of events being delivered" />
     <MESSAGE value="- Finished a runnable version of the backend server&#10;- Organized some src files" />
     <MESSAGE value="- Created a primitive interface between websockets clients and our Backend Nodes Api.&#10;- Added a few unit test" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Created a primitive interface between websockets clients and our Backend Nodes Api.&#10;- Added a few unit test" />
+    <MESSAGE value="- small bugfixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="- small bugfixes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

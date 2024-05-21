@@ -73,8 +73,6 @@ def disconnection_handler():
         close_room("user_" + user_dto.username)
     session.pop("user_dto")
 
-    # TODO: remove user from all rooms on worker threads
-
 
 @socketio.on("json")
 def json_payload_handler(js):

@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Callable
 import uuid
 
-from src.Core.ResourceManager import ResourceManager, ResourceManagerJob
+from src.Core.ResourceManager import ResourceManager, ResourceManagerJob, DelayedTask
 from src.Core.User import User
 from src.Core.stratego import Side
 from src.Core.table import Table, TableApi
@@ -57,6 +57,7 @@ class Room:
         self._chat = Chat(self.event_broadcast)
         self._password = None
         self._job: None | ResourceManagerJob = None
+        self._inactive_room_auto_termination: None | DelayedTask = None
         self._id = uuid.uuid4().hex  # TODO: replace uuid with something more memorable
         self.event_manager = event_manager
 
@@ -82,8 +83,8 @@ class Room:
                 "role": self.get_role_of(user)
             }
         }
-
         self.event_broadcast(add_user_event)
+        self.delay_room_termination()
 
     def __empty_check(self):
         if len(self.users) == 0:
@@ -113,6 +114,7 @@ class Room:
         return self._id
 
     def get_table_api(self):
+        self.delay_room_termination()
         return TableApi(self._table)
 
     def get_role_of(self, user: User) -> str:
@@ -145,6 +147,7 @@ class Room:
             player.session.receive(event_body)
 
     def get_chat(self):
+        self.delay_room_termination()
         return self._chat
 
     def __on_seat_change(self, player_id, side: Side | None):
@@ -168,12 +171,29 @@ class Room:
         self.event_broadcast(role_changed_event)
 
     def get_table(self):
+        self.delay_room_termination()
         return self._table
 
     def kill(self):
         self._table.kill()
         if self._job is not None:
             self._job.cancel()
+
+        if self._inactive_room_auto_termination is not None:
+            self._inactive_room_auto_termination.cancel()
+
+    def delay_room_termination(self):
+        if self._inactive_room_auto_termination is not None:
+            self._inactive_room_auto_termination.cancel()
+        self._inactive_room_auto_termination = DelayedTask(self.close_room, 1000 * 600)
+        self.resourceManager.add_delayed_task(self._inactive_room_auto_termination)
+
+    def close_room(self):
+        event = {
+            "type": "room_closed"
+        }
+        self.event_broadcast(event)
+        self.__mark_self_for_deletion(self._id)
 
 
 class RoomApi:
