@@ -33,9 +33,6 @@ from src.Core.ResourceManager import ResourceManager, DelayedTask
 from src.Events.Events import Eventmanager, IEventReceiver
 
 
-# TODO: add feature to allow casting ApiType to another ApiType
-
-
 class ConsoleEventReceiver(IEventReceiver):
     def __init__(self, username: str, event_manager: Eventmanager):
         super().__init__(lambda: None)
@@ -233,6 +230,6 @@ def convert_script(script: str, new_header: str, methods_dict):
     return result
 
 
-UserSimulationInterpreter.add_header("$TableApi", "src.table", "TableApi")
-UserSimulationInterpreter.add_header("$RoomApi", "src.Room", "RoomApi")
-UserSimulationInterpreter.add_header("$ChatApi", "src.chat", "ChatApi")
+UserSimulationInterpreter.add_header("$TableApi", "src.Core.table", "TableApi")
+UserSimulationInterpreter.add_header("$RoomApi", "src.Core.Room", "RoomApi")
+UserSimulationInterpreter.add_header("$ChatApi", "src.Core.chat", "ChatApi")

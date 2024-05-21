@@ -65,14 +65,29 @@ class Eventmanager:
 
 class EventLogicalEndpoint:
     """
-    Think about this class like an organization.
-    Organization can receive the level in any of its departments. Though, in this case
-    it will receive it in all of its mailboxes.
+       Think about this class like an organization.
+       Organization can receive the level in any of its departments. Though, in this case
+       it will receive it in all of its mailboxes.
+       """
+
+    def __init__(self, event_man: Eventmanager):
+        self.endpoints: set[IEventReceiver] = set()
+        self._event_manager = event_man
+
+    def receive(self, event: dict):
+        for mailbox in self.endpoints:
+            e = UniCastEvent(event)
+            self._event_manager.start_delivery(e, mailbox)
+
+
+class EventLogicalEndpointWithSignature(EventLogicalEndpoint):
+    """
+        This subclass is used by backend to cumulate events in order to provide
+        bulks send to frontend
     """
 
     def __init__(self, event_man: Eventmanager, signature: str | list[str]):
-        self.endpoints: set[IEventReceiver] = set()
-        self._event_manager = event_man
+        super().__init__(event_man)
         self.signature = signature
 
     def receive(self, event: dict):
@@ -83,7 +98,7 @@ class EventLogicalEndpoint:
             self._event_manager.start_delivery(e, mailbox)
 
     @staticmethod
-    def merge(logical_endpoints: list[EventLogicalEndpoint], event_manager: Eventmanager) -> EventLogicalEndpoint:
+    def merge(logical_endpoints: list[EventLogicalEndpointWithSignature], event_manager: Eventmanager) -> EventLogicalEndpointWithSignature:
         result_endpoint = set()
         result_signature = []
         for endpoint in logical_endpoints:
@@ -93,6 +108,6 @@ class EventLogicalEndpoint:
             else:
                 result_signature += endpoint.signature
 
-        result = EventLogicalEndpoint(event_manager, result_signature)
+        result = EventLogicalEndpointWithSignature(event_manager, result_signature)
         result.endpoints = result_endpoint
         return result

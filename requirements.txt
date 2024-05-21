@@ -1,1 +1,4 @@
 redis
+flask
+flask-socketio
+psycopg2

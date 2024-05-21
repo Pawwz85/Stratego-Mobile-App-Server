@@ -7,7 +7,7 @@ from src.Core.User import User
 from src.Core.stratego import Side
 from src.Core.table import Table, TableApi
 from src.Core.chat import Chat, ChatApi
-from src.Events.Events import EventLogicalEndpoint, Eventmanager
+from src.Events.Events import EventLogicalEndpointWithSignature, Eventmanager
 
 
 class Room:
@@ -127,13 +127,13 @@ class Room:
         event_body["room_id"] = self._id
 
         sessions = [user.session for user in self.users.values() if user.id not in player_set]
-        multi_cast_endpoint = EventLogicalEndpoint.merge(sessions, self.event_manager)
+        multi_cast_endpoint = EventLogicalEndpointWithSignature.merge(sessions, self.event_manager)
         multi_cast_endpoint.receive(event_body)
 
     def event_broadcast(self, event: dict):
         event["room_id"] = self._id
         sessions = [user.session for user in self.users.values()]
-        multi_cast_endpoint = EventLogicalEndpoint.merge(sessions, self.event_manager)
+        multi_cast_endpoint = EventLogicalEndpointWithSignature.merge(sessions, self.event_manager)
         multi_cast_endpoint.receive(event)
 
     def __players_channel(self, event_body: dict, side: Side):

@@ -3,7 +3,7 @@
     It controls lifecycle of other components, listens to redis pubs
 
     TODO: Add a commend to documentation that allows player to get room time control
-    TODO: Add a job to BackendSystem to remove users that are not in any room
+    TODO: Document how this server communicates with others
 """
 from __future__ import annotations
 import json

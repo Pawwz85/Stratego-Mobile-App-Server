@@ -8,7 +8,7 @@ from src.Core.Room import Room, RoomApi
 from src.Core.table import Table
 
 
-class MyTestCase(unittest.TestCase):
+class RoomTestCase(unittest.TestCase):
     table_api_to_room_api_mapping = {
         "take_seat": "claim_seat",
         "submit_setup": "send_setup",
@@ -31,13 +31,14 @@ class MyTestCase(unittest.TestCase):
         ).build()
         gameplay_scenario_gen = GameplayScenarioGenerator()
         setup_script = gameplay_scenario_gen.assume_random_setup("User1", "User2")
-        setup_script = convert_script(setup_script, "$RoomApi", MyTestCase.table_api_to_room_api_mapping)
+        setup_script = convert_script(setup_script, "$RoomApi", RoomTestCase.table_api_to_room_api_mapping)
         gameplay_script = gameplay_scenario_gen.simulate_gameplay("User1", "User2")
-        gameplay_script = convert_script(gameplay_script, "$RoomApi", MyTestCase.table_api_to_room_api_mapping)
+        gameplay_script = convert_script(gameplay_script, "$RoomApi", RoomTestCase.table_api_to_room_api_mapping)
         usi = UserSimulationInterpreter({"$RoomApi": RoomApi(room)}, main_loop.get_resource_manager(), event_man)
+        usi.run_command("WAIT 50")  # give some time for setting up the test
         try:
             usi.run_command("$RoomApi\nUser1 join > {}\nWAIT 20\nUser2 join > {}\nWAIT 20")
-            usi.run_script("../TestResources/table_api_test_players_ready", "$RoomApi", MyTestCase.table_api_to_room_api_mapping)
+            usi.run_script("../TestResources/table_api_test_players_ready", "$RoomApi", RoomTestCase.table_api_to_room_api_mapping)
             usi.run_command("WAIT 110")
             usi.run_command(setup_script)
             usi.run_command("WAIT 310")
@@ -45,9 +46,9 @@ class MyTestCase(unittest.TestCase):
             usi.run_command("WAIT 20")
 
             setup_script = gameplay_scenario_gen.assume_random_setup("User2", "User1")
-            setup_script = convert_script(setup_script, "$RoomApi", MyTestCase.table_api_to_room_api_mapping)
+            setup_script = convert_script(setup_script, "$RoomApi", RoomTestCase.table_api_to_room_api_mapping)
             gameplay_script = gameplay_scenario_gen.simulate_gameplay("User2", "User1")
-            gameplay_script = convert_script(gameplay_script, "$RoomApi", MyTestCase.table_api_to_room_api_mapping)
+            gameplay_script = convert_script(gameplay_script, "$RoomApi", RoomTestCase.table_api_to_room_api_mapping)
 
             usi.run_command('User1 set_rematch_willingness > {"value":true}')
             usi.run_command('User2 set_rematch_willingness > {"value":true}')

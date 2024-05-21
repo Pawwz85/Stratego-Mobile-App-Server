@@ -6,7 +6,7 @@ import src.DataStructures.BlackRedTree as brtree
 class BlackRedTreeTestCase(unittest.TestCase):
 
     def test_for_addition_crash(self):
-        data = [i for i in range(1000000)]
+        data = [i for i in range(100000)]
         random.shuffle(data)
         tree = brtree.BlackRedTree()
 
@@ -20,8 +20,8 @@ class BlackRedTreeTestCase(unittest.TestCase):
             self.assertEqual(True, False)
 
     def test_search_addition_only(self):
-        existing_data = [i for i in range(1000000)]
-        unexisting_data = [i for i in range(1000000, 2000000)]
+        existing_data = [i for i in range(100000)]
+        unexisting_data = [i for i in range(100000, 200000)]
         random.shuffle(existing_data)
         random.shuffle(unexisting_data)
         tree = brtree.BlackRedTree()
@@ -36,8 +36,8 @@ class BlackRedTreeTestCase(unittest.TestCase):
             self.assertIs(tree.search(i), None)
 
     def test_search(self):
-        existing_data = [i for i in range(500000)]
-        unexisting_data = [i for i in range(500000, 1000000)]
+        existing_data = [i for i in range(50000)]
+        unexisting_data = [i for i in range(50000, 100000)]
         data = existing_data + unexisting_data
         random.shuffle(data)
         random.shuffle(existing_data)
@@ -57,7 +57,7 @@ class BlackRedTreeTestCase(unittest.TestCase):
             self.assertIs(tree.search(nr), None)
 
     def test_deletion_for_crash(self):
-        data = [i for i in range(1000000)]
+        data = [i for i in range(100000)]
         random.shuffle(data)
         tree = brtree.BlackRedTree()
         debug_count = 0

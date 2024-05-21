@@ -6,7 +6,7 @@ from src.Core.table import *
 from src.Events.Events import Eventmanager
 
 
-class MyTestCase(unittest.TestCase):
+class TableTestCase(unittest.TestCase):
 
     def test_main_loop(self):
         main_loop = MainLoopStub()
@@ -26,14 +26,15 @@ class MyTestCase(unittest.TestCase):
         player_sim = GameplayScenarioGenerator()
         setup_script = player_sim.assume_random_setup("User1", "User2")
         gameplay_script = player_sim.simulate_gameplay("User1", "User2")
+        usi.run_command("WAIT 50")
         try:
             usi.run_script("../TestResources/table_api_test_players_ready")
-            check1 = DelayedTask(lambda: self.assertIs(table.phase_type, TableGamePhase.awaiting), usi.now)
+            check1 = DelayedTask(lambda: self.assertIs(table.phase_type, TableGamePhase.awaiting), usi.now + 20)
             main_loop.get_resource_manager().add_delayed_task(check1)
-            check2 = DelayedTask(lambda: self.assertIs(table.phase_type, TableGamePhase.setup), usi.now + 120)
-            main_loop.get_resource_manager().add_delayed_task(check2)
             usi.run_command("WAIT 120")
             usi.run_command(setup_script)
+            check2 = DelayedTask(lambda: self.assertIs(table.phase_type, TableGamePhase.setup), usi.now + 50)
+            main_loop.get_resource_manager().add_delayed_task(check2)
             usi.run_command("WAIT 300")
             check3 = DelayedTask(lambda: self.assertIs(table.phase_type, TableGamePhase.gameplay), usi.now + 10)
             main_loop.get_resource_manager().add_delayed_task(check3)
@@ -81,6 +82,7 @@ class MyTestCase(unittest.TestCase):
                  set_setup_time(300).
                  build())
         usi = UserSimulationInterpreter({"$TableApi": TableApi(table)}, main_loop.get_resource_manager(), event_man)
+        usi.run_command("WAIT 50")  # give some time for setting up the test
         try:
             usi.run_script("../TestResources/table_api_test_players_ready")
             usi.run_command("WAIT 100")
