@@ -27,7 +27,7 @@ class WebsocketBackendCaller(IBackendCaller):
 
         try:
             request_id = command["message_id"]
-            room_name = "user_" + str(user.user_id)
+            room_name = "user_" + user.username
             result = BackendResponseStrategy(request_id, lambda d: self.handle_response(d, room_name))
         except KeyError as e:
             result = None

@@ -87,8 +87,9 @@ class BackendSystem:
             self.register_user(user_dto)
             user = self.users_connected[user_dto.user_id]
             response = self.api(user, request_body)
-            response["response_id"] = request_body["message_id"]
-            self.redis.publish(self.config["frontend_api_channel_name"], json.dumps(response))
+            if response is not None:
+                response["response_id"] = request_body["message_id"]
+                self.redis.publish(self.config["frontend_api_channel_name"], json.dumps(response))
 
     def run(self):
         self.resource_manager.add_delayed_task(DelayedTask(self.__user_garbage_collector, 60 * 1000))
@@ -140,8 +141,11 @@ class BackendApi:
         room_id: str | None = request.get("room_id", None)
         if room_id is None:
             return False, 'Request missed the necessary field "room_id"'
-        room = self.system.rooms[room_id]
-        return RoomApi(room)(user, request)
+        try:
+            room = self.system.rooms[room_id]
+        except KeyError:
+            room = None
+        return RoomApi(room)(user, request) if room is not None else None
 
     @staticmethod
     def __verify_time_control(time_control: float | int, increment_time: float,
@@ -175,8 +179,8 @@ class BackendApi:
         return False, "Could not resolve the command (missing room_id?)"
 
     @staticmethod
-    def __produce_api_response(api_response: tuple[bool, str | None] | dict) -> dict:
-        if type(api_response) is dict:
+    def __produce_api_response(api_response: tuple[bool, str | None] | dict | None) -> dict | None:
+        if type(api_response) is dict or api_response is None:
             return api_response
 
         success, excuse = api_response

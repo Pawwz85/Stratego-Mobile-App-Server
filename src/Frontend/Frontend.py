@@ -18,12 +18,18 @@ redis = Redis()
 
 def handle_incoming_event(event: dict):
     signature: str | list[str] = event["signature"]
+    if type(signature) is not str | list:
+        raise RuntimeError("Empty signature")
+
     room_id: str = event["room_id"]
     if room_id is not None:
         event.pop("signature")
-        socketio.emit(event["type"], event)
 
-    # TODO: In future, consider handling events by signatures instead of rooms
+        if type(signature) is str:
+            socketio.send(event, json=True, to="user_"+signature)
+        else:
+            for user in signature:
+                socketio.send(event, json=True, to="user_" + user)
 
 
 backend_response_repository = BackendResponseStrategyRepository()
@@ -57,14 +63,14 @@ def connection_handler(auth):
         return False
     else:
         session["user_dto"] = user_dto
-        join_room("user_" + str(user_dto.user_id))
+        join_room("user_" + user_dto.username)
 
 
 @socketio.on("disconnect")
 def disconnection_handler():
     user_dto = session.get("user_dto")
     if user_dto is not None:
-        close_room("user_" + str(user_dto.user_id))
+        close_room("user_" + user_dto.username)
     session.pop("user_dto")
 
     # TODO: remove user from all rooms on worker threads
@@ -89,7 +95,6 @@ def json_payload_handler(js):
         except Exception as e:
             print(e)
     websocketBackendCaller.call(js, session.get("user_dto"), 10, lambda: print("Backend not responding"))
-    # TODO: monitor type of messages, to join valid room
 
 
 if __name__ == "__main__":

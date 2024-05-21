@@ -4,7 +4,6 @@ from src.Core.User import UserDto
 
 
 class IUserRepository(ABC):
-    
     def __init__(self):
         super().__init__()
 

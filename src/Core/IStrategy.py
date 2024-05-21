@@ -3,8 +3,16 @@ from typing import Callable
 
 
 class IStrategy(ABC):
+    """
+    An abstract class representing a strategy.
+    """
     def __init__(self, preconditions: Callable[[any], bool], strategy: Callable):
-        self.__times_applied = 0
+        """
+         An abstract class representing a strategy.
+        :param preconditions: A function that checks if strategy could be used on given data
+        :param strategy: A procedure to perform on given data.
+        """
+        self.__times_applied = 0  # This fields counts how many times strategy was successfully applied
         self.preconditions = preconditions
         self.strategy = strategy
 
@@ -14,6 +22,10 @@ class IStrategy(ABC):
             self.strategy(*args, **kwargs)
 
     def get_times_applied(self):
+        """
+        A method returning how many times a data handling procedure of strategy was called
+        :return:
+        """
         return self.__times_applied
 
 
@@ -38,4 +50,9 @@ class IStrategyPicker(ABC):
 
 
 def print_strategy(message: str) -> IStrategy:
+    """
+    Prints received data after given message, used as a placeholder
+    :param message: Message to print before data
+    :return:
+    """
     return IStrategy(lambda x: True, lambda x: print(message, x))
