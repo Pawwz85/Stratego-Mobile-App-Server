@@ -60,6 +60,7 @@ class Room:
         self._inactive_room_auto_termination: None | DelayedTask = None
         self._id = uuid.uuid4().hex  # TODO: replace uuid with something more memorable
         self.event_manager = event_manager
+        self.delay_room_termination()
 
     def player_set(self):
         return self._table.get_seat_manager().seats.values()
