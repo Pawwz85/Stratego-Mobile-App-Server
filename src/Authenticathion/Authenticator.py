@@ -1,3 +1,5 @@
+import json
+
 from src.Authenticathion.UserDao import UserDao
 from src.Core.IUserRepository import IUserRepository
 import hashlib
@@ -19,9 +21,28 @@ class Authenticator:
         try:
             username = auth["username"]
             password = self.hash_password(auth["password"])
+
+            print(username, password)
+            print(type(username), type(password) )
+            if type(username) is not str or type(password) is not str:
+                return None
+
             result = self.user_repository.find_user_by_username(username)
+            print(result)
             if result.password != password:
                 return None
-        except KeyError | TypeError:
+        except KeyError as e:
+            print(e)
             return None
+        print("auth result: ", result)
         return result
+
+
+if __name__ == "__main__":
+    with open('../../Config/secret_config.properties') as file:
+        config = json.load(file)
+
+    print("Password encryption tool")
+    password = input("Type password to encrypt")
+    auth = Authenticator(config)
+    print("Your encrypted password is: ", auth.hash_password(password))

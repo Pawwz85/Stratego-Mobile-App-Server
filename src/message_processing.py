@@ -6,17 +6,16 @@
 import enum
 import json
 import time
-from threading import Lock
-from typing import Callable
+from threading import Lock, Thread
 
 
 class UserMessageType(enum.Enum):
     """
     An enum used by MessageHandlingStrategyPicker to determine which strategy to use
     """
-    ill_formatted: 0
-    request: 1
-    event_response: 2
+    ill_formatted = 0
+    request = 1
+    event_response = 2
 
 
 def decode_json(raw_message: str) -> None | dict:
@@ -82,4 +81,15 @@ class ResponseBufferer:
     def add_response(self, response_id: str, response: str):
         with self.lock:
             self._response_buffer[response_id] = response
-            self._entry_last_interact[response] = time.process_time()
+            self._entry_last_interact[response_id] = time.process_time()
+
+
+class ResponseBuffererService(Thread):
+    def __init__(self, bufferer: ResponseBufferer):
+        self.bufferer = bufferer
+        super().__init__()
+
+    def run(self):
+        while True:
+            time.sleep(10)
+            self.bufferer.discard_old_entries()

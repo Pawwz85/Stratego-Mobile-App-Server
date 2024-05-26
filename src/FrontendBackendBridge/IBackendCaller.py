@@ -39,6 +39,9 @@ class IBackendCaller(ABC):
         return result
 
     @staticmethod
+    def __user_dto_to_json(user: UserDto):
+        return {"username": user.username, "password": user.password, "user_id": user.user_id}
+    @staticmethod
     def wrap_strategy_with_mapping(original_request_id: str, generated_response_id: str,
                                    raw_strategy: BackendResponseStrategy) -> BackendResponseStrategy:
         """
@@ -67,14 +70,14 @@ class IBackendCaller(ABC):
 
     def call_all_nodes(self, command: dict, user: UserDto):
         message = {
-            "user": user,
+            "user": self.__user_dto_to_json(user),
             "request": command
         }
         self.redis.publish(self.config["backend_api_channel_name"], json.dumps(message))
 
     def call_random_node(self, command: dict, user: UserDto):
         message = {
-            "user": user,
+            "user": self.__user_dto_to_json(user),
             "request": command
         }
         self.redis.rpush(self.config["request_queue_name"], json.dumps(message))

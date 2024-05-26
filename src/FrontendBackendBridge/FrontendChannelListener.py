@@ -53,8 +53,9 @@ class BackendResponseStrategyPicker(IStrategyPicker):
 class MessageStrategyPicker(IStrategyPicker):
     def pick_strategy(self, event: any) -> IStrategy:
         with self.lock:
-
+            print(event)
             if event.get("event_id") is not None:
+                print("event")
                 return self.event_handler
             elif event.get("response_id") is not None:
                 return self.__response_strategy_picker.pick_strategy(event)
@@ -80,9 +81,10 @@ class BackendMessageListenerService(Thread):
         super().__init__()
 
     def run(self):
-        for message in self.pub_sub.listen():
-            if message["type"] == message:
-                with self.strategy_picker.lock:
+        while True:
+            for message in self.pub_sub.listen():
+                if message["type"] == "message":
                     msg = json.loads(message["data"])
+                    print(msg)
                     strategy = self.strategy_picker.pick_strategy(msg)
-                strategy(msg)
+                    strategy(msg)

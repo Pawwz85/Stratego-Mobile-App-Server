@@ -11,7 +11,8 @@ class UserDao(IUserRepository):
             dbname=config["db_name"],
             host=config["db_host"],
             password=config["db_password"],
-            port=config["port"]
+            port=config["db_port"],
+            user=config["db_user"]
         )
         self.config = config
         super().__init__()

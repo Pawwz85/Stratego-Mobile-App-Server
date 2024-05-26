@@ -83,10 +83,12 @@ class BackendSystem:
     def iterate_requests(self):
         reqs = self.__check_requests()
         for req in reqs:
+            print(req)
             user_dto, request_body = BackendSystem.parse_request(req)
             self.register_user(user_dto)
             user = self.users_connected[user_dto.user_id]
             response = self.api(user, request_body)
+            print(response)
             if response is not None:
                 response["response_id"] = request_body["message_id"]
                 self.redis.publish(self.config["frontend_api_channel_name"], json.dumps(response))
@@ -172,6 +174,7 @@ class BackendApi:
 
         if request_type == "create_room":
             self.create_room(user, request)
+            return True, None
 
         if request.get("room_id", None) is not None:
             return self.forward_request_to_room_api(user, request)
