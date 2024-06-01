@@ -22,19 +22,15 @@ class Authenticator:
             username = auth["username"]
             password = self.hash_password(auth["password"])
 
-            print(username, password)
-            print(type(username), type(password) )
             if type(username) is not str or type(password) is not str:
                 return None
 
             result = self.user_repository.find_user_by_username(username)
-            print(result)
-            if result.password != password:
+            if result is None or result.password != password:
                 return None
         except KeyError as e:
             print(e)
             return None
-        print("auth result: ", result)
         return result
 
 

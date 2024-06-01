@@ -1,9 +1,10 @@
 import asyncio
 import json
+import threading
 from threading import Thread, Lock
 
 from redis import Redis
-from websockets import serve, WebSocketServerProtocol
+from websockets import serve, WebSocketServerProtocol, WebSocketServer
 
 from src.Authenticathion.Authenticator import Authenticator
 from src.Core.User import UserDto
@@ -22,6 +23,7 @@ class WebsocketService(Thread):
                  redis: Redis, config: dict,
                  backend_strategy_repository: BackendResponseStrategyRepository):
         super().__init__()
+        self.stop_flag = threading.Event()
         self.lock = Lock()
         self.path = path
         self.response_bufferer = response_bufferer
@@ -150,7 +152,7 @@ class WebsocketService(Thread):
 
         with self.lock:
             try:
-                asyncio.run(self.__user_usernames_to_websockets[username].send(msg)) # get this out of this thread
+                asyncio.run(self.__user_usernames_to_websockets[username].send(msg))  # get this out of this thread
             except KeyError as e:
                 print(e)
 
@@ -172,8 +174,19 @@ class WebsocketService(Thread):
     async def __service_main(self):
         async with serve(self.__websocket_endpoint,
                          host="localhost",
-                         port=5001):
-            await asyncio.Future()
+                         port=5001) as server:
+            future = asyncio.Future()
+            asyncio.ensure_future(self.__check_stop_flag(server, future))
+            await future
+
+    async def __check_stop_flag(self, server: WebSocketServer, future: asyncio.Future):
+        while not self.stop_flag.is_set():
+            await asyncio.sleep(1)
+        server.close()
+        future.cancel()
 
     def run(self):
-        asyncio.run(self.__service_main())
+        try:
+            asyncio.run(self.__service_main())
+        except asyncio.exceptions.CancelledError:
+            print("Stopped websocket service")

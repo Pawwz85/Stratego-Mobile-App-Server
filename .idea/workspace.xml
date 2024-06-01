@@ -7,20 +7,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="Starting the room termination countdown">
-      <change afterPath="$PROJECT_DIR$/run.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/websocket_service.py" afterDir="false" />
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Added a websocket service on port 5001&#10;- A few bugfixes">
+      <change afterPath="$PROJECT_DIR$/src/Frontend/login.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/register.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/render_board.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/stratego_board.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GracefulThreads.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Authenticathion/Authenticator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Authenticathion/Authenticator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Authenticathion/UserDao.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Authenticathion/UserDao.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BackendSystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/BackendSystem.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/User.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/Frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/Frontend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/websocket_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/websocket_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FrontendBackendBridge/FrontendChannelListener.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/FrontendBackendBridge/FrontendChannelListener.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FrontendBackendBridge/IBackendCaller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/FrontendBackendBridge/IBackendCaller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FrontendBackendBridge/WebsocketBackendCaller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/FrontendBackendBridge/WebsocketBackendCaller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/message_processing.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/message_processing.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,6 +36,7 @@
         <option value="Setup Script" />
         <option value="Python Unit Test" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -57,68 +59,72 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Batch.run.executor": "Run",
-    "Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_add_for_detachments.executor": "Run",
-    "Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_deletion_for_crash.executor": "Run",
-    "Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_for_addition_crash.executor": "Run",
-    "Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_search.executor": "Run",
-    "Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_search_addition_only.executor": "Run",
-    "Python tests.Python tests for room_unit_tests.MyTestCase.test_expected_behaviour.executor": "Run",
-    "Python tests.Python tests for table_unit_test.MyTestCase.executor": "Run",
-    "Python tests.Python tests for table_unit_test.MyTestCase.test_expected_behavior.executor": "Run",
-    "Python tests.Python tests for table_unit_test.MyTestCase.test_gameplay_timeout.executor": "Run",
-    "Python tests.Python tests for table_unit_test.MyTestCase.test_main_loop.executor": "Run",
-    "Python tests.Python tests for table_unit_test.MyTestCase.test_resign.executor": "Run",
-    "Python tests.Python tests for table_unit_test.MyTestCase.test_something.executor": "Run",
-    "Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.executor": "Run",
-    "Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping.executor": "Run",
-    "Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping_mismatch.executor": "Run",
-    "Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping_original_None.executor": "Run",
-    "Python tests.Python tests for test_linked_list.TestLinkedList.test_addition.executor": "Run",
-    "Python tests.Python tests for test_linked_list.TestLinkedList.test_deletion.executor": "Run",
-    "Python tests.Python tests for test_linked_list.TestLinkedList.test_iteration_after_detach_from_middle.executor": "Run",
-    "Python tests.Python tests for test_table.MyTestCase.test_expected_behavior.executor": "Run",
-    "Python tests.Python tests in BlackRedTreeTest.py.executor": "Run",
-    "Python tests.Python tests in UnitTests.executor": "Run",
-    "Python tests.Python tests in room_unit_tests.py.executor": "Run",
-    "Python tests.Python tests in table_unit_test.py.executor": "Run",
-    "Python.AIDocumentationGenerator.executor": "Run",
-    "Python.Authenticator.executor": "Run",
-    "Python.BackendSystem.executor": "Run",
-    "Python.Frontend.executor": "Run",
-    "Python.GameplayScenarioGenerator.executor": "Run",
-    "Python.Room.executor": "Run",
-    "Python.StrategoCLI.executor": "Run",
-    "Python.UserSimulation.executor": "Run",
-    "Python.linked_list.executor": "Run",
-    "Python.main (1).executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.message_processing.executor": "Debug",
-    "Python.message_validation.executor": "Run",
-    "Python.stratego.executor": "Run",
-    "Python.table.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Pawwz/OneDrive/Desktop/Stratego - server/Python_Implementation/pythonProject",
-    "run.code.analysis.last.selected.profile": "aDefault",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Batch.run.executor&quot;: &quot;Run&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_add_for_detachments.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_deletion_for_crash.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_for_addition_crash.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_search.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_search_addition_only.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for room_unit_tests.MyTestCase.test_expected_behaviour.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for table_unit_test.MyTestCase.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_expected_behavior.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_gameplay_timeout.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_main_loop.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_resign.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_something.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping_mismatch.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping_original_None.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_linked_list.TestLinkedList.test_addition.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_linked_list.TestLinkedList.test_deletion.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_linked_list.TestLinkedList.test_iteration_after_detach_from_middle.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_table.MyTestCase.test_expected_behavior.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in BlackRedTreeTest.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in UnitTests.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in room_unit_tests.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in table_unit_test.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.AIDocumentationGenerator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Authenticator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.BackendSystem.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Frontend.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GameplayScenarioGenerator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GracefulThreads.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Room.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SIGTERM_HANDLING.executor&quot;: &quot;Run&quot;,
+    &quot;Python.StrategoCLI.executor&quot;: &quot;Run&quot;,
+    &quot;Python.User.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.UserSimulation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.linked_list.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.message_processing.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.message_validation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.stratego.executor&quot;: &quot;Run&quot;,
+    &quot;Python.table.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Pawwz/OneDrive/Desktop/Stratego - server/Python_Implementation/pythonProject&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\DataStructures" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Frontend" />
+      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\UnitTests" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\FrontendBackendBridge" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Core" />
-      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Events" />
-      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -128,7 +134,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Authenticator">
+  <component name="RunManager" selected="Python.Frontend">
     <configuration name="run" type="BatchConfigurationType" factoryName="Batch" temporary="true">
       <module name="pythonProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -136,28 +142,6 @@
       <option name="PARENT_ENVS" value="true" />
       <option name="SCRIPT_NAME" value="run.bat" />
       <option name="PARAMETERS" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Authenticator" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="pythonProject" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/Authenticathion" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Authenticathion/Authenticator.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
     <configuration name="BackendSystem" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -221,16 +205,14 @@
     </configuration>
     <list>
       <item itemvalue="Batch.run" />
-      <item itemvalue="Python.Authenticator" />
       <item itemvalue="Python.BackendSystem" />
       <item itemvalue="Python.Frontend" />
       <item itemvalue="Python tests.Python tests in UnitTests" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.BackendSystem" />
         <item itemvalue="Python.Frontend" />
-        <item itemvalue="Python.Authenticator" />
+        <item itemvalue="Python.BackendSystem" />
         <item itemvalue="Batch.run" />
         <item itemvalue="Python tests.Python tests in UnitTests" />
       </list>
@@ -316,7 +298,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716333053848</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="- Added a websocket service on port 5001&#10;- A few bugfixes">
+      <option name="closed" value="true" />
+      <created>1716722157342</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1716722157342</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -339,7 +329,8 @@
     <MESSAGE value="- small bugfixes" />
     <MESSAGE value="- Now rooms will close themselves after 10 minutes of inactivity." />
     <MESSAGE value="Starting the room termination countdown" />
-    <option name="LAST_COMMIT_MESSAGE" value="Starting the room termination countdown" />
+    <MESSAGE value="- Added a websocket service on port 5001&#10;- A few bugfixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Added a websocket service on port 5001&#10;- A few bugfixes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

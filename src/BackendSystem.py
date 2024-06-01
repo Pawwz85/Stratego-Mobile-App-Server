@@ -2,7 +2,7 @@
     This file defines a backend system, which is a main class of a worker thread.
     It controls lifecycle of other components, listens to redis pubs
 
-    TODO: Add a commend to documentation that allows player to get room time control
+    TODO: Add a commend  that allows player to get room time control
     TODO: Document how this server communicates with others
 """
 from __future__ import annotations
@@ -83,12 +83,10 @@ class BackendSystem:
     def iterate_requests(self):
         reqs = self.__check_requests()
         for req in reqs:
-            print(req)
             user_dto, request_body = BackendSystem.parse_request(req)
             self.register_user(user_dto)
             user = self.users_connected[user_dto.user_id]
             response = self.api(user, request_body)
-            print(response)
             if response is not None:
                 response["response_id"] = request_body["message_id"]
                 self.redis.publish(self.config["frontend_api_channel_name"], json.dumps(response))

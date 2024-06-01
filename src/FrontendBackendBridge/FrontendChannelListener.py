@@ -4,6 +4,7 @@ from threading import Lock, Thread
 
 from redis import Redis
 
+from src import GracefulThreads
 from src.Core.IStrategy import IStrategy, IStrategyRepository, IStrategyPicker
 
 
@@ -73,6 +74,7 @@ class MessageStrategyPicker(IStrategyPicker):
         super().__init__(strategy_repository, default_strategy)
 
 
+@GracefulThreads.GracefulThread
 class BackendMessageListenerService(Thread):
     def __init__(self, redis: Redis, config: dict, strategy_picker: MessageStrategyPicker):
         self.pub_sub = redis.pubsub()
@@ -80,11 +82,11 @@ class BackendMessageListenerService(Thread):
         self.strategy_picker = strategy_picker
         super().__init__()
 
+    @GracefulThreads.loop_forever_gracefully
     def run(self):
-        while True:
-            for message in self.pub_sub.listen():
-                if message["type"] == "message":
-                    msg = json.loads(message["data"])
-                    print(msg)
-                    strategy = self.strategy_picker.pick_strategy(msg)
-                    strategy(msg)
+        for message in self.pub_sub.listen():
+            if message["type"] == "message":
+                msg = json.loads(message["data"])
+                print(msg)
+                strategy = self.strategy_picker.pick_strategy(msg)
+                strategy(msg)

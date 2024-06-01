@@ -8,6 +8,8 @@ import json
 import time
 from threading import Lock, Thread
 
+from src import GracefulThreads
+
 
 class UserMessageType(enum.Enum):
     """
@@ -84,12 +86,13 @@ class ResponseBufferer:
             self._entry_last_interact[response_id] = time.process_time()
 
 
+@GracefulThreads.GracefulThread
 class ResponseBuffererService(Thread):
     def __init__(self, bufferer: ResponseBufferer):
         self.bufferer = bufferer
         super().__init__()
 
+    @GracefulThreads.loop_forever_gracefully
     def run(self):
-        while True:
-            time.sleep(10)
-            self.bufferer.discard_old_entries()
+        time.sleep(10)
+        self.bufferer.discard_old_entries()
