@@ -2,8 +2,6 @@
     This file defines a backend system, which is a main class of a worker thread.
     It controls lifecycle of other components, listens to redis pubs
 
-    TODO: Add a commend  that allows player to get room time control
-    TODO: Document how this server communicates with others
 """
 from __future__ import annotations
 import json

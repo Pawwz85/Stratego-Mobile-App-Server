@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Board</title>
+    <script type='text/javascript' src="/src/Frontend/JavaScript/board_model.js"></script>
+    <script type='text/javascript' src="/src/Frontend/JavaScript/board_view.js"></script>
+    <script type='text/javascript' src="/src/Frontend/JavaScript/board_loader.js"></script>
+    <script>
+        function load_board(){
+        let view = new BoardView();
+        let loader = new BoardLoader(null, view, new DebugBoardController());
+        loader.append_board_to_element("board_wrapper");
+        console.log("Board loaded");
+        }
+        console.log("script loaded");
+    </script>
+</head>
+<body onload="load_board()">
+
+ <div id="board_wrapper"></div>
+
+</body>
+</html>

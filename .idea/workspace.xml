@@ -7,22 +7,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Added a websocket service on port 5001&#10;- A few bugfixes">
-      <change afterPath="$PROJECT_DIR$/src/Frontend/login.py" afterDir="false" />
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Now threads support signals such as sigint and sigterm">
+      <change afterPath="$PROJECT_DIR$/src/Frontend/JavaScript/board_loader.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/JavaScript/board_model.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/JavaScript/board_view.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/JavaScript/example_piece_util_renderer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/JavaScript/render_board.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/board.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/Frontend/templates/login.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/Frontend/templates/register.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/render_board.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/Frontend/templates/stratego_board.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/GracefulThreads.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Authenticathion/Authenticator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Authenticathion/Authenticator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BackendSystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/BackendSystem.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/User.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/Frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/Frontend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/websocket_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/websocket_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FrontendBackendBridge/FrontendChannelListener.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/FrontendBackendBridge/FrontendChannelListener.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/message_processing.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/message_processing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GracefulThreads.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/GracefulThreads.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +44,9 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python312/Lib/pyclbr.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Room.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -120,11 +121,11 @@
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\DataStructures" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Frontend\templates" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Frontend" />
+      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Frontend\JavaScript" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\UnitTests" />
-      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\FrontendBackendBridge" />
-      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Core" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -306,7 +307,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716722157342</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="- Now threads support signals such as sigint and sigterm">
+      <option name="closed" value="true" />
+      <created>1717253908177</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1717253908177</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -330,7 +339,8 @@
     <MESSAGE value="- Now rooms will close themselves after 10 minutes of inactivity." />
     <MESSAGE value="Starting the room termination countdown" />
     <MESSAGE value="- Added a websocket service on port 5001&#10;- A few bugfixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Added a websocket service on port 5001&#10;- A few bugfixes" />
+    <MESSAGE value="- Now threads support signals such as sigint and sigterm" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Now threads support signals such as sigint and sigterm" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

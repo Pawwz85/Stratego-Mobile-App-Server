@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="login_form_container">
+    <form id="login_form" action="/login" method="post">
+        <input type="text" name="username" id="login_form_username" placeholder="Your Login">
+        <input type="text" name="password" id="login_form_password" placeholder="Your Password">
+        <input type="submit" id="login_submit" value="Log in">
+    </form>
+    </div>
+    <div>
+        <comment>Don't have an account yet? You can register one</comment>
+        <a id="login_register_link" href="/register"> here.</a>
+    </div>
+    <div>
+        <comment>Don't want to have an account? </comment>
+        <a id="login_guest_link" href="/guest_login">Log in as guest.</a>
+    </div>
+</body>
+</html>

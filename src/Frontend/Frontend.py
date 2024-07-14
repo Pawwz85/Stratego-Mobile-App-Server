@@ -57,6 +57,10 @@ def login():
 
     return flask.render_template('login.html')
 
+@app.route("/board", methods=['GET'])
+def test_board():
+    return flask.render_template('board.html')
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
