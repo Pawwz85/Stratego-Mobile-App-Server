@@ -49,8 +49,6 @@ class BackendResponseStrategyPicker(IStrategyPicker):
             return self.default_strategy
 
 
-# TODO add a StrategyRepository and a StrategyPicker that would work with any message from backend
-
 class MessageStrategyPicker(IStrategyPicker):
     def pick_strategy(self, event: any) -> IStrategy:
         with self.lock:

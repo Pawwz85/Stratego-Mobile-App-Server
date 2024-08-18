@@ -50,3 +50,6 @@ class Move:
         if type(from_) is not int or type(to_) is not int:
             raise ParsingException()
         return Move(from_, to_)
+
+    def to_dict(self):
+        return {"to": self.to_, "from": self.from_}

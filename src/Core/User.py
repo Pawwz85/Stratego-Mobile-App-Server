@@ -29,7 +29,7 @@ class HttpUser:
         self.user_id: str | None = str(user_id)
 
     def get_dto(self):
-        return UserDto(self.username,self.password, int(self.user_id))
+        return UserDto(self.username, self.password, int(self.user_id))
 
     @staticmethod
     def from_dto(dto: UserDto):

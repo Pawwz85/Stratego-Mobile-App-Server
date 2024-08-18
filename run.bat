@@ -1,2 +1,2 @@
-python "..\BackendSystem.py"
+python "..\src\BackendSystem.py"
 pause

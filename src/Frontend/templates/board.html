@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Board</title>
-    <script type='text/javascript' src="/src/Frontend/JavaScript/board_model.js"></script>
-    <script type='text/javascript' src="/src/Frontend/JavaScript/board_view.js"></script>
-    <script type='text/javascript' src="/src/Frontend/JavaScript/board_loader.js"></script>
+
     <script>
-        function load_board(){
-        let view = new BoardView();
-        let loader = new BoardLoader(null, view, new DebugBoardController());
-        loader.append_board_to_element("board_wrapper");
-        console.log("Board loaded");
-        }
-        console.log("script loaded");
+        import ("{{url_for('static', filename='boot.js')}}").then(
+            module => {
+                   module.append_game_to_element("fragment_wrapper");
+            }
+        );
     </script>
 </head>
-<body onload="load_board()">
+<body>
 
- <div id="board_wrapper"></div>
+<div style="display:none" id="boot_info">
+    <p id="boot_info_username">{{boot_info.username}}</p>
+    <p id="boot_info_room_id">{{boot_info.room_id}}</p>
+</div>
+
+ <div id="fragment_wrapper"></div>
 
 </body>
 </html>

@@ -5,14 +5,14 @@
 from __future__ import annotations
 
 from math import floor
-from time import process_time
+from time import time
 from typing import Callable
 
 from src.DataStructures.PriorityQueue import PriorityQueue
 from src.DataStructures.linked_list import LinkedList
 
 
-class ResourceManagerJob:
+class Job:
     def __init__(self, task: Callable):
         self.task = task
         self._ResourceManagerJobIteratorNode: None | LinkedList.LinkedListNode = None
@@ -25,20 +25,20 @@ class ResourceManagerJob:
             self._ResourceManagerJobIteratorNode.detach()
 
 
-def process_time_ms() -> int:
-    time = process_time()*1000
-    return floor(time)
+def time_ms() -> int:
+    res_time = time()*1000
+    return floor(res_time)
 
 
 class DelayedTask:
     def __init__(self, task: Callable, delay: int):
         self.__task = task
-        self.__deadline = process_time_ms() + delay
+        self.__deadline = time_ms() + delay
         self._TaskPriorityQueue: None | PriorityQueue = None
         self._key = None
 
     def __call__(self):
-        if process_time_ms() > self.__deadline:
+        if time_ms() > self.__deadline:
             self.__task()
             self.cancel()
 
@@ -50,7 +50,7 @@ class DelayedTask:
             self._TaskPriorityQueue.remove(self._key)
 
 
-class ResourceManager:
+class JobManager:
 
     def __init__(self):
         self.job_iterator = LinkedList()
@@ -59,7 +59,7 @@ class ResourceManager:
     def __len__(self):
         return len(self.job_iterator) + len(self.task_queue)
 
-    def add_job(self, job: ResourceManagerJob):
+    def add_job(self, job: Job):
         job._ResourceManagerJobIteratorNode = self.job_iterator.add(job)
 
     def add_delayed_task(self, task: DelayedTask):
@@ -79,7 +79,7 @@ class ResourceManager:
         exit_queue = False
         while not exit_queue:
             top: DelayedTask = self.task_queue.get_top()
-            if top is not None and process_time_ms() > top.get_deadline():
+            if top is not None and time_ms() > top.get_deadline():
                 top()
             else:
                 exit_queue = True

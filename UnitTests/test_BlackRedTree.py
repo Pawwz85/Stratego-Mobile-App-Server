@@ -80,6 +80,17 @@ class BlackRedTreeTestCase(unittest.TestCase):
             tree.verify()
             self.assertEqual(True, False)
 
+    def test_len(self):
+        data = [i for i in range(100000)]
+        random.shuffle(data)
+        tree = brtree.BlackRedTree()
+        for nr in data:
+            tree.add(nr, nr)
+        self.assertEqual(len(tree), len(data))
+        for i in range(5000):
+            tree.delete(i)
+        self.assertEqual(len(tree), len(data) - 5000)
+
 
 if __name__ == '__main__':
     unittest.main()

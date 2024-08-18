@@ -90,7 +90,6 @@ class BlackRedTree:
 
     def _bst_style_insert(self, key, value):
         node = BlackRedTree.Node(key, value)
-        self._size += 1
         if self._root is None:
             self._root = node
             node.color = BlackRedTree.Color.BLACK
@@ -192,7 +191,6 @@ class BlackRedTree:
 
     def _remove_node(self, node: BlackRedTree.Node):
         nr_of_children = 0
-        self._size -= 1
         if node.left_son is not None:
             nr_of_children += 1
         if node.right_son is not None:
@@ -248,7 +246,7 @@ class BlackRedTree:
 
         while node is None or node.parent is not None:
             if node is not None:
-                p = node.parent
+                p: BlackRedTree = node.parent
                 if node is p.left_son:
                     s: BlackRedTree.Node = p.right_son
                     d = s.right_son
@@ -284,6 +282,7 @@ class BlackRedTree:
 
     def add(self, key, value):
         x = self._bst_style_insert(key, value)
+        self._size += 1
         if x is self._root:
             x.color = BlackRedTree.Color.BLACK
         elif x.parent is not None and x.parent.color is BlackRedTree.Color.RED:
@@ -292,6 +291,7 @@ class BlackRedTree:
     def delete(self, key):
         x = self._bst_search(key)
         if x is not None:
+            self._size -= 1
             self._remove_node(x)
 
     @staticmethod

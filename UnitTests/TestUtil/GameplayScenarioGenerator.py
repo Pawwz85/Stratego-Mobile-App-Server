@@ -75,3 +75,13 @@ class GameplayScenarioGenerator:
             result += f'{nickname} make_move > {json.dumps({"move": {"from": move[0], "to": move[1]}})}\n'
         result += "AUTOWAIT FALSE"
         return result
+
+    def create_match(self):
+        setup = game_state_from_setups(self.__random_setup(Side.red), self.__random_setup(Side.blue))
+        gs = GameState()
+        gs.set_game_state(setup)
+
+        while not gs.is_game_finish():
+            yield gs
+            move = self.ai(gs, gs.get_side())
+            gs.execute_move(move)

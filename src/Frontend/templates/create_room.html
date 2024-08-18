@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create Room</title>
+  </head>
+  <body>
+    <h1>Create Room</h1>
+    <form id="create-room" action="/create_room" method="post">
+      <label for="time_control">Time Control:</label>
+      <input type="number" id="time_control" name="time_control" min="1" max="60"><br><br>
+
+      <label for="time_added">Time Added:</label>
+      <input type="number" id="time_added" name="time_added" min="0"><br><br>
+
+      <label for="setup_time">Setup Time:</label>
+      <input type="number" id="setup_time" name="setup_time" min="1" max="60"><br><br>
+
+      <!-- Checkbox for including a password -->
+      <label for="include_password">Include Password:</label>
+      <input type="checkbox" id="include_password">
+
+      <label for="password">Password:</label>
+      <input type="text" id="password" name="password" disabled><br><br>
+
+      <input type="submit" value="Create Room">
+    </form>
+
+  <script>
+      document.getElementById('include_password').addEventListener('change', function(event) {
+      var includePassword = event.target.checked;
+
+      if (includePassword) {
+        document.getElementById('password').disabled = false;
+      } else {
+        document.getElementById('password').disabled = true;
+      }
+    });
+  </script>
+  </body>
+</html>

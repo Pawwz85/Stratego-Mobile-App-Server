@@ -29,7 +29,7 @@ from enum import Enum
 from pyclbr import Class, readmodule_ex
 from collections import deque
 from src.Core.User import User
-from src.Core.ResourceManager import ResourceManager, DelayedTask
+from src.Core.JobManager import JobManager, DelayedTask
 from src.Events.Events import Eventmanager, IEventReceiver
 
 
@@ -66,13 +66,13 @@ class UserSimulationInterpreter:
                  }
     _headers: dict[str, Class] = dict()
 
-    def __init__(self, instances: dict[str, any], resource_manager: ResourceManager, event_manager):
+    def __init__(self, instances: dict[str, any], job_manager: JobManager, event_manager):
         self._api: None | Class = None
         self._auto_wait = False
         self._auto_wait_interval = 20
         self._user_pool: dict[str, User] = dict()
         self._instances: dict[Class, any] = {UserSimulationInterpreter._headers[k]: v for k, v in instances.items()}
-        self._resource_manager = resource_manager
+        self._job_manager = job_manager
         self.event_manager = event_manager
         self.now = 0
         self.lines_seen = deque()
@@ -160,7 +160,7 @@ class UserSimulationInterpreter:
             code += f"\n\tprint('{user.username}: ', result)"
 
             task_lambda = lambda: exec(code, None, {"api_object": api_object, "USER": user, "REQ": req})
-            self._resource_manager.add_delayed_task(DelayedTask(task_lambda, self.now))
+            self._job_manager.add_delayed_task(DelayedTask(task_lambda, self.now))
 
             if self._auto_wait:
                 self.now += self._auto_wait_interval

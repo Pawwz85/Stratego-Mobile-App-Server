@@ -2,7 +2,7 @@ from __future__ import annotations
 import json
 from abc import ABC, abstractmethod
 from typing import Callable
-from src.Core.ResourceManager import DelayedTask, ResourceManager
+from src.Core.JobManager import DelayedTask, JobManager
 import uuid
 
 
@@ -42,16 +42,16 @@ class Eventmanager:
     Think about this class like a mailing company.
     It ensures that letters are reaching their destined mailboxes
     """
-    def __init__(self, resource_manager: ResourceManager):
+    def __init__(self, job_manager: JobManager):
         self.events: set[str] = set()
-        self.resource_man = resource_manager
+        self.job_manager = job_manager
 
     def _attempt_delivery(self, event: UniCastEvent, endpoint: IEventReceiver):
         if event.id in self.events and event.TIL > 0:
             event.TIL -= 1
             endpoint.receive(event.__str__())
             retry = DelayedTask(lambda: self._attempt_delivery(event, endpoint), 1000)
-            self.resource_man.add_delayed_task(retry)
+            self.job_manager.add_delayed_task(retry)
         else:
             endpoint.declare_disconnected()
 

@@ -10,16 +10,18 @@ from src.Authenticathion.Authenticator import Authenticator
 from src.Core.User import UserDto
 from src.FrontendBackendBridge.FrontendChannelListener import BackendResponseStrategyRepository
 from src.FrontendBackendBridge.WebsocketBackendCaller import WebsocketBackendCaller
-from src.message_processing import ResponseBufferer, decode_json, check_message_type, UserMessageType
+from src.Frontend.message_processing import decode_json, check_message_type, UserMessageType, \
+    UserResponseBufferer
 
 
+# TODO: Add a response or other handler to message retry while previous message is in making
 class WebsocketService(Thread):
     class WebsocketSession:
         def __init__(self):
             self.user: UserDto | None = None
             self.ill_formatted_msgs_send = 0
 
-    def __init__(self, path: str, response_bufferer: ResponseBufferer,
+    def __init__(self, path: str, response_bufferer: UserResponseBufferer,
                  redis: Redis, config: dict,
                  backend_strategy_repository: BackendResponseStrategyRepository):
         super().__init__()
@@ -59,8 +61,16 @@ class WebsocketService(Thread):
             "status": "failure",
             "cause": "Room hosting server timed out."
         }
-        # TODO: get it out to another thread
+
+        # TODO: buffer response timeout
         asyncio.run(websocket.send(json.dumps(response)))
+
+    def __set_message_status_to_in_progress(self, username, request):
+        response = {
+            "response_id": request["message_id"],
+            "status": "processed"
+        }
+        self.response_bufferer.add_response(username, request["message_id"], json.dumps(response))
 
     async def __handle_api_call_request(self, websocket: WebSocketServerProtocol,
                                         session: WebsocketSession,
@@ -73,6 +83,8 @@ class WebsocketService(Thread):
             }
             await websocket.send(json.dumps(response))
             return
+
+        self.__set_message_status_to_in_progress(session.user.username, request)
         self.__backend_caller.call(request, session.user, 10,
                                    lambda: WebsocketService.__handle_api_call_request_timeout(websocket, request))
 
@@ -139,6 +151,13 @@ class WebsocketService(Thread):
             }
             await websocket.send(json.dumps(response))
             return
+
+        if session.user is not None:
+            username = session.user.username
+            cached_response = self.response_bufferer.get_response(username, request["message_id"])
+            if cached_response is not None:
+                await websocket.send(json.dumps(cached_response))
+                return
 
         type_ = request.get("type")
         if type_ == "login":

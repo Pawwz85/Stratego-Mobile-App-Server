@@ -7,20 +7,54 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Now threads support signals such as sigint and sigterm">
-      <change afterPath="$PROJECT_DIR$/src/Frontend/JavaScript/board_loader.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/JavaScript/board_model.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/JavaScript/board_view.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/JavaScript/example_piece_util_renderer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/JavaScript/render_board.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/board.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/register.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/stratego_board.html" afterDir="false" />
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/PerfTests/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PerfTests/test_stratego_core.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UnitTests/test_stratego.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/TemporalStorageService.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/socketio_socket_management.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/create_room.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/loading_screen.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/room_not_found.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/room_preview.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/room_search.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/FrontendBackendBridge/GameNodeAPICallsBuilder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/FrontendBackendBridge/GameNodeQuery.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/FrontendBackendBridge/SocketioBackendCaller.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/EventManagerWithTracking.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/EventManagerWithTracking.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/GameplayScenarioGenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/GameplayScenarioGenerator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/MainLoopStub.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/MainLoopStub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/UserSimulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/UserSimulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/test_BlackRedTree.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_BlackRedTree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/test_room.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_room.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/protocole.odt" beforeDir="false" afterPath="$PROJECT_DIR$/protocole.odt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.bat" beforeDir="false" afterPath="$PROJECT_DIR$/run.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Authenticathion/UserDao.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Authenticathion/UserDao.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BackendSystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/BackendSystem.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/IUserRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/IUserRepository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/ResourceManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/JobManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/Room.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Room.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/User.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/chat.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/chat.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/stratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/stratego.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataStructures/BlackRedTree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataStructures/BlackRedTree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Events/Events.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Events/Events.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/Frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/Frontend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GracefulThreads.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/GracefulThreads.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/JavaScript/board_loader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/JavaScript/board_model.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/JavaScript/board_view.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/JavaScript/example_piece_util_renderer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/JavaScript/render_board.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/board.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/board.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/websocket_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/websocket_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FrontendBackendBridge/FrontendChannelListener.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/FrontendBackendBridge/FrontendChannelListener.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FrontendBackendBridge/IBackendCaller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/FrontendBackendBridge/IBackendCaller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FrontendBackendBridge/WebsocketBackendCaller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/FrontendBackendBridge/WebsocketBackendCaller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ProtocolObjects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ProtocolObjects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/message_processing.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/message_processing.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,6 +110,7 @@
     &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_main_loop.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_resign.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_something.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_BlackRedTree.BlackRedTreeTestCase.test_len.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping_mismatch.executor&quot;: &quot;Run&quot;,
@@ -83,11 +118,22 @@
     &quot;Python tests.Python tests for test_linked_list.TestLinkedList.test_addition.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for test_linked_list.TestLinkedList.test_deletion.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for test_linked_list.TestLinkedList.test_iteration_after_detach_from_middle.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_room.RoomTestCase.test_expected_behaviour.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_stratego.MyTestCase.testFlip.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_stratego.StrategoGameStateTest.testFinnishMobilePresentNotLegalMoves.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_stratego.StrategoGameStateTest.testTrackers.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_stratego.StrategoUtilsTest.testStateFromSetups.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_stratego.StrategoUtilsTest.testVerifySetupDict.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_stratego.StrategoUtilsTest.testWhoWouldWinTest.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_stratego_core.MoveGenPerf.test_move_gen.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for test_table.MyTestCase.test_expected_behavior.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_table.TableTestCase.test_expected_behavior.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_table.TableTestCase.test_gameplay_timeout.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests in BlackRedTreeTest.py.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests in UnitTests.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests in room_unit_tests.py.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests in table_unit_test.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_stratego.py.executor&quot;: &quot;Run&quot;,
     &quot;Python.AIDocumentationGenerator.executor&quot;: &quot;Run&quot;,
     &quot;Python.Authenticator.executor&quot;: &quot;Run&quot;,
     &quot;Python.BackendSystem.executor&quot;: &quot;Run&quot;,
@@ -97,20 +143,25 @@
     &quot;Python.Room.executor&quot;: &quot;Run&quot;,
     &quot;Python.SIGTERM_HANDLING.executor&quot;: &quot;Run&quot;,
     &quot;Python.StrategoCLI.executor&quot;: &quot;Run&quot;,
+    &quot;Python.TestExplorer (1).executor&quot;: &quot;Run&quot;,
+    &quot;Python.TestExplorer.executor&quot;: &quot;Run&quot;,
+    &quot;Python.TextExplorer.executor&quot;: &quot;Run&quot;,
     &quot;Python.User.executor&quot;: &quot;Debug&quot;,
     &quot;Python.UserSimulation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.game node.executor&quot;: &quot;Run&quot;,
     &quot;Python.linked_list.executor&quot;: &quot;Run&quot;,
     &quot;Python.main (1).executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;Python.message_processing.executor&quot;: &quot;Debug&quot;,
     &quot;Python.message_validation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.server.executor&quot;: &quot;Run&quot;,
     &quot;Python.stratego.executor&quot;: &quot;Run&quot;,
     &quot;Python.table.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Pawwz/OneDrive/Desktop/Stratego - server/Python_Implementation/pythonProject&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Pawwz/OneDrive/Desktop/Stratego - server/Python_Implementation/pythonProject/src/Frontend&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
@@ -123,29 +174,21 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Frontend\templates" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Frontend" />
-      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Frontend\JavaScript" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject" />
+      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Frontend\JavaScript" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\UnitTests" />
     </key>
   </component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
+        <option value="CompoundRunConfigurationType" />
         <option value="PythonConfigurationType" />
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Frontend">
-    <configuration name="run" type="BatchConfigurationType" factoryName="Batch" temporary="true">
-      <module name="pythonProject" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SCRIPT_NAME" value="run.bat" />
-      <option name="PARAMETERS" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="BackendSystem" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.game node">
+    <configuration name="game node" type="PythonConfigurationType" factoryName="Python">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -154,8 +197,9 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="SDK_NAME" value="Python 3.12 (pythonProject)" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/BackendSystem.py" />
@@ -167,7 +211,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Frontend" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="server" type="PythonConfigurationType" factoryName="Python">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -176,8 +220,9 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/Frontend" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="SDK_NAME" value="Python 3.12 (pythonProject)" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Frontend" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Frontend/Frontend.py" />
@@ -189,7 +234,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in UnitTests" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_room.RoomTestCase.test_expected_behaviour" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -200,22 +245,52 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/UnitTests&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <option name="_new_target" value="&quot;test_room.RoomTestCase.test_expected_behaviour&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_table.TableTestCase.test_expected_behavior" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="pythonProject" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_table.TableTestCase.test_expected_behavior&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_table.TableTestCase.test_gameplay_timeout" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="pythonProject" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_table.TableTestCase.test_gameplay_timeout&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Batch.run" />
-      <item itemvalue="Python.BackendSystem" />
-      <item itemvalue="Python.Frontend" />
-      <item itemvalue="Python tests.Python tests in UnitTests" />
+      <item itemvalue="Python.game node" />
+      <item itemvalue="Python.server" />
+      <item itemvalue="Python tests.Python tests for test_room.RoomTestCase.test_expected_behaviour" />
+      <item itemvalue="Python tests.Python tests for test_table.TableTestCase.test_expected_behavior" />
+      <item itemvalue="Python tests.Python tests for test_table.TableTestCase.test_gameplay_timeout" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Frontend" />
-        <item itemvalue="Python.BackendSystem" />
-        <item itemvalue="Batch.run" />
-        <item itemvalue="Python tests.Python tests in UnitTests" />
+        <item itemvalue="Python tests.Python tests for test_room.RoomTestCase.test_expected_behaviour" />
+        <item itemvalue="Python tests.Python tests for test_table.TableTestCase.test_expected_behavior" />
+        <item itemvalue="Python tests.Python tests for test_table.TableTestCase.test_gameplay_timeout" />
       </list>
     </recent_temporary>
   </component>
@@ -315,7 +390,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717253908177</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="- Started work on UI, now on /board server would generate a board, that is for now, empty">
+      <option name="closed" value="true" />
+      <created>1721001173248</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1721001173248</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -340,7 +423,8 @@
     <MESSAGE value="Starting the room termination countdown" />
     <MESSAGE value="- Added a websocket service on port 5001&#10;- A few bugfixes" />
     <MESSAGE value="- Now threads support signals such as sigint and sigterm" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Now threads support signals such as sigint and sigterm" />
+    <MESSAGE value="- Started work on UI, now on /board server would generate a board, that is for now, empty" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Started work on UI, now on /board server would generate a board, that is for now, empty" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

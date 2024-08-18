@@ -1,11 +1,11 @@
-from src.Events.Events import Eventmanager, ResourceManager, UniCastEvent, IEventReceiver
+from src.Events.Events import Eventmanager, JobManager, UniCastEvent, IEventReceiver
 #  TODO: Make this work
 
 
 class EvenManagerWithTracking(Eventmanager):
-    def __init__(self, resource_manager: ResourceManager):
+    def __init__(self, job_manager: JobManager):
         self.send_messages: dict[IEventReceiver, list[dict]] = dict()
-        super().__init__(resource_manager)
+        super().__init__(job_manager)
 
     def start_delivery(self, event: UniCastEvent, endpoint: IEventReceiver):
         if self.send_messages.get(endpoint) is None:

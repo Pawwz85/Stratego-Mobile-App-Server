@@ -5,7 +5,6 @@ import psycopg2
 
 
 class UserDao(IUserRepository):
-
     def __init__(self, config: dict):
         self.connection_factory = lambda: psycopg2.connect(
             dbname=config["db_name"],
@@ -61,7 +60,7 @@ class UserDao(IUserRepository):
         try:
             connection = self.connection_factory()
             cursor = connection.cursor()
-            sql = "INSERT INTO t_users (username, password, id) VALUES(%s, %s, %s);"
+            sql = "INSERT INTO t_users (username, password, id, is_tester) VALUES(%s, %s, %s, FALSE);"
             data = (user.username, user.password, user.user_id)
             cursor.execute(sql, data)
             result = True
@@ -94,3 +93,21 @@ class UserDao(IUserRepository):
                 connection.close()
 
         return result
+
+    def is_tester(self, user: UserDto) -> bool:
+        connection: psycopg2._psycopg.connection | None = None
+        cursor: psycopg2._psycopg.cursor | None = None
+        try:
+            connection = self.connection_factory()
+            cursor = connection.cursor()
+            sql = "SELECT is_tester FROM t_users WHERE id = %s;"
+            data = (user.user_id,)
+            cursor.execute(sql, data)
+            result = cursor.fetchone()
+        finally:
+            if cursor is not None:
+                cursor.close()
+            if connection is not None:
+                connection.close()
+
+        return True if result else False

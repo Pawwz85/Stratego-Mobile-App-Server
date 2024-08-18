@@ -23,3 +23,6 @@ class IUserRepository(ABC):
     def remove_user(self, user: UserDto) -> bool:
         pass
 
+    @abstractmethod
+    def is_tester(self, user: UserDto) -> bool:
+        pass

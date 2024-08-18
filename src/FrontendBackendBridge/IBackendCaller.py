@@ -10,11 +10,6 @@ from redis import Redis
 from src.Core.User import UserDto
 from src.FrontendBackendBridge.FrontendChannelListener import BackendResponseStrategy, BackendResponseStrategyRepository
 
-"""
-    TODO: integrate this class with BackendStrategyRepository and BackendStrategyPicker
-"""
-
-
 class IBackendCaller(ABC):
 
     def __init__(self, strategy_repository: BackendResponseStrategyRepository, redis: Redis, config: dict):
@@ -41,6 +36,7 @@ class IBackendCaller(ABC):
     @staticmethod
     def __user_dto_to_json(user: UserDto):
         return {"username": user.username, "password": user.password, "user_id": user.user_id}
+
     @staticmethod
     def wrap_strategy_with_mapping(original_request_id: str, generated_response_id: str,
                                    raw_strategy: BackendResponseStrategy) -> BackendResponseStrategy:

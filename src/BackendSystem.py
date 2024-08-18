@@ -9,7 +9,7 @@ import math
 
 import redis as redis
 
-from src.Core.ResourceManager import ResourceManager, DelayedTask, ResourceManagerJob
+from src.Core.JobManager import JobManager, DelayedTask, Job
 from src.Events.Events import Eventmanager
 from src.Events.RedisEventReceiver import RedisPubSubEventReceiver
 from src.Core.Room import Room, RoomApi
@@ -22,8 +22,8 @@ class BackendSystem:
 
     def __init__(self):
         self.api = BackendApi(self)
-        self.resource_manager = ResourceManager()
-        self.event_manager = Eventmanager(self.resource_manager)
+        self.job_manager = JobManager()
+        self.event_manager = Eventmanager(self.job_manager)
         self.rooms: dict[str, Room] = dict()
         self.users_connected: dict[int, User] = dict()
         with open("../Config/secret_config.properties") as file:
@@ -41,14 +41,17 @@ class BackendSystem:
             self.users_connected[user.user_id] = user_obj
 
     def get_room_builder(self):
-        return Room.Builder(self.resource_manager, lambda _id: self.rooms.pop(_id))
+        return Room.Builder(self.job_manager, lambda _id: self.rooms.pop(_id))
 
     def __user_garbage_collector(self):
+        users_to_remove = deque()
         for id_, user in self.users_connected.items():
             if user.room_count == 0:
-                self.users_connected.pop(id_)
+                users_to_remove.append(id_)
+        for id_ in users_to_remove:
+            self.users_connected.pop(id_)
         next_check = DelayedTask(self.__user_garbage_collector, 60 * 1000)
-        self.resource_manager.add_delayed_task(next_check)
+        self.job_manager.add_delayed_task(next_check)
 
     def __scans_for_pubs(self):
         new_messages: deque[str] = deque()
@@ -90,11 +93,11 @@ class BackendSystem:
                 self.redis.publish(self.config["frontend_api_channel_name"], json.dumps(response))
 
     def run(self):
-        self.resource_manager.add_delayed_task(DelayedTask(self.__user_garbage_collector, 60 * 1000))
-        self.resource_manager.add_job(ResourceManagerJob(self.iterate_requests))
+        self.job_manager.add_delayed_task(DelayedTask(self.__user_garbage_collector, 60 * 1000))
+        self.job_manager.add_job(Job(self.iterate_requests))
 
         while True:
-            self.resource_manager.iteration_of_job_execution()
+            self.job_manager.iteration_of_job_execution()
 
 
 class BackendApi:
@@ -115,7 +118,7 @@ class BackendApi:
         if not ver_result[0]:
             return ver_result
 
-        table_factory = (Table.Builder(self.system.resource_manager)
+        table_factory = (Table.Builder(self.system.job_manager)
                          .set_setup_time(math.ceil(60 * 1000 * time_setup))
                          .set_time_control(math.ceil(60 * 1000 * time_control), math.ceil(1000 * increment))
                          )
@@ -169,8 +172,7 @@ class BackendApi:
             return False, f'Field "type" should have type str, found {type(request_type)}'
 
         if request_type == "create_room":
-            self.create_room(user, request)
-            return True, None
+            return self.create_room(user, request)
 
         if request.get("room_id", None) is not None:
             return self.forward_request_to_room_api(user, request)

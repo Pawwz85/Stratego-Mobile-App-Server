@@ -1,0 +1,24 @@
+ <!DOCTYPE html>
+<html>
+<head>
+	<title>Room Preview</title>
+</head>
+<body>
+	<h1>{{ room_metadata.room_id }}</h1>
+	<p>{{ room_metadata.user_count }} users currently in the room.</p>
+	<p>{{ room_metadata.game_phase }} game phase.</p>
+
+	{% if room_metadata.password_required %}
+	<form method="POST" action="/join_room/{{room_metadata.room_id}}">
+		<label for="password">Enter Password:</label>
+		<input type="password" name="password" id="password">
+		<button type="submit">Join Room</button>
+	</form>
+    {% else %}
+    <form method="POST" action="/join_room/{{room_metadata.room_id}}">
+		<input type="hidden" name="room_id" value="{{ room_metadata.room_id }}">
+		<button type="submit">Join Room</button>
+	</form>
+	{% endif %}
+</body>
+</html>

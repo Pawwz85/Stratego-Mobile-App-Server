@@ -16,3 +16,4 @@ class AppLogin:
             user_dto = self.user_dao.find_user_by_id(user_id)
             if user_dto:
                 return HttpUser.from_dto(user_dto)
+

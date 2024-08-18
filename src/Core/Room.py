@@ -2,20 +2,20 @@ from __future__ import annotations
 from typing import Callable
 import uuid
 
-from src.Core.ResourceManager import ResourceManager, ResourceManagerJob, DelayedTask
+from src.Core.JobManager import JobManager, Job, DelayedTask
 from src.Core.User import User
 from src.Core.stratego import Side
-from src.Core.table import Table, TableApi
+from src.Core.table import Table, TableApi, TableGamePhase
 from src.Core.chat import Chat, ChatApi
 from src.Events.Events import EventLogicalEndpointWithSignature, Eventmanager
 
 
 class Room:
     class Builder:
-        def __init__(self, resource_manager: ResourceManager, mark_for_deletion: Callable[[str], any]):
-            self.resourceManager = resource_manager
-            self.event_manager: Eventmanager = Eventmanager(resource_manager)
-            self.table_builder = Table.Builder(resource_manager)
+        def __init__(self, job_manager: JobManager, mark_for_deletion: Callable[[str], any]):
+            self.job_manager = job_manager
+            self.event_manager: Eventmanager = Eventmanager(job_manager)
+            self.table_builder = Table.Builder(job_manager)
             self.chat_cap = 1024
             self.password: str | None = None
             self.mark_for_deletion: Callable = mark_for_deletion
@@ -37,16 +37,16 @@ class Room:
             return self
 
         def build(self) -> Room:
-            result: Room = Room(self.resourceManager, self.event_manager, self.table_builder, self.mark_for_deletion)
+            result: Room = Room(self.job_manager, self.event_manager, self.table_builder, self.mark_for_deletion)
             result._chat = Chat(result.event_broadcast, self.chat_cap)
             result._password = self.password
             return result
 
-    def __init__(self, resource_manager: ResourceManager, event_manager: Eventmanager,
+    def __init__(self, job_manager: JobManager, event_manager: Eventmanager,
                  table_builder: Table.Builder, mark_for_deletion: Callable[[str], any]):
         self.users: dict[int, User] = dict()
         self.user_list_updates = 0
-        self.resourceManager = resource_manager
+        self.job_manager = job_manager
         self.__mark_self_for_deletion = mark_for_deletion
         self._table = (table_builder.
                        set_seat_observer(self.__on_seat_change).
@@ -56,7 +56,7 @@ class Room:
                        build())
         self._chat = Chat(self.event_broadcast)
         self._password = None
-        self._job: None | ResourceManagerJob = None
+        self._job: None | Job = None
         self._inactive_room_auto_termination: None | DelayedTask = None
         self._id = uuid.uuid4().hex  # TODO: replace uuid with something more memorable
         self.event_manager = event_manager
@@ -69,8 +69,8 @@ class Room:
         self.users[user.id] = user
         user.room_count += 1
         if self._job is not None:
-            self._job = ResourceManagerJob(lambda: self.__empty_check())
-            self.resourceManager.add_job(self._job)
+            self._job = Job(lambda: self.__empty_check())
+            self.job_manager.add_job(self._job)
         welcome_event = {"type": "room_welcome_event", "room_id": self._id, "password": self._password}
         user.session.receive(welcome_event)
         self.user_list_updates += 1
@@ -122,7 +122,7 @@ class Room:
         seats = self._table.get_seat_manager().seats
         for color in Side:
             if seats[color] == user.id:
-                return "blue_player" if color.value() else "red_player"
+                return "blue_player" if color.value else "red_player"
         return "spectator"
 
     def __spectator_channel(self, event_body: dict):
@@ -187,7 +187,7 @@ class Room:
         if self._inactive_room_auto_termination is not None:
             self._inactive_room_auto_termination.cancel()
         self._inactive_room_auto_termination = DelayedTask(self.close_room, 1000 * 600)
-        self.resourceManager.add_delayed_task(self._inactive_room_auto_termination)
+        self.job_manager.add_delayed_task(self._inactive_room_auto_termination)
 
     def close_room(self):
         event = {
@@ -202,8 +202,10 @@ class RoomApi:
         self.room = room
         self.strategies: dict[str, Callable[[User, dict], tuple[bool, str | None] | dict]] = {
             "exit_room": lambda user, req: self.exit_room(user),
+            "join_room": lambda user, req: self.join(user, req),
             "get_room_users": lambda user, req: self.get_room_users(user),
             "get_board": lambda user, req: self.get_board(user),
+            "get_room_info": lambda user, req: self.get_room_metadata(),
             "claim_seat": lambda user, req: self.claim_seat(user, req),
             "release_seat": lambda user, req: self.release_seat(user),
             "set_ready": lambda user, req: self.set_readiness(user, req),
@@ -303,6 +305,24 @@ class RoomApi:
         if user.id not in self.room.users.keys():
             return False, "You must join room to access this command"
         return self.room.get_table_api().set_rematch_willingness(user, request)
+
+    def get_room_metadata(self) -> dict:
+        phases_to_string = {
+            TableGamePhase.setup: "setup",
+            TableGamePhase.awaiting: "awaiting",
+            TableGamePhase.finished: "finished",
+            TableGamePhase.gameplay: "gameplay"
+        }
+        response = {
+            "room_id": self.room.get_id(),
+            "status": "success",
+            "metadata": {
+                "password_required": self.room.get_password() is not None,
+                "user_count": len(self.room.users),
+                "game_phase": phases_to_string.get(self.room.get_table().phase_type, None)
+            }
+        }
+        return response
 
     def __call__(self, user: User, request: dict) -> tuple[bool, str | None] | dict:
         request_type: str | None = request.get("type", None)

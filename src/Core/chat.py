@@ -1,3 +1,4 @@
+import json
 from typing import Callable
 
 from src.Core.User import User
@@ -13,6 +14,12 @@ class _ChatMessage:
     def __init__(self, nickname: str, message: str):
         self.nickname = nickname
         self.message = message
+
+    def to_json(self):
+        return {
+            "nickname": self.nickname,
+            "message": self.message
+        }
 
 
 class Chat:
@@ -49,7 +56,7 @@ class Chat:
 
         reset_event = {
             "type": "chat_reset",
-            "messages": self._messages[0:survivor_count - 1]
+            "messages": self._messages[0:(survivor_count - 1)]
         }
         self._event_broadcaster(reset_event)
 
@@ -81,6 +88,9 @@ class Chat:
 
     def __getitem__(self, item):
         return self._messages.__getitem__(item)
+
+    def get_capacity(self):
+        return self._max_size
 
 
 class ChatApi:
@@ -122,7 +132,8 @@ class ChatApi:
         return {
             "status": "success",
             "chat_metadata": {
-                "size": len(self.chat)
+                "size": len(self.chat),
+                "capacity": self.chat.get_capacity()
             }
         }
 
@@ -140,7 +151,7 @@ class ChatApi:
         if type(to_) is not int:
             return False, f'Field "to" should have type of int, found {type(from_)} instead'
 
-        if from_ not in range(len(self.chat)) or to_ not in range(len(self.chat)):
+        if from_ not in range(len(self.chat)) or to_ not in range(len(self.chat) + 1):
             return False, 'Access out of range'
 
         return {

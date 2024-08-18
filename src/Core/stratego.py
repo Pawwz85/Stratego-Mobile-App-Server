@@ -1,4 +1,5 @@
 import json
+from collections import deque
 from enum import Enum
 
 """
@@ -149,7 +150,6 @@ class GameStateView:
     def __getitem__(self, item):
         return self._view[item]
 
-
 class GameState:
     def __init__(self):
         self._board: list[None | Piece] = [None] * 100
@@ -280,7 +280,7 @@ class GameState:
         return self._board.copy()
 
     def move_gen(self, side: Side):
-        pseudo_legal_moves: list[tuple[int, int]] = []
+        pseudo_legal_moves: deque[tuple[int, int]] = deque()
         for i, p in enumerate(self._board):
             if p is not None and p.color is side:
                 if p.type is PieceType.scout:

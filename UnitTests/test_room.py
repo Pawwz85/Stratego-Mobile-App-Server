@@ -39,7 +39,7 @@ class RoomTestCase(unittest.TestCase):
         try:
             usi.run_command("$RoomApi\nUser1 join > {}\nWAIT 20\nUser2 join > {}\nWAIT 20")
             usi.run_script("../TestResources/table_api_test_players_ready", "$RoomApi", RoomTestCase.table_api_to_room_api_mapping)
-            usi.run_command("WAIT 110")
+            usi.run_command("WAIT 120")
             usi.run_command(setup_script)
             usi.run_command("WAIT 310")
             usi.run_command(gameplay_script)
