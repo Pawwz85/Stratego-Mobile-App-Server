@@ -1,12 +1,17 @@
 import { appGlobalContext } from "./global_context.js";
-import {SimpleButtonWithText} from "./ui_primitives.js";
+import {SimpleButtonWithText, SimpleTogglerBuilder} from "./ui_primitives.js";
 export class SideSelectorSeatModel{
   constructor(color){
     this.color = color;
     this.ownerUsername = null;
+    
     this.blocked = false;
+    this.ready = false;
+    this.isUserOwner = false;
+
     this.onClaimSeat = ()=>{};
     this.onReleaseSeat = ()=>{};
+    this.onReadyChange = (value) => {};
     this.observers = []
   
   }
@@ -21,13 +26,30 @@ export class SideSelectorSeatModel{
       
       if(this.color == "blue")
         owner = table.blue_player;
-      
+
       const newUsername = owner?.username ?? null;
       anyChange = anyChange || newUsername != this.ownerUsername;
 
+      this.isUserOwner = newUsername == appGlobalContext.currentUser.username;
       this.ownerUsername = newUsername;
+      console.log(anyChange, this.ownerUsername, newUsername, this.color, table)
       if(anyChange)
         this.notify_observers();
+  }
+
+
+  // seat can also listen on ready status
+  update_ready_status(status){
+    let value = false;
+    if(this.color == "red") value = status.red_player;
+    if(this.color == "blue") value = status.blue_player;
+
+    if(value != this.ready)
+     {
+      this.ready = value;
+      this.notify_observers();
+     }
+
   }
 
   block(){
@@ -51,122 +73,207 @@ export class SideSelectorSeatModel{
 
 }
 
-export class SideSelectorSeatView{
-  constructor(model, color, onHoverColor){
+export class SideSelectorView{
+  constructor(model){
     this.model = model;
-    this.width = 100;
-    this.height = 20;
-    this.color = color ?? model.color;
-    this.onHoverColor = onHoverColor ?? this.color;
-
+    model.observers.push(this);
     this.element = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    this.model.observers.push(this);
-    this.refresh();
+    this.element.style.overflow = "visible";
+    this.update(model);
   }
 
   __clear(){
-    while(this.element.firstChild)
-      this.element.firstChild.remove();
-  }
-
-  __create_rect(){
-    let result = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    result.setAttribute( "width", this.width);
-    result.setAttribute( "height", this.height);
-    result.setAttribute( "fill", this.color);
-    return result;
-  }
-
-  __render_button(text, on_click = null){
-    const passiveColor = this.color;
-    const hoverColor = this.onHoverColor;
-    let result = new SimpleButtonWithText(text, passiveColor, hoverColor);
-    if(on_click){
-          result.onClick = on_click;
-    } else{
-      result.clickable = false;
-    }
-
-    result.setSize(this.width, this.height);
-    return result.element;
-  }
-
-  __render_owned_by_other_player(){
-    const username = (this.model.ownerUsername == "CLAIM")? "" : this.model.ownerUsername;
-
-    return this.__render_button(this.model.ownerUsername);
-  }
-
-  __render_owned_by_user(){
-    const username = (this.model.ownerUsername == "CLAIM")? "" : this.model.ownerUsername;
-    const callback = () =>{
-      this.model.onReleaseSeat();
-      this.model.block();
-      setTimeout(()=>{this.model.unblock();}, 500);
-
-    }
-    return this.__render_button("RELEASE", callback);
-  }
-  __render_owned_by_nobody(){
-    const callback = ev => {
-      this.model.onClaimSeat();
-      this.model.block();
-      setTimeout(()=>{this.model.unblock();}, 500);
-    }
-    return this.__render_button("CLAIM", callback);
-  }
-
-  __render_blocked(){
-    // TODO: replace loading with animated circle
-    return this.__render_button("LOADING...");
-  }
-
-  update(model){
-    this.__clear();
-
-    let renderer = this.__render_owned_by_nobody;
-    const currentUser = appGlobalContext?.currentUser?.username ?? null;
-
-    if(model.ownerUsername != null && model.ownerUsername != currentUser) renderer = this.__render_owned_by_other_player;
-    if(model.ownerUsername == null) renderer = this.__render_owned_by_nobody;
-    if(model.ownerUsername == currentUser) renderer = this.__render_owned_by_user;
-    if(model.blocked) renderer = this.__render_blocked;
-    
-    renderer = renderer.bind(this);
-
-    this.element.append(renderer());
-  }
-
-  setSize(width, height){
-    this.width = width;
-    this.height = height;
-    this.refresh();
+    while((this.element.firstChild))
+      this.element.firstChild?.remove();
   }
 
   refresh(){
     this.update(this.model);
   }
-}
 
-class ReadyButton{
-  constructor(){
-    this.button = new SimpleButtonWithText("START");
+  __build_main_btn(model){
+    const btn_pass_color = (model.color == "red") ? "#FF0000" : "#0000FF";
+    const btn_hov_color = (model.color == "red") ? "#FF3F3F": "#3F3FFF";
+    const is_free = model.ownerUsername == null;
+    let btn_text = (model.isUserOwner) ? "Release" : "Claim";
+    if(model.blocked) btn_text = "Loading..";
+    
+    const btn = new SimpleButtonWithText(btn_text, btn_pass_color, btn_hov_color);
+    btn.clickable = (is_free || model.isUserOwner) && !model.blocked;
+    btn.onClick = ()=> {
+      if (is_free)
+        model.onClaimSeat();
+      else
+      model.onReleaseSeat();
 
-    this.readyValue = false;
+      model.block();
+      setTimeout(() =>{
+        model.unblock();
+      }, 500);
 
-    this.on_ready = () => {}
-    this.on_not_ready = () => {}
-
-    this.primary_color = "#007700";
-    this.secondary_color = "#33AA33";
+    }
+    return btn;
   }
 
-  refresh(){
-    this.button.passiveColor = this.primary_color;
-    this.button.onHoverColor = this.secondary_color;
+  __ensure_ready_toggler_grad(){
+    const grad_id = "ready-toggle-grad-" + this.model.color;
+    if(!document.getElementById(grad_id)){
+      const gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient")
+      gradient.setAttribute("id", grad_id);
+      gradient.setAttributeNS(null, "x1", "0%");
+      gradient.setAttributeNS(null, "y1", "0%");
+      gradient.setAttributeNS(null, "y2", "0%");
+      gradient.setAttributeNS(null, "x2", "100%");
+      const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+      stop1.setAttribute("offset", "0%");
+      stop1.setAttributeNS(null, "stop-color", "#ffffff")
+      stop1.style.stopOpacity = "1"; 
+      const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+      stop2.setAttribute("offset", "100%");
+      stop2.setAttributeNS(null, "stop-color", this.model.color)
+      stop2.style.stopOpacity = "1"; 
+      gradient.appendChild(stop1)
+      gradient.appendChild(stop2);
+      const dev = document.createElementNS("http://www.w3.org/2000/svg", "defs")
+      dev.appendChild(gradient)
 
-    this.button.refresh();
+      const defs = document.getElementById("svg-defs");
+      defs.append(dev)
+    }
   }
+
+  __ensure_await_labels_grad(){
+    const grad_id = "await-label-grad-" + this.model.color;
+    const c1 = (this.model.color == "blue")? "purple": "red";
+    const c2 =  (this.model.color == "blue")? "blue": "purple";
+    if(!document.getElementById(grad_id)){
+      const gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient")
+      gradient.setAttribute("id", grad_id);
+      gradient.setAttributeNS(null, "x1", "0%");
+      gradient.setAttributeNS(null, "y1", "0%");
+      gradient.setAttributeNS(null, "y2", "0%");
+      gradient.setAttributeNS(null, "x2", "100%");
+      const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+      stop1.setAttribute("offset", "0%");
+      stop1.setAttributeNS(null, "stop-color", c1)
+      stop1.style.stopOpacity = "1"; 
+      const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+      stop2.setAttribute("offset", "100%");
+      stop2.setAttributeNS(null, "stop-color", c2)
+      stop2.style.stopOpacity = "1"; 
+      gradient.appendChild(stop1)
+      gradient.appendChild(stop2);
+      const dev = document.createElementNS("http://www.w3.org/2000/svg", "defs")
+      dev.appendChild(gradient)
+
+      const defs = document.getElementById("svg-defs");
+      defs.append(dev)
+    }
+  }
+
+
+  __build_ready_toggler(model){
+    const builder = new SimpleTogglerBuilder();
+    const grad_id = "ready-toggle-grad-" + this.model.color;
+    
+    this.__ensure_ready_toggler_grad();
+
+    const passive_bar = {
+      fill : "gray",
+      rx: "5",
+      ry: "5"
+    }
+
+    const active_bar = {
+      fill : "url(#" + grad_id +")",
+      rx: "5",
+      ry: "5"
+    }
+
+    const passive_dot = {
+      fill : "white"
+    }
+
+    const active_dot = {
+      fill : this.model.color
+    }
+
+    const toggle = builder.set_active_state(active_bar, active_dot).set_passive_state(passive_bar, passive_dot).build();
+    toggle.set_value(model.ready);
+    toggle.onValueChange = (value) => {model.onReadyChange(value);};
+    return toggle;
+  }
+
+  update(model){
+    // Step 1. clear group
+    this.__clear();
+
+    // Step 2. Init sub components 
+
+    const label_color = "url(#await-label-grad-" + this.model.color +")";
+    this.__ensure_await_labels_grad();
+
+    const btn = this.__build_main_btn(model);
+    const toggle = this.__build_ready_toggler(model);
+
+    const toggle_label =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+    toggle_label.textContent = "READY"
+
+    const ready_title = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    ready_title.textContent = "READY";
+    
+  
+    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    label.textContent = model.color + " player" + ((model.ownerUsername)?": "+ model.ownerUsername: "");
+
+    // Step 3. Set placement of those elements on the element
+
+    ready_title.setAttribute("x", "50%");
+    ready_title.setAttribute("y", "20%");
+    ready_title.setAttributeNS(null, 'text-anchor', "middle");
+    ready_title.setAttribute("fill", model.color)
+
+    label.setAttribute("x", "50%");
+    label.setAttribute("y", "40%");
+    label.setAttributeNS(null, 'text-anchor', "middle");
+    label.setAttribute("fill", label_color)
+
+    toggle_label.setAttribute("fill", label_color)
+
+    btn.width = 100;
+    btn.height = 23;
+    btn.element.setAttribute('y', "45%");
+    
+    btn.setSize(btn.width, btn.height);
+  
+    
+
+    toggle_label.setAttribute("x", "25%");
+    toggle_label.setAttribute("y", "90%");
+    toggle_label.setAttribute("width", "25%");
+    toggle_label.setAttribute("height", "10%");
+    toggle_label.setAttributeNS(null, 'text-anchor', "middle");
+
+    toggle.element.setAttribute("x", "75%");
+    toggle.element.setAttribute("y", "80%");
+    toggle.element.setAttribute("width", "25%");
+    toggle.element.setAttribute("height", "10%");
+
+    // Step 4. Insert relevant elements into element
+    this.element.append(btn.element);
+    this.element.append(label);
+
+
+    if(model.isUserOwner){
+      this.element.append(toggle.element);
+      this.element.append(toggle_label);
+    }
+
+    if(model.ready)
+      this.element.append(ready_title)
+
+  }
+  
 }
 
 export class SeatSelectorWindowModel{
@@ -175,10 +282,13 @@ export class SeatSelectorWindowModel{
     this.blueSeat = new SideSelectorSeatModel("blue");
     this.onClaimSeat = color => {};
     this.onSeatRelease = color => {};
+    this.onReadyChange = value => {};
     this.redSeat.onClaimSeat = () => {this.onClaimSeat("red");};
     this.blueSeat.onClaimSeat = () => {this.onClaimSeat("blue");};
     this.redSeat.onReleaseSeat = () => {this.onSeatRelease("red");};
     this.blueSeat.onReleaseSeat = () => {this.onSeatRelease("blue");};
+    this.redSeat.onReadyChange = (value) => {this.onReadyChange(value)};
+    this.blueSeat.onReadyChange = (value) => {this.onReadyChange(value)};
   }
 
   attachTableObservers(table){
@@ -189,12 +299,18 @@ export class SeatSelectorWindowModel{
     this.redSeat.notify_observers();
     this.blueSeat.notify_observers();
   }
+
+  update_ready_status(statuses){
+    console.log(statuses);
+    this.redSeat.update_ready_status(statuses)
+    this.blueSeat.update_ready_status(statuses)
+  }
 }
 
 export class SeatSelectorWindowView{
   constructor(model){
-    this.redSeatView = new SideSelectorSeatView(model.redSeat, "#AA0000", "#BB3333");
-    this.blueSeatView = new SideSelectorSeatView(model.blueSeat, "#0000AA", "#3333BB");
+    this.redSeatView = new SideSelectorView(model.redSeat);
+    this.blueSeatView = new SideSelectorView(model.blueSeat);
     this.window = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.__init_window();
   }
@@ -202,29 +318,98 @@ export class SeatSelectorWindowView{
   __init_window(){
     this.window.setAttributeNS("http://www.w3.org/2000/svg", "viewBox", "0 0 100 100");
     let background = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    const stroke = "url(#await-window-stroke)";
+    this.__ensure_await_window_stroke();
 
     background.setAttribute("height", "100%");
     background.setAttribute("width", "100%");
-    background.setAttribute("fill", "white");
-    background.setAttribute("stroke", "black");
-    background.setAttribute("stroke-width", "4%");
-    this.redSeatView.element.setAttribute("y", "10%");
-    this.blueSeatView.element.setAttribute("y", "50%");
+    background.setAttribute("fill", "black");
+    background.setAttribute("stroke", stroke);
+    background.setAttribute("stroke-width", "1%");
     
+    this.redSeatView.element.setAttribute("x", "5%");
+    this.redSeatView.element.setAttribute("y", "20%");
+    this.redSeatView.element.setAttribute("width", "40%");
+    this.redSeatView.element.setAttribute("height", "80%");
+
+    this.blueSeatView.element.setAttribute("x", "55%");
+    this.blueSeatView.element.setAttribute("y", "20%");
+    this.blueSeatView.element.setAttribute("width", "40%");
+    this.blueSeatView.element.setAttribute("height", "80%");
+    
+    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    label.textContent = "Player Info"
+    label.style.fill = stroke;
+    label.setAttribute("x", "50%");
+    label.setAttribute("y", "20%");
+    label.setAttribute("text-anchor", "middle");
     this.window.append(background);
     this.window.append(this.redSeatView.element);
     this.window.append(this.blueSeatView.element);
+    this.window.append(label);
+
+    this.__compose();
+  }
+  __ensure_await_window_stroke(){
+    const grad_id = "await-window-stroke";
+    const c1 = "red";
+    const c2 = "white";
+    const c3 =  "blue";
+    if(!document.getElementById(grad_id)){
+      const gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient")
+      gradient.setAttribute("id", grad_id);
+      gradient.setAttributeNS(null, "x1", "0%");
+      gradient.setAttributeNS(null, "y1", "0%");
+      gradient.setAttributeNS(null, "y2", "0%");
+      gradient.setAttributeNS(null, "x2", "100%");
+      const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+      stop1.setAttribute("offset", "0%");
+      stop1.setAttributeNS(null, "stop-color", c1)
+      stop1.style.stopOpacity = "1"; 
+      const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+      stop2.setAttribute("offset", "50%");
+      stop2.setAttributeNS(null, "stop-color", c2);
+      stop2.style.stopOpacity = "1"; 
+      const stop3 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+      stop3.setAttribute("offset", "100%");
+      stop3.setAttributeNS(null, "stop-color", c3)
+      stop3.style.stopOpacity = "1"; 
+      gradient.appendChild(stop1)
+      gradient.appendChild(stop2);
+      gradient.appendChild(stop3);
+      const dev = document.createElementNS("http://www.w3.org/2000/svg", "defs")
+      dev.appendChild(gradient)
+
+      const defs = document.getElementById("svg-defs");
+      defs.append(dev)
+    }
+  }
+
+  __compose(){
+    const margin = 5.0;
+    const seat_width = 30.0;
+    const height = 80.0;
+
+     this.redSeatView.element.setAttribute("x", (margin)+"%");
+     this.blueSeatView.element.setAttribute("x", + (100 - margin - seat_width) +"%");
+
+     this.redSeatView.element.setAttribute("y", margin+"%");
+     this.blueSeatView.element.setAttribute("y", margin +"%");
+
+     this.redSeatView.element.setAttribute("width", seat_width+"%");
+     this.blueSeatView.element.setAttribute("width", seat_width+"%");
+
+
+     this.redSeatView.element.setAttribute("height", height+"%");
+     this.blueSeatView.element.setAttribute("height", height+"%");
   }
 
   setSize(width, height){
     this.window.style.width = width + "px";
     this.window.style.height = height + "px";
-
-    this.redSeatView.element.setAttribute("x", +width*0.1+"px");
-    this.blueSeatView.element.setAttribute("x", +width*0.1+"px");
-    this.redSeatView.width = this.blueSeatView.width = width * 0.8;
-    this.redSeatView.height = this.blueSeatView.height = height / 3;
-    this.redSeatView.refresh();
-    this.blueSeatView.refresh();
+     
+     
+     //this.redSeatView.refresh();
+    // this.blueSeatView.refresh();
   }
 }

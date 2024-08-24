@@ -53,6 +53,7 @@ class Room:
                        set_event_channels({None: self.__spectator_channel,
                                            Side.blue: lambda body: self.__players_channel(body, Side.blue),
                                            Side.red: lambda body: self.__players_channel(body, Side.red)}).
+                       set_event_broadcast(self.event_broadcast).
                        build())
         self._chat = Chat(self.event_broadcast)
         self._password = None
@@ -209,6 +210,7 @@ class RoomApi:
             "claim_seat": lambda user, req: self.claim_seat(user, req),
             "release_seat": lambda user, req: self.release_seat(user),
             "set_ready": lambda user, req: self.set_readiness(user, req),
+            "get_ready": lambda user, req: self.get_readiness(user),
             "get_chat_metadata": lambda user, req: self.get_chat_metadata(user),
             "get_chat_messages": lambda user, req: self.get_chat_messages(user, req),
             "send_chat_message": lambda user, req: self.post_message(user, req),
@@ -275,6 +277,11 @@ class RoomApi:
         if user.id not in self.room.users.keys():
             return False, "You must join room to access this command"
         return self.room.get_table_api().set_readiness(request, user)
+
+    def get_readiness(self, user: User):
+        if user.id not in self.room.users.keys():
+            return False, "You must join room to access this command"
+        return self.room.get_table_api().get_player_readiness(user)
 
     def get_chat_metadata(self, user: User) -> tuple[bool, str | None] | dict:
         if user.id not in self.room.users.keys():

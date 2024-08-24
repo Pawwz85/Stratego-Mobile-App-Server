@@ -193,6 +193,7 @@ export class ServerConnection{
         this.socket.on("room_welcome_event", jsonPayload => {con.eventHandler.handleWelcomeEvent(jsonPayload);});
         this.socket.on("room_user_event", jsonPayload => {con.eventHandler.handleUserEvent(jsonPayload); });
         this.socket.on("board_event", jsonPayload => {con.eventHandler.handleBoardEvent(jsonPayload); });
+        this.socket.on("ready_event", jsonPayload => {con.eventHandler.handleReadyEvent(jsonPayload);});
         this.socket.on("chat_event", jsonPayload => {con.eventHandler.handleChatEvent(jsonPayload); console.log("chat ev");});
         this.socket.on("chat_reset", jsonPayload => {con.eventHandler.handleChatReset(jsonPayload);});
         this.socket.on("room_closed", jsonPayload => {con.eventHandler.handleRoomClosed(jsonPayload);});

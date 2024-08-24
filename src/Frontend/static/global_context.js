@@ -1,4 +1,5 @@
 import {BoardModel, BoardState, MoveGenerator, PieceType} from  "./board_model.js";
+import { SeatSelectorWindowModel } from "./side_selector.js";
 import { GeneralChatModel } from "./chat.js";
 export class User{
     constructor(){
@@ -30,6 +31,7 @@ export class TableModel{
         const user_adapter = user => {return {profilePicture: null, username: user.username, boardrole: user.role}};
 
         for(let user of user_list){
+            console.log(user)
             if(user.role == "red_player"){
                 this.red_player = user_adapter(user);
               
@@ -47,6 +49,7 @@ export class TableModel{
        // if(change)
         this.notify_observers();
     }
+
 }
 
 class AppGlobalContext{
@@ -55,10 +58,12 @@ class AppGlobalContext{
         this.roomId = "123",
         this.table = new TableModel();
         this.chatModel = new GeneralChatModel();
+        this.seatWindowModel = new SeatSelectorWindowModel();
         this.userList = [];
-        
     }
-
+    update_ready_status(statuses){
+        this.seatWindowModel.update_ready_status(statuses);
+    }
 }
 
 export const appGlobalContext = new AppGlobalContext();

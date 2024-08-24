@@ -214,10 +214,11 @@ export class AwaitPhaseFragment{
         this.boardView = new BoardView(); //only for aestetic reason
         this.chatFrag = new ChatFragment(appGlobalContext.chatModel);
         this.chatFrag.onSend = (msg) => serverConnection.commandMannager.send_message(msg);
-        this.seatSelectorWindowModel = new SeatSelectorWindowModel();
+        this.seatSelectorWindowModel = appGlobalContext.seatWindowModel;
         this.seatSelectorWindowView = new SeatSelectorWindowView(this.seatSelectorWindowModel); 
         this.seatSelectorWindowModel.onClaimSeat = color => {serverConnection.commandMannager.claim_seat(color);}
-        this.seatSelectorWindowModel.onSeatRelease = color => {serverConnection.commandMannager.release_seat();}
+        this.seatSelectorWindowModel.onSeatRelease = _ => {serverConnection.commandMannager.release_seat();}
+        this.seatSelectorWindowModel.onReadyChange = value => {serverConnection.commandMannager.set_ready(value);}
         this.fragmentElement = document.createElement("div");
 
         this.onCreate();
@@ -250,7 +251,7 @@ export class AwaitPhaseFragment{
         this.chatFrag.chatWrapper.style.top = "8px";
 
         this.seatSelectorWindowView.window.style.position = "absolute";
-        const windowX = Math.floor(page_size_x/5);
+        const windowX = Math.floor(page_size_x/2);
         const windowY = Math.floor(page_size_y/5);
         this.seatSelectorWindowView.setSize(windowX, windowY);
         this.seatSelectorWindowView.window.style.left = (board_size - windowX)/2 + "px";

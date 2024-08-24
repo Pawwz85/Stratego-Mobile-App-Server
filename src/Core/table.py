@@ -84,7 +84,7 @@ class _SeatManager:
             return False, "Seat is already taken"
 
         if self.seats[color.flip()] == user_id:
-            self._seat_observer(user_id, None)
+            self.release_seat(user_id)
 
         self.seats[color] = user_id
         self._seat_observer(user_id, color)
@@ -122,8 +122,10 @@ class _SeatManagerWithReadyCommand(_SeatManager):
 
     def __init__(self, set_table_to_setup_phase: Callable,
                  job_manager: JobManager, transmission_time_ms: int,
+                 on_ready_change: Callable[[Side, bool], any],
                  seat_observer: Callable[[int, Side], any]):
         super().__init__(set_table_to_setup_phase, seat_observer)
+        self._on_ready_change = on_ready_change
         self._readiness: dict[Side, bool] = {Side.red: False, Side.blue: False}
         self._transmission_task: DelayedTask | None = None
         self.job_manager = job_manager
@@ -151,6 +153,7 @@ class _SeatManagerWithReadyCommand(_SeatManager):
             if v == user_id:
                 self.seats[k] = None
                 self._readiness[k] = False
+                self._on_ready_change(k, False)
 
         if self._transmission_task is not None:
             self._transmission_task.cancel()
@@ -167,6 +170,15 @@ class _SeatManagerWithReadyCommand(_SeatManager):
             self._transmission_task.cancel()
             self._transmission_task = None
         self._readiness[side] = value
+        self._on_ready_change(side, value)
+
+    def get_readiness(self):
+        result = {
+            "status": "success",
+            "red_player": self._readiness[Side.red],
+            "blue_player": self._readiness[Side.blue]
+        }
+        return result
 
 
 class _SetupManager:
@@ -328,13 +340,23 @@ class Table:
             self.__time_control: TableTimeControl = TableTimeControl(300000, 1200000, 1200000)
             self.__use_readiness = True
             self.__start_timer = 10000
+            self.__event_broadcast: Callable[[dict], any] = lambda x: None
             self.__event_channels = {side: (lambda d: None) for side in {Side.red, Side.blue, None}}
             self.__seat_observer: Callable[[int, Side | None], any] = lambda x, y: None
 
         def get_sm_constructor(self):
+            def __on_ready_change(side: Side, value: bool):
+                event = {
+                   "type": "ready_event",
+                   "side": "red" if side is Side.red else "blue",
+                   "value": value
+                }
+                self.__event_broadcast(event)
+
             if self.__use_readiness:
                 return lambda x: _SeatManagerWithReadyCommand(x, self.__job_manager,
-                                                              self.__start_timer, self.__seat_observer)
+                                                              self.__start_timer, __on_ready_change,
+                                                              self.__seat_observer)
             else:
                 return lambda x: _SeatManager(x, self.__seat_observer)
 
@@ -365,6 +387,10 @@ class Table:
 
         def set_event_channels(self, channels: [Side | None, Callable[[dict], any]]) -> Table.Builder:
             self.__event_channels = channels
+            return self
+
+        def set_event_broadcast(self, broadcast: Callable[[dict], any]) -> Table.Builder:
+            self.__event_broadcast = broadcast
             return self
 
         def set_seat_observer(self, seat_observer: Callable[[int, Side | None], any]) -> Table.Builder:
@@ -556,8 +582,14 @@ class TableApi:
         seat_man = self.table.get_seat_manager()
         if isinstance(seat_man, _SeatManagerWithReadyCommand):
             return seat_man.set_readiness(user.id, value)
+        else:
+            return False, f"This room do not support this command"
 
-        return True, None
+    def get_player_readiness(self, user: User) -> tuple[bool, str | None] | dict:
+        seat_man = self.table.get_seat_manager()
+        if not isinstance(seat_man, _SeatManagerWithReadyCommand):
+            return False, f"This room do not support this command"
+        return seat_man.get_readiness()
 
     def release_seat(self, user: User) -> tuple[bool, str]:
         if self.table.phase_type not in {TableGamePhase.awaiting, TableGamePhase.finished}:

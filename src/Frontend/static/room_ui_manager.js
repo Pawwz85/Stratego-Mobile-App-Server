@@ -5,6 +5,7 @@ import {FragmentManager, AwaitPhaseFragment, SetupFragment, GameplayPhaseFragmen
 export class RoomUIManager{
     constructor(roomLiveImage){
             appGlobalContext.chatModel = roomLiveImage.chatImage.chatModel;
+            roomLiveImage.playerReadyStatusLiveImage.add_observer(appGlobalContext.seatWindowModel);
             this.roomLiveImage = roomLiveImage;
             this.fragmentManager = new FragmentManager(roomLiveImage.get_connection());
             roomLiveImage.gamePhaseLiveImage.add_observer(this);

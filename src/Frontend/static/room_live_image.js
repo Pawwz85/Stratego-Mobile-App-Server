@@ -388,19 +388,92 @@ class UserListLiveImage{
 
 }
 
+class PlayerReadyStatusLiveImage{
+    constructor(serverConnection, roomId){
+        this.serverConnection = serverConnection;
+        this.roomId = roomId;
+        this.is_red_player_ready = false;
+        this.is_blue_player_ready = false;
+        this.observers = []
+    }
+
+    handleReadyEvent(event){
+        if(typeof event?.value != "boolean" || typeof event?.side != "string"){
+            console.log("API produced unrecognizable response. Outdated client?");
+            console.log(event);
+            return;
+        }
+        console.log("ready_event", event)
+        if(event.side == "red"){
+            this.is_red_player_ready = event.value;
+        }
+
+        if(event.side == "blue"){
+            this.is_blue_player_ready = event.value;
+        }
+
+        this.notify_observers()
+    }
+
+    sync(){
+        const request = {
+            type: "get_ready",
+            room_id: this.roomId
+        }
+        const tmp = this;
+        this.serverConnection.send_request(request, 10000).then(
+            value => {
+                if (typeof value?.red_player != "boolean" || typeof value?.blue_player != "boolean" || value?.status != "success"){
+                    console.log("Failed to get player ready status");
+                    console.log(value);
+                    return;
+                }
+                this.is_red_player_ready = value.red_player;
+                this.is_blue_player_ready = value.blue_player;
+                tmp.notify_observers()
+            }
+        )
+
+    }
+
+    add_observer(observer){
+        const tmp = this;
+        const msg = {
+            red_player: tmp.is_red_player_ready,
+            blue_player: tmp.is_blue_player_ready
+        };
+        this.observers.push(observer);
+        observer.update_ready_status(msg);
+    }
+
+    notify_observers(){
+        const tmp = this;
+        const msg = {
+            red_player: tmp.is_red_player_ready,
+            blue_player: tmp.is_blue_player_ready
+        }
+   
+        for(let ob of this.observers){
+           ob.update_ready_status(msg)
+        }
+            
+    }
+}
+
 export class RoomLiveImage{
     constructor(serverConnection, roomId){
         this.connection = serverConnection;
         this.chatImage = new LiveChatImage(serverConnection, roomId);
         this.userListImage = new UserListLiveImage(serverConnection, roomId);
+        this.playerReadyStatusLiveImage = new PlayerReadyStatusLiveImage(serverConnection, roomId);
         this.boardLiveImage = new BoardLiveImage(serverConnection, roomId); 
         this.positionLiveImage = new BoardPositionLiveImage(this.boardLiveImage);
-        this.gamePhaseLiveImage = new GamePhaseLiveImage(this.boardLiveImage);
-    
+        this.gamePhaseLiveImage = new GamePhaseLiveImage(this.boardLiveImage);    
     }
 
     sync(){
         this.userListImage.sync();
+        this.playerReadyStatusLiveImage.sync();
         this.chatImage.sync();
         this.boardLiveImage.sync(); // explicitly sync position and gamephase
     }
@@ -412,6 +485,7 @@ export class RoomLiveImage{
             handleBoardEvent: (json) => this.boardLiveImage.handle_board_event(json),
             handleChatEvent: (json) => this.chatImage.handle_chat_event(json),
             handleChatReset: (json) => {},
+            handleReadyEvent: (json) => this.playerReadyStatusLiveImage.handleReadyEvent(json),
             handleRoomClosed: (json) => {alert("Room was closed by server")}
         }
     }
