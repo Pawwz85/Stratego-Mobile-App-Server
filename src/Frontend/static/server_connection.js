@@ -101,7 +101,7 @@ class GameNodeCommandManager{
     send_move(move){
         const request ={
             "type" : "send_move",
-            "setup" : move,
+            "move" : move,
             "room_id": appGlobalContext.roomId
         } 
         return this.serverConnection.send_request(request, this.timeout_time);

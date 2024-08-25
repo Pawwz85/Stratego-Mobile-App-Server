@@ -16,12 +16,10 @@ export var PieceType
   PieceType[(PieceType["UNKNOWN"] = 12)] = "UNKNOWN"
 })(PieceType || (PieceType = {}))
 
-export var Color
-
-;(function(Color) {
-  Color[(Color["RED"] = 0)] = "RED"
-  Color[(Color["BLUE"] = 1)] = "BLUE"
-})(Color || (Color = {}))
+export var Color = {
+  RED: "red",
+  BLUE: "blue"
+}
 
 export class Piece {
   constructor(color, type_) {
@@ -68,17 +66,20 @@ export class BoardState {
 
   notify_observers() {
     for (let i = 0; i < this.observers.length; ++i) {
+      console.log(this.observers[i])
       this.observers[i].set_state(this)
     }
   }
 
   set_position(index_piece_pairs) {
     this.reset()
+    console.log(index_piece_pairs)
     for (let i = 0; i < index_piece_pairs.length; ++i) {
       let index = index_piece_pairs[i][0]
       let piece = index_piece_pairs[i][1]
       this.squares[index].piece = piece
     }
+  
     this.notify_observers()
   }
 
@@ -120,13 +121,16 @@ export class MoveGenerator {
     if ([PieceType.BOMB, PieceType.FLAG].includes(piece.type)) return []
 
     const result = []
+
     if (piece.type != PieceType.SCOUT) {
       const offsets = [-10, -1, 1, 10]
       const result = []
       for (let off of offsets) {
         let move = new Move(sq_id, sq_id + off)
-        if (this.is_move_valid(move)) result.push(move)
+        //if (this.is_move_valid(move))
+           result.push(move)
       }
+      console.log(piece)
       return result
     } else {
       const offsets = [-10, -1, 1, 10]
@@ -246,11 +250,15 @@ export class BoardModel {
       this.selected_sq_id < this.boardstate.squares.length &&
       this.selected_sq_id >= 0
     ) {
+      this.move_gen.set_state(this.boardstate);
       const legal_moves = this.move_gen.generate_moves_for_piece(
         this.selected_sq_id
       )
+
+      console.log(legal_moves)
       for (let move of legal_moves)
         this.boardstate.squares[move.to].draw_dot = true
+      console.log(this.boardstate.squares)
     }
 
     this.boardstate.notify_observers()

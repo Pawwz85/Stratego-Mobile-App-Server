@@ -1,4 +1,4 @@
-import {BoardModel, BoardState, MoveGenerator, PieceType, Piece} from  "./board_model.js";
+import {BoardModel, BoardState, MoveGenerator, PieceType, Piece, Color} from  "./board_model.js";
 import { BoardView} from "./board_view.js"
 import {SidePanelModel, SidePanelView} from  "../static/board_side_panel.js"
 import {ChatFragment} from "../static/chat.js"
@@ -6,6 +6,8 @@ import {appGlobalContext} from "../static/global_context.js"
 import {SeatSelectorWindowModel, SeatSelectorWindowView} from "../static/side_selector.js"
 import {SelectorWithQuantityView, SelectorWithQuantityModel} from "../static/unit_selector.js"
 import { ServerConnection } from "./server_connection.js";
+import { extract_setup } from "./PieceEncoder.js";
+import {OnlineGameplayBoardController} from "./gameplay_board_controller.js"
 
 export const user_game_roles = {
     red_player: "red_player",
@@ -26,8 +28,8 @@ class __SetupPhaseComponentsFactory{
           components and then glued together to be used only in such fragment and being impossible to reuse in other fragments.  
 
     */
-    constructor(){
-        this.color = undefined;
+    constructor(color){
+        this.color = color;
     }
 
     create_unit_selector_model(){
@@ -95,7 +97,8 @@ class __SetupPhaseComponentsFactory{
             case 10: type = PieceType.GENERAL; break;
             case 11: type = PieceType.MARSHAL; break; 
         }
-        return (type != null)? new Piece(this.color, type): null;
+        console.log(this.color)
+        return (type != null)? new Piece(this.color.toLowerCase(), type): null;
     }
 
     __create_renderer_for_selector_index(index, boardView){
@@ -206,6 +209,7 @@ class __SetupPhaseComponentsFactory{
         return view;
     }
 
+
 }
 
 export class AwaitPhaseFragment{
@@ -223,6 +227,8 @@ export class AwaitPhaseFragment{
 
         this.onCreate();
     }
+
+
     onCreate(){
         this.fragmentElement.append(this.boardView.boardElement);
         this.fragmentElement.append(this.chatFrag.chatWrapper);
@@ -268,15 +274,22 @@ export class SetupFragment{
         this.chatFrag.onSend = (msg) => serverConnection.commandMannager.send_message(msg);
         this.boardModel.boardstate.observers.push(this.boardView);
 
-        let compFact = new __SetupPhaseComponentsFactory();
-        compFact.color = color;
+        let compFact = new __SetupPhaseComponentsFactory(color);
         this.unitSelectorModel = compFact.create_unit_selector_model(this.boardModel);
         this.unitSelectorView = compFact.create_unit_selector_view(this.boardView, this.unitSelectorModel);
         this.boardController = compFact.create_board_controller(this.boardModel, this.unitSelectorModel);
         this.fragmentElement = document.createElement("div");
-  
-        this.boardSidePanelModel = compFact.create_board_side_panel_model(function(){}, function(){})
+        
+        const send_setup = () => {
+            const setup = extract_setup(this.boardModel, color==Color.BLUE);
+            console.log(setup);
+            serverConnection.commandMannager.send_setup(setup);
+        }
+
+        this.boardSidePanelModel = compFact.create_board_side_panel_model(function(){}, send_setup)
         this.boardSidePanelView = compFact.create_board_side_panel_view(this.boardSidePanelModel);
+
+        
 
         this.userColor = color;
 
@@ -291,6 +304,7 @@ export class SetupFragment{
 
         this.chatFrag.setSize(300, 375);
     }
+
     onDestroy(){}
 
     onHide(){
@@ -330,13 +344,57 @@ export class SetupFragment{
 }
 
 export class GameplayPhaseFragment{
-    constructor(ServerConnection){
+    constructor(serverConnection, userColor){
         // TODO: implement this class and decouple general mess that are those ducking fragments
-        this.boardModel = new BoardModel(new MoveGenerator(), new BoardState());
+        this.boardModel = appGlobalContext.table.boardModel;
+    
         this.boardView = new BoardView();
+        this.boardView.set_model(this.boardModel);
         this.chatFrag = new ChatFragment(appGlobalContext.chatModel);
         this.chatFrag.onSend = (msg) => serverConnection.commandMannager.send_message(msg);
+        this.boardModel.submitMove = (move) => serverConnection.commandMannager.send_move(move);
         this.boardModel.boardstate.observers.push(this.boardView);
+        this.boardModel.boardstate.notify_observers();
+
+        this.boardController = new OnlineGameplayBoardController(serverConnection, this.boardModel, userColor);
+        this.boardView.set_controller(this.boardController);
+
+        this.fragmentElement = document.createElement("div");
+
+        this.onCreate();
+    }
+
+    onCreate(){
+        this.fragmentElement.append(this.boardView.boardElement);
+        this.fragmentElement.append(this.chatFrag.chatWrapper);
+
+
+        this.chatFrag.setSize(300, 375);
+    }
+
+    onDestroy(){}
+
+    onHide(){
+        this.fragmentElement.style.display = "none";
+    }
+
+    onFocus(){
+        this.fragmentElement.style.display = "block";
+        this.boardView.set_controller(this.boardController);
+    }
+    
+    resize_fragment(page_size_x, page_size_y){
+        let board_size = Math.floor(page_size_x * 0.66);
+        this.boardView.set_size(board_size);
+        this.chatFrag.setSize(Math.floor(0.33 * page_size_x), board_size);
+        this.chatFrag.chatWrapper.style.position = "absolute";
+        this.chatFrag.chatWrapper.style.left = Math.floor(page_size_x * 0.75) + "px";
+        this.chatFrag.chatWrapper.style.top = "8px";
+
+        // this.boardSidePanelView.setSize(Math.floor(page_size_x * 0.03), board_size);
+        // this.boardSidePanelView.element.style.position = "absolute";
+        // this.boardSidePanelView.element.style.left = Math.floor(page_size_x * 0.68) + "px";
+        // this.boardSidePanelView.element.style.top = "8px";
     }
 }
 
@@ -370,4 +428,6 @@ export class FragmentManager{
         if(frag)
             this.setFragment(frag);
     }
+
+    
 }

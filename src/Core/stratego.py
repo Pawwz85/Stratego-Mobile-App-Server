@@ -334,7 +334,7 @@ def verify_setup_dict(setup: dict[int, PieceType], side: Side) -> bool:
     # if len(setup) != 40:
     #    return False
 
-    allowed_area = range(60, 100) if side.value else range(0, 40)
+    allowed_area = range(40) if side.value else range(60, 100)
 
     for key in setup.keys():
         if key not in allowed_area:

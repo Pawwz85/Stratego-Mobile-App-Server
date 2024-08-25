@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import collections
 from typing import Callable
 import uuid
 
@@ -128,25 +130,24 @@ class Room:
 
     def __spectator_channel(self, event_body: dict):
         player_set = self.player_set()
-        event_body["room_id"] = self._id
-
-        sessions = [user.session for user in self.users.values() if user.id not in player_set]
-        multi_cast_endpoint = EventLogicalEndpointWithSignature.merge(sessions, self.event_manager)
-        multi_cast_endpoint.receive(event_body)
-
-    def event_broadcast(self, event: dict):
+        users = [user for user in self.users.values() if user.id not in player_set]
+        self.send_event_to_range(event_body, users)
+    
+    def send_event_to_range(self, event: dict, users: collections.Collection[User]):
         event["room_id"] = self._id
-        sessions = [user.session for user in self.users.values()]
+        sessions = [user.session for user in users]
         multi_cast_endpoint = EventLogicalEndpointWithSignature.merge(sessions, self.event_manager)
         multi_cast_endpoint.receive(event)
+
+    def event_broadcast(self, event: dict):
+        self.send_event_to_range(event, self.users.values())
 
     def __players_channel(self, event_body: dict, side: Side):
         # We can send this directly to users, as mplayer numbers is always small (1 or 0)
         player_id = self._table.get_seat_manager().seats.get(side, None)
         player = self.users.get(player_id)
-        event_body["room_id"] = self._id
         if player is not None:
-            player.session.receive(event_body)
+            self.send_event_to_range(event_body, [player])
 
     def get_chat(self):
         self.delay_room_termination()

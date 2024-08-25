@@ -36,7 +36,7 @@ class StrategoUtilsTest(unittest.TestCase):
     def generate_random_setup(side: stratego.Side) -> dict[int, stratego.PieceType]:
         setup = {}
         piece_counts = stratego._piece_type_setup_count.copy()
-        available_squares = list(range(60, 100)) if side == stratego.Side.blue else list(range(40))
+        available_squares = list(range(60, 100)) if side == stratego.Side.red else list(range(40))
         random.shuffle(available_squares)
 
         for piece_type, count in piece_counts.items():
@@ -57,7 +57,7 @@ class StrategoUtilsTest(unittest.TestCase):
                 self.assertIs(stratego.verify_setup_dict(dict(), side), False)
 
                 # edge case 2: correct placement, incorrect unit's type
-                range_ = range(40) if side is stratego.Side.red else range(60, 100)
+                range_ = range(40) if side is stratego.Side.blue else range(60, 100)
                 self.assertIs(stratego.verify_setup_dict({sq_id: stratego.PieceType.flag
                                                           for sq_id in range_}, side),
                               False)

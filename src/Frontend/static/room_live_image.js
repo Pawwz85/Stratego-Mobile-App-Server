@@ -1,5 +1,6 @@
 import { GeneralChatModel } from "./chat.js";
 import {PieceType, Color, Piece} from "./board_model.js"
+import { PieceEncoder } from "./PieceEncoder.js";
 export class LiveChatImage{
     constructor(serverConnection, room_id){
         this.chatModel = new GeneralChatModel();
@@ -120,14 +121,14 @@ class BoardLiveImage{
 
     handle_board_event(event){
         console.log(event)
-        if(typeof event?.status != "string" || typeof event?.board != "object" || typeof event?.nr != "number"){
+        if( typeof event?.game_status != "string" || typeof event?.board != "object" || typeof event?.nr != "number"){
             console.log("API produced unrecognizable response. Outdated client?");
             console.log(event);
             return;
         }
         if (event.nr > this.orderNumber){
             this.orderNumber = event.nr;
-            this.phase = event.status;
+            this.phase = event.game_status;
             this.position = event.board;
             this.notify_observers();
         }
@@ -161,6 +162,7 @@ class GamePhaseLiveImage{
 
     update(boardLiveImage){
         const new_value = boardLiveImage.phase;
+        console.log(new_value, "phase")
         if( new_value != this.game_phase){
             this.game_phase = new_value;
             this.notify_observers();
@@ -182,7 +184,7 @@ class BoardPositionLiveImage{
         this.position = []; // position is compatibible with set_position() method of board_state
         this.position_observers = [];
 
-        this.token_decoter = this.__create_token_decoter();
+        this.token_decoter = new PieceEncoder();
         boardLiveImage.add_observer(this);
     }
 
@@ -193,48 +195,30 @@ class BoardPositionLiveImage{
 
     notify_observers(){
         for (let obs of this.position_observers)
-            obs.update_position(this.game_phase);
+            obs.update_position(this.position);
     }
 
-    __create_token_decoter(){
-        let token_decoter = new Map();
-        token_decoter.set("?", PieceType.UNKNOWN);
-        token_decoter.set("S", PieceType.SPY);
-        token_decoter.set("F", PieceType.FLAG);
-        token_decoter.set("B", PieceType.BOMB);
-        token_decoter.set("2", PieceType.SCOUT);
-        token_decoter.set("3", PieceType.MINER);
-        token_decoter.set("4", PieceType.SERGEANT);
-        token_decoter.set("5", PieceType.LIEUTENANT);
-        token_decoter.set("6", PieceType.CAPTAIN);
-        token_decoter.set("7", PieceType.MAJOR);
-        token_decoter.set("8", PieceType.COLONEL);
-        token_decoter.set("9", PieceType.GENERAL);
-        token_decoter.set("10", PieceType.MARSHAL);
-        return token_decoter;
-    }
+
 
     __parse_position(boardArray){
         let result = [];
+        console.log(boardArray)
         if (!boardArray) return result;
 
         for(let i = 0; i < boardArray.length; ++i) if(boardArray[i] != null){
 
-            if(!["blue", "red"].includes(boardArray[i]?.side)) continue;
-            const type = this.token_decoter.get(boardArray?.type);
+            const type = this.token_decoter.decode_token(boardArray[i]?.type);
             const color = (boardArray[i]?.side == "red")? Color.RED : Color.BLUE
-
-            if(type) continue;
 
             result.push([i, new Piece(color, type)]);
         }
-        result.sort()
+        console.log(result);
         return result;
     }
 
     update(boardLiveImage){
         const new_pos = this.__parse_position(boardLiveImage.position);
-
+        console.log(new_pos)
         const are_pos_different = (pos1, pos2) => {
             if(pos1.length != pos2.length)
                 return true;

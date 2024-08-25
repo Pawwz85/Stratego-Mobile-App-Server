@@ -19,40 +19,46 @@ export class RoomUIManager{
 
     update_position(position){
         let user_oriented_position = [];
-
+        console.log(position)
         if(appGlobalContext.currentUser.boardrole == "blue_player")
             for(let i = 0; i < position.length; ++i)
                 user_oriented_position.push([99 - position[i][0], position[i][1]]);
+        else user_oriented_position = position;
 
+        console.log(user_oriented_position)
         appGlobalContext.table.boardModel.boardstate.set_position(user_oriented_position);
         appGlobalContext.table.boardModel.set_selected_square_id(-1); // reset any marks
+        this.refresh_fragment();
     }
 
     update_user_list(user_list){
-
+        appGlobalContext.table.update_user_list(user_list);
+        this.currentUserRole = appGlobalContext.currentUser.boardrole
     }
 
     refresh_fragment(){
         let frag;
+        const serverCon = this.roomLiveImage.get_connection();
         switch(this.currentGamePhase){
 
             case "awaiting": 
-                frag = new AwaitPhaseFragment();
+                frag = new AwaitPhaseFragment(serverCon);
                 this.fragmentManager.setFragment(frag);
                 break;
             
             case "setup":
-                if (this.currentUserRole != "spectator")
+                if (this.currentUserRole != "spectator" && this.currentUserRole)
                 {
-                    const color = (boardrole == "blue_player")? "blue" : "red";
-                    frag = new SetupFragment(color);
+                    const color = (this.currentUserRole == "blue_player")? "blue" : "red";
+                    frag = new SetupFragment(color, serverCon);
                     this.fragmentManager.setFragment(frag);
                 }
                 break;
             
             case "gameplay":
-                    const color = (boardrole == "blue_player")? "blue" : "red";
-                    frag = new GameplayPhaseFragment();
+                    let color = (this.currentUserRole == "blue_player")? "blue" : undefined;
+                    color = (this.currentUserRole == "red_player")? "red": color;
+                    frag = new GameplayPhaseFragment(serverCon, color);
                     this.fragmentManager.setFragment(frag);
                 break;
 
@@ -64,15 +70,21 @@ export class RoomUIManager{
 
     update_phase(phase){
         appGlobalContext.table.game_phase = phase;
+        this.currentGamePhase = phase;
         appGlobalContext.table.notify_observers(); 
+        this.refresh_fragment();
     }
 
     update(table_model){
         change = false;
-        change = change || this.currentGamePhase == table_model.game_phase;
-        change = change || this.currentUserRole == appGlobalContext.currentUser.boardrole;
-        if(change)
+        change = change || this.currentGamePhase != table_model.game_phase;
+        change = change || this.currentUserRole != appGlobalContext.currentUser.boardrole;
+        if(change){
+            this.currentUserRole = appGlobalContext.currentUser.boardrole;
+            this.currentGamePhase = table_model.game_phase;
             this.refresh_fragment();
+        }
+            
 
     }
 

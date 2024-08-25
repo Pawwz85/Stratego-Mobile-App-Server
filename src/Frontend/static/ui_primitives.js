@@ -144,7 +144,7 @@ class __SimpleTogglerState{
        circle.setAttributeNS(null, "r", "33%"); 
        circle.setAttributeNS(null, "cx", 100 * (this.__progress) + "%"); 
        circle.setAttributeNS(null, "cy",  "50%"); 
-        console.log(bar_style, circle_style)
+
        for (let prop in bar_style) if (bar_style.hasOwnProperty(prop)){
         try {
             bar.style[prop] =  bar_style[prop];
@@ -218,7 +218,6 @@ class UIToggle{
     }
 
     redraw(){
-        console.log(this.__value)
         this.__clear();
         if(this.__value)
             this.element.append(this.toggled_state.g)
@@ -227,3 +226,39 @@ class UIToggle{
         
     }
 }
+
+export function ensure_await_window_stroke(){
+    const grad_id = "await-window-stroke";
+    const c1 = "red";
+    const c2 = "white";
+    const c3 =  "blue";
+    if(!document.getElementById(grad_id)){
+      const gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient")
+      gradient.setAttribute("id", grad_id);
+      gradient.setAttributeNS(null, "x1", "0%");
+      gradient.setAttributeNS(null, "y1", "0%");
+      gradient.setAttributeNS(null, "y2", "0%");
+      gradient.setAttributeNS(null, "x2", "100%");
+      const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+      stop1.setAttribute("offset", "0%");
+      stop1.setAttributeNS(null, "stop-color", c1)
+      stop1.style.stopOpacity = "1"; 
+      const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+      stop2.setAttribute("offset", "50%");
+      stop2.setAttributeNS(null, "stop-color", c2);
+      stop2.style.stopOpacity = "1"; 
+      const stop3 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+      stop3.setAttribute("offset", "100%");
+      stop3.setAttributeNS(null, "stop-color", c3)
+      stop3.style.stopOpacity = "1"; 
+      gradient.appendChild(stop1)
+      gradient.appendChild(stop2);
+      gradient.appendChild(stop3);
+      const dev = document.createElementNS("http://www.w3.org/2000/svg", "defs")
+      dev.appendChild(gradient)
+
+      const defs = document.getElementById("svg-defs");
+      defs.append(dev)
+    }
+  }
+

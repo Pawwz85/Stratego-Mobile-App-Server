@@ -495,7 +495,7 @@ class Table:
                   TableGamePhase.setup: "setup",
                   TableGamePhase.finished: "finished"}
 
-        event_body = {"type": "board_event", "nr": self.__generated_events_counter, "status": status[self.phase_type],
+        event_body = {"type": "board_event", "nr": self.__generated_events_counter, "game_status": status[self.phase_type],
                       "moving_side": self._gameplay_manager.get_moving_side()}
 
         for perspective in {Side.red, Side.blue, None}:

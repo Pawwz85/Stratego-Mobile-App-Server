@@ -31,7 +31,7 @@ export class TableModel{
         const user_adapter = user => {return {profilePicture: null, username: user.username, boardrole: user.role}};
 
         for(let user of user_list){
-            console.log(user)
+            
             if(user.role == "red_player"){
                 this.red_player = user_adapter(user);
               
@@ -42,6 +42,7 @@ export class TableModel{
                 this.blue_player = user_adapter(user);
               //  change = true;
             }
+            
 
             if(user.username == appGlobalContext.currentUser.username)
                 appGlobalContext.currentUser.boardrole = user.role;

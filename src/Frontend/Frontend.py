@@ -219,13 +219,12 @@ def handle_connect():
     print(session["username"] + " has been disconnected")
 
 
-if __name__ == "__main__":
+def start_server():
     backend_listener_service = BackendMessageListenerService(redis, config, backend_message_strategy_picker)
     backend_listener_service.start()
     temporal_storage_service = TemporalStorageService(response_bufferer, socket_manager)
     temporal_storage_service.start()
     web_socket_service.start()
-
 
     def stop_services(signum, frame):
         print("stopping...")
@@ -236,12 +235,15 @@ if __name__ == "__main__":
         time.sleep(3)
         os.kill(os.getpid(), signal.SIGINT)
 
-
     signal.signal(signal.SIGINT, stop_services)
     signal.signal(signal.SIGTERM, stop_services)
-    #app.run(host='127.0.0.1', port=5000)
-    socketio.run(app, host='127.0.0.1', port=5000, allow_unsafe_werkzeug=True)
+    # app.run(host='127.0.0.1', port=5000)
+    socketio.run(app, host='0.0.0.0', port=5000, allow_unsafe_werkzeug=True)
 
     web_socket_service.join()
     temporal_storage_service.join()
     backend_listener_service.join()
+
+
+if __name__ == "__main__":
+    start_server()

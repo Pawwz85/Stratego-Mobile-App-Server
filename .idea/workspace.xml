@@ -7,10 +7,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Allowed browser user to create and join rooms. Thought, there is no button to set_ready value yet, so users would be stuck in awaiting phase.&#10;- Seat placement and chat features are integrated into browser client">
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="Reworked window visible in awaiting phase">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/test_stratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_stratego.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/Room.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Room.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/stratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/stratego.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/Frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/Frontend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/board_model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/board_view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/chat.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/static/game_fragments.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/game_fragments.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/static/global_context.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/global_context.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/static/room_live_image.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/room_live_image.js" afterDir="false" />
@@ -151,7 +157,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in UnitTests">
+  <component name="RunManager" selected="Python tests.Python tests in test_stratego.py">
     <configuration name="game node" type="PythonConfigurationType" factoryName="Python">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
@@ -213,6 +219,21 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests for test_stratego.StrategoUtilsTest.testVerifySetupDict" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="pythonProject" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_stratego.StrategoUtilsTest.testVerifySetupDict&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="Python tests for test_table.TableTestCase.test_expected_behavior" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
@@ -225,21 +246,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_table.TableTestCase.test_expected_behavior&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests for test_table.TableTestCase.test_gameplay_timeout" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="pythonProject" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TableTestCase.test_gameplay_timeout&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -258,20 +264,37 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests in test_stratego.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="pythonProject" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/UnitTests/test_stratego.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.game node" />
       <item itemvalue="Python.server" />
+      <item itemvalue="Python tests.Python tests for test_stratego.StrategoUtilsTest.testVerifySetupDict" />
+      <item itemvalue="Python tests.Python tests in test_stratego.py" />
       <item itemvalue="Python tests.Python tests in UnitTests" />
       <item itemvalue="Python tests.Python tests for test_room.RoomTestCase.test_expected_behaviour" />
       <item itemvalue="Python tests.Python tests for test_table.TableTestCase.test_expected_behavior" />
-      <item itemvalue="Python tests.Python tests for test_table.TableTestCase.test_gameplay_timeout" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Python tests in test_stratego.py" />
+        <item itemvalue="Python tests.Python tests for test_stratego.StrategoUtilsTest.testVerifySetupDict" />
         <item itemvalue="Python tests.Python tests in UnitTests" />
         <item itemvalue="Python tests.Python tests for test_room.RoomTestCase.test_expected_behaviour" />
         <item itemvalue="Python tests.Python tests for test_table.TableTestCase.test_expected_behavior" />
-        <item itemvalue="Python tests.Python tests for test_table.TableTestCase.test_gameplay_timeout" />
       </list>
     </recent_temporary>
   </component>
@@ -387,7 +410,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723970452901</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Reworked window visible in awaiting phase">
+      <option name="closed" value="true" />
+      <created>1724539299688</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1724539299688</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -414,7 +445,8 @@
     <MESSAGE value="- Now threads support signals such as sigint and sigterm" />
     <MESSAGE value="- Started work on UI, now on /board server would generate a board, that is for now, empty" />
     <MESSAGE value="- Allowed browser user to create and join rooms. Thought, there is no button to set_ready value yet, so users would be stuck in awaiting phase.&#10;- Seat placement and chat features are integrated into browser client" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Allowed browser user to create and join rooms. Thought, there is no button to set_ready value yet, so users would be stuck in awaiting phase.&#10;- Seat placement and chat features are integrated into browser client" />
+    <MESSAGE value="Reworked window visible in awaiting phase" />
+    <option name="LAST_COMMIT_MESSAGE" value="Reworked window visible in awaiting phase" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
