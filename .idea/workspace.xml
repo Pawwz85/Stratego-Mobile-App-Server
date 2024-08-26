@@ -7,13 +7,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="First playable version, introduced controller for board in gameplay phase. A number of bugfixes">
-      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/index.html" afterDir="false" />
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Added index.html&#10;- Fixed small bug regarding the loading of user's username in board.html">
+      <change afterPath="$PROJECT_DIR$/UnitTests/TestUtil/random_setup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/Frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/Frontend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/board_model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/side_selector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/side_selector.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/board.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/board.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/test_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/IStrategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/IStrategy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/IUserRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/IUserRepository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/JobManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/JobManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/Room.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Room.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/chat.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/chat.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,8 +29,8 @@
         <option value="Python Stub" />
         <option value="Setup Script" />
         <option value="Python Unit Test" />
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -53,78 +56,99 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Batch.run.executor&quot;: &quot;Run&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_add_for_detachments.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_deletion_for_crash.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_for_addition_crash.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_search.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_search_addition_only.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for room_unit_tests.MyTestCase.test_expected_behaviour.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for table_unit_test.MyTestCase.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_expected_behavior.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_gameplay_timeout.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_main_loop.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_resign.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for table_unit_test.MyTestCase.test_something.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_BlackRedTree.BlackRedTreeTestCase.test_len.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping_mismatch.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping_original_None.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_linked_list.TestLinkedList.test_addition.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_linked_list.TestLinkedList.test_deletion.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_linked_list.TestLinkedList.test_iteration_after_detach_from_middle.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_room.RoomTestCase.test_expected_behaviour.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_stratego.MyTestCase.testFlip.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_stratego.StrategoGameStateTest.testFinnishMobilePresentNotLegalMoves.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_stratego.StrategoGameStateTest.testTrackers.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_stratego.StrategoUtilsTest.testStateFromSetups.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_stratego.StrategoUtilsTest.testVerifySetupDict.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_stratego.StrategoUtilsTest.testWhoWouldWinTest.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_stratego_core.MoveGenPerf.test_move_gen.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_table.MyTestCase.test_expected_behavior.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_table.TableTestCase.test_expected_behavior.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_table.TableTestCase.test_gameplay_timeout.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in BlackRedTreeTest.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in UnitTests.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in room_unit_tests.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in table_unit_test.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in test_stratego.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python.AIDocumentationGenerator.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Authenticator.executor&quot;: &quot;Run&quot;,
-    &quot;Python.BackendSystem.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Frontend.executor&quot;: &quot;Run&quot;,
-    &quot;Python.GameplayScenarioGenerator.executor&quot;: &quot;Run&quot;,
-    &quot;Python.GracefulThreads.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Room.executor&quot;: &quot;Run&quot;,
-    &quot;Python.SIGTERM_HANDLING.executor&quot;: &quot;Run&quot;,
-    &quot;Python.StrategoCLI.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TestExplorer (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.TestExplorer.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TextExplorer.executor&quot;: &quot;Run&quot;,
-    &quot;Python.User.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.UserSimulation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.game node.executor&quot;: &quot;Run&quot;,
-    &quot;Python.linked_list.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main (1).executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.message_processing.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.message_validation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.server.executor&quot;: &quot;Run&quot;,
-    &quot;Python.stratego.executor&quot;: &quot;Run&quot;,
-    &quot;Python.table.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Pawwz/OneDrive/Desktop/Stratego - server/Python_Implementation/pythonProject/src/Frontend&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Batch.run.executor": "Run",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_add_for_detachments.executor": "Run",
+    "Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_deletion_for_crash.executor": "Run",
+    "Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_for_addition_crash.executor": "Run",
+    "Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_search.executor": "Run",
+    "Python tests.Python tests for BlackRedTreeTest.BlackRedTreeTestCase.test_search_addition_only.executor": "Run",
+    "Python tests.Python tests for room_unit_tests.MyTestCase.test_expected_behaviour.executor": "Run",
+    "Python tests.Python tests for table_unit_test.MyTestCase.executor": "Run",
+    "Python tests.Python tests for table_unit_test.MyTestCase.test_expected_behavior.executor": "Run",
+    "Python tests.Python tests for table_unit_test.MyTestCase.test_gameplay_timeout.executor": "Run",
+    "Python tests.Python tests for table_unit_test.MyTestCase.test_main_loop.executor": "Run",
+    "Python tests.Python tests for table_unit_test.MyTestCase.test_resign.executor": "Run",
+    "Python tests.Python tests for table_unit_test.MyTestCase.test_something.executor": "Run",
+    "Python tests.Python tests for test_BlackRedTree.BlackRedTreeTestCase.test_len.executor": "Run",
+    "Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.executor": "Run",
+    "Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping.executor": "Run",
+    "Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping_mismatch.executor": "Run",
+    "Python tests.Python tests for test_IBackendCaller.TestIBackendCaller.test_wrap_strategy_with_mapping_original_None.executor": "Run",
+    "Python tests.Python tests for test_linked_list.TestLinkedList.test_addition.executor": "Run",
+    "Python tests.Python tests for test_linked_list.TestLinkedList.test_deletion.executor": "Run",
+    "Python tests.Python tests for test_linked_list.TestLinkedList.test_iteration_after_detach_from_middle.executor": "Run",
+    "Python tests.Python tests for test_room.RoomTestCase.test_expected_behaviour.executor": "Run",
+    "Python tests.Python tests for test_stratego.MyTestCase.testFlip.executor": "Run",
+    "Python tests.Python tests for test_stratego.StrategoGameStateTest.testFinnishMobilePresentNotLegalMoves.executor": "Run",
+    "Python tests.Python tests for test_stratego.StrategoGameStateTest.testTrackers.executor": "Run",
+    "Python tests.Python tests for test_stratego.StrategoUtilsTest.testStateFromSetups.executor": "Run",
+    "Python tests.Python tests for test_stratego.StrategoUtilsTest.testVerifySetupDict.executor": "Run",
+    "Python tests.Python tests for test_stratego.StrategoUtilsTest.testWhoWouldWinTest.executor": "Run",
+    "Python tests.Python tests for test_stratego_core.MoveGenPerf.test_move_gen.executor": "Run",
+    "Python tests.Python tests for test_table.MyTestCase.test_expected_behavior.executor": "Run",
+    "Python tests.Python tests for test_table.TableTestCase.test_expected_behavior.executor": "Run",
+    "Python tests.Python tests for test_table.TableTestCase.test_gameplay_timeout.executor": "Run",
+    "Python tests.Python tests for test_table.TableTestCase.test_resign.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManager.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManager.test_phase_init.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManager.test_phase_logic.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManager.test_release_seat_not_belonging_to_user.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManager.test_seat_release.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManager.test_swap_seats.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManager.test_take_empty_seat.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManager.test_take_empty_seat_while_already_owning_one.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManager.test_take_not_empty_seat.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand.test_phase.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand.test_phase_init.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand.test_phase_logic.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand.test_release_seat.executor": "Run",
+    "Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand.test_release_seat_cancels_transmission.executor": "Run",
+    "Python tests.Python tests for test_table.TestSetupManager.test_phase_finish_top_transmission.executor": "Run",
+    "Python tests.Python tests for test_table.TestSetupManager.test_players_submit_valid_setups.executor": "Run",
+    "Python tests.Python tests for test_table.TestTablePhase.test.executor": "Run",
+    "Python tests.Python tests in BlackRedTreeTest.py.executor": "Run",
+    "Python tests.Python tests in UnitTests.executor": "Run",
+    "Python tests.Python tests in room_unit_tests.py.executor": "Run",
+    "Python tests.Python tests in table_unit_test.py.executor": "Run",
+    "Python tests.Python tests in test_stratego.py.executor": "Run",
+    "Python tests.Python tests in test_table.py.executor": "Run",
+    "Python.AIDocumentationGenerator.executor": "Run",
+    "Python.Authenticator.executor": "Run",
+    "Python.BackendSystem.executor": "Run",
+    "Python.Frontend.executor": "Run",
+    "Python.GameplayScenarioGenerator.executor": "Run",
+    "Python.GracefulThreads.executor": "Run",
+    "Python.PyDoc.executor": "Run",
+    "Python.Room.executor": "Run",
+    "Python.SIGTERM_HANDLING.executor": "Run",
+    "Python.StrategoCLI.executor": "Run",
+    "Python.TestExplorer (1).executor": "Run",
+    "Python.TestExplorer.executor": "Run",
+    "Python.TextExplorer.executor": "Run",
+    "Python.User.executor": "Debug",
+    "Python.UserSimulation.executor": "Run",
+    "Python.game node.executor": "Run",
+    "Python.linked_list.executor": "Run",
+    "Python.main (1).executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.message_processing.executor": "Debug",
+    "Python.message_validation.executor": "Run",
+    "Python.server.executor": "Run",
+    "Python.stratego.executor": "Run",
+    "Python.table.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/Pawwz/OneDrive/Desktop/Stratego - server/Python_Implementation/pythonProject/src/Frontend",
+    "run.code.analysis.last.selected.profile": "aDefault",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject" />
@@ -146,7 +170,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in test_stratego.py">
+  <component name="RunManager" selected="Python tests.Python tests in test_table.py">
     <configuration name="game node" type="PythonConfigurationType" factoryName="Python">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
@@ -193,7 +217,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_room.RoomTestCase.test_expected_behaviour" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestSeatManagerWithReadyCommand" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -204,11 +228,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_room.RoomTestCase.test_expected_behaviour&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestSeatManagerWithReadyCommand&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_stratego.StrategoUtilsTest.testVerifySetupDict" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestSeatManagerWithReadyCommand.test_release_seat" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -219,11 +243,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_stratego.StrategoUtilsTest.testVerifySetupDict&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestSeatManagerWithReadyCommand.test_release_seat&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TableTestCase.test_expected_behavior" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestSetupManager.test_phase_finish_top_transmission" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -234,11 +258,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TableTestCase.test_expected_behavior&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestSetupManager.test_phase_finish_top_transmission&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in UnitTests" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestSetupManager.test_players_submit_valid_setups" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -249,11 +273,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/UnitTests&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestSetupManager.test_players_submit_valid_setups&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in test_stratego.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests in test_table.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -264,26 +288,26 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/UnitTests/test_stratego.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/UnitTests/test_table.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Python.game node" />
       <item itemvalue="Python.server" />
-      <item itemvalue="Python tests.Python tests for test_stratego.StrategoUtilsTest.testVerifySetupDict" />
-      <item itemvalue="Python tests.Python tests in test_stratego.py" />
-      <item itemvalue="Python tests.Python tests in UnitTests" />
-      <item itemvalue="Python tests.Python tests for test_room.RoomTestCase.test_expected_behaviour" />
-      <item itemvalue="Python tests.Python tests for test_table.TableTestCase.test_expected_behavior" />
+      <item itemvalue="Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand" />
+      <item itemvalue="Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand.test_release_seat" />
+      <item itemvalue="Python tests.Python tests for test_table.TestSetupManager.test_phase_finish_top_transmission" />
+      <item itemvalue="Python tests.Python tests for test_table.TestSetupManager.test_players_submit_valid_setups" />
+      <item itemvalue="Python tests.Python tests in test_table.py" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests in test_stratego.py" />
-        <item itemvalue="Python tests.Python tests for test_stratego.StrategoUtilsTest.testVerifySetupDict" />
-        <item itemvalue="Python tests.Python tests in UnitTests" />
-        <item itemvalue="Python tests.Python tests for test_room.RoomTestCase.test_expected_behaviour" />
-        <item itemvalue="Python tests.Python tests for test_table.TableTestCase.test_expected_behavior" />
+        <item itemvalue="Python tests.Python tests in test_table.py" />
+        <item itemvalue="Python tests.Python tests for test_table.TestSetupManager.test_players_submit_valid_setups" />
+        <item itemvalue="Python tests.Python tests for test_table.TestSetupManager.test_phase_finish_top_transmission" />
+        <item itemvalue="Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand" />
+        <item itemvalue="Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand.test_release_seat" />
       </list>
     </recent_temporary>
   </component>
@@ -415,7 +439,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724608061760</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="- Added index.html&#10;- Fixed small bug regarding the loading of user's username in board.html">
+      <option name="closed" value="true" />
+      <created>1724630548592</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1724630548592</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -444,7 +476,8 @@
     <MESSAGE value="- Allowed browser user to create and join rooms. Thought, there is no button to set_ready value yet, so users would be stuck in awaiting phase.&#10;- Seat placement and chat features are integrated into browser client" />
     <MESSAGE value="Reworked window visible in awaiting phase" />
     <MESSAGE value="First playable version, introduced controller for board in gameplay phase. A number of bugfixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="First playable version, introduced controller for board in gameplay phase. A number of bugfixes" />
+    <MESSAGE value="- Added index.html&#10;- Fixed small bug regarding the loading of user's username in board.html" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Added index.html&#10;- Fixed small bug regarding the loading of user's username in board.html" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

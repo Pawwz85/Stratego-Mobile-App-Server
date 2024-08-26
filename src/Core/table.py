@@ -14,12 +14,24 @@ from src.Core.stratego import *
 
 
 class UserTableRole(Enum):
+    """
+    Represents the possible roles that a user can have in a multiplayer game, based on whether they are currently
+    spectating or actively playing as either the red or blue player.
+
+    :custom: This is a custom enum defined for this specific use case.
+    """
     spectator = 0
     red_player = 1
     blue_player = 2
 
 
 class TableGamePhase(Enum):
+    """
+    Represents the different phases that a multiplayer game can be in, from waiting for players to join and set up
+    their boards, to actively playing the game itself, to the final phase when the match has ended.
+
+    :custom: This is a custom enum defined for this specific use case.
+    """
     awaiting = 0
     setup = 1
     gameplay = 2
@@ -27,6 +39,13 @@ class TableGamePhase(Enum):
 
 
 class TableTimeControl:
+    """
+    Represents the time control settings for a multiplayer game, including the amount of time each player has to set
+    up their board and make initial moves, as well as the base time limit and increment (if any) for each player
+    during the gameplay phase.
+
+    :custom: This is a custom class defined for this specific use case.
+    """
     def __init__(self, setup_time_ms: int, red_base_time_ms: int,
                  blue_base_time_ms: int, red_increment_ms=0, blue_increment_ms=0):
         self.red_time_control_ms = red_base_time_ms, red_increment_ms
@@ -34,30 +53,54 @@ class TableTimeControl:
         self.setup_time_ms = setup_time_ms
 
 
-class _TablePhase:
-
+class TablePhase:
+    """
+        This class represents a phase in a table's execution. It is initialized with three callables:
+        1. `phase_init` - called at the beginning of the phase to prepare it.
+        2. `phase_logic` - called during the actual execution of the phase.
+        3. `phase_finish` - called at the end of the phase to perform any cleanup or finalization tasks.
+        :param phase_init: A callable function that should not take any arguments and should be used to initialize the phase.
+        :param phase_logic: A callable function that takes no arguments and performs the logic for this phase.
+        :param phase_finish: A callable function that does not take any arguments and performs cleanup or finalization tasks at the end of the phase.
+    """
     def __init__(self, phase_init: Callable, phase_logic: Callable, phase_finish: Callable):
         self._phase_init = phase_init
         self._phase_logic = phase_logic
         self._phase_finish = phase_finish
 
-    def init(self):
+    def init(self) -> None:
+        """
+        Initializes the phase by calling its initialization function.
+        :return: None
+        """
         self._phase_init()
 
-    def logic(self):
+    def logic(self) -> None:
+        """
+        Executes the logic of this phase by calling its execution function.
+        :return: None
+        """
         self._phase_logic()
 
-    def finish(self):
+    def finish(self) -> None:
+        """
+        Performs any cleanup or finalization tasks at the end of the phase by calling its finalization function.
+        :return: None
+        """
         self._phase_finish()
 
 
-class _SeatManager:
+class SeatManager:
     """
     Note: This class performs an immediate transmission between awaiting phase and setup phase
     after gathering full seating. While this would be preferable for automated match making,
     it may be not desirable behavior for seating players in private or public rooms.
 
     For custom behaviour, please use subclass of this
+
+    :param set_table_to_setup_phase: A callable that sets the table to the setup phase.
+    :param seat_observer: A callable that takes a player's ID and side as arguments and performs
+                            some action, such as sending a notification to the player.
     """
 
     def __init__(self, set_table_to_setup_phase: Callable, seat_observer: Callable[[int, Side | None], any]):
@@ -66,20 +109,25 @@ class _SeatManager:
         self._seat_observer = seat_observer
 
     def _phase_init(self, clear_seats=True):
+        """Initialization phase."""
         if clear_seats:
             self.seats = {Side.red: None, Side.blue: None}
 
     def _phase_logic(self):
+        """Logic for the phase """
         if self.seats[Side.blue] is not None and self.seats[Side.red] is not None:
             self._set_table_to_setup_phase()
 
     def _phase_finish(self):
+        """Finalization phase."""
         pass
 
-    def get_phase(self, clear_seats: bool = True) -> _TablePhase:
-        return _TablePhase(lambda: self._phase_init(clear_seats), self._phase_logic, self._phase_finish)
+    def get_phase(self, clear_seats: bool = True) -> TablePhase:
+        """Returns the current table phase with initialization, logic, and finalization functions."""
+        return TablePhase(lambda: self._phase_init(clear_seats), self._phase_logic, self._phase_finish)
 
     def take_seat(self, user_id, color: Side) -> tuple[bool, str | None]:
+        """Takes a seat for the player with the given ID and color."""
         if self.seats[color] is not None:
             return False, "Seat is already taken"
 
@@ -91,33 +139,40 @@ class _SeatManager:
         return True, None
 
     def get_side(self, user_id) -> Side | None:
+        """Returns the side of the player with the given ID or None if they are not seated."""
         if user_id not in self.seats.values():
             return None
         return Side.red if self.seats[Side.red] == user_id else Side.blue
 
     def release_seat(self, user_id) -> tuple[bool, str | None]:
+        """Releases the seat of the player with the given ID."""
         if user_id not in self.seats.values():
             return False, "Seat does not exist"
-        for k, v in self.seats.items():
-            if k == user_id:
-                self.seats[k] = None
+        self.seats[self.get_side(user_id)] = None
         self._seat_observer(user_id, None)
         return True, None
 
     def swap_seats(self):
+        """Swaps the seats of both players."""
         self.seats = {k.flip(): v for k, v in self.seats.items()}
         for k in Side:
             if self.seats[k] is not None:
                 self._seat_observer(self.seats[k], k)
 
 
-class _SeatManagerWithReadyCommand(_SeatManager):
+class SeatManagerWithReadyCommand(SeatManager):
     """
         Extends seat manager to allow players to set their readiness status.
         Instead of starting game automatically after taking both seats are taken,
         this seat manager will wait for both players to set their ready flag to true.
         After this flag is seat, seat manager will wait transmission_time_ms ms to give
         user chance to change their mind.
+
+        :param set_table_to_setup_phase: Callable that sets the table to setup phase.
+        :param job_manager: JobManager instance used for delayed tasks management.
+        :param transmission_time_ms: Delay (in milliseconds) after both players are ready and before game starts.
+        :param on_ready_change: Callback function taking Side and boolean as arguments, called when readiness is changed.
+        :param seat_observer: Callback function taking seat ID and Side as arguments, called when a seat is released or occupied.
     """
 
     def __init__(self, set_table_to_setup_phase: Callable,
@@ -132,21 +187,25 @@ class _SeatManagerWithReadyCommand(_SeatManager):
         self._transmission_time_ms = transmission_time_ms
 
     def _phase_init(self, clear_seats: bool = True):
+        """Initialize phase."""
         self._readiness = {Side.red: False, Side.blue: False}
         super()._phase_init(clear_seats)
 
     def _phase_logic(self):
+        """Main game logic in active phase."""
         if self._readiness[Side.red] and self._readiness[Side.blue] and self._transmission_task is None:
             self._transmission_task = DelayedTask(lambda: self._set_table_to_setup_phase(),
                                                   self._transmission_time_ms)
             self.job_manager.add_delayed_task(self._transmission_task)
 
     def _phase_finish(self):
+        """Clean up phase."""
         if self._transmission_task is not None:
             self._transmission_task.cancel()
         super()._phase_finish()
 
     def release_seat(self, user_id) -> tuple[bool, str | None]:
+        """Release seat occupied by user"""
         if user_id not in self.seats.values():
             return False, "Seat does not exist"
         for k, v in self.seats.items():
@@ -162,6 +221,7 @@ class _SeatManagerWithReadyCommand(_SeatManager):
         return True, None
 
     def set_readiness(self, user_id, value: bool) -> tuple[bool, str | None]:
+        """Set readiness flag for specified user"""
         side = self.get_side(user_id)
         if side is None:
             return False, "Seat does not exist"
@@ -173,6 +233,7 @@ class _SeatManagerWithReadyCommand(_SeatManager):
         self._on_ready_change(side, value)
 
     def get_readiness(self):
+        """Get readiness status of all players."""
         result = {
             "status": "success",
             "red_player": self._readiness[Side.red],
@@ -181,7 +242,7 @@ class _SeatManagerWithReadyCommand(_SeatManager):
         return result
 
 
-class _SetupManager:
+class SetupManager:
     def __init__(self, job_manager: JobManager, time_for_setup_ms: int,
                  set_table_to_gameplay_mode: Callable[[list[Piece | None]], None],
                  set_table_to_finished_mode: Callable[[Side | None], None]):
@@ -201,6 +262,7 @@ class _SetupManager:
     def __on_timeout(self):
         blue_submitted = self.setups[Side.blue] is not None
         red_submitted = self.setups[Side.red] is not None
+
         if blue_submitted and red_submitted:
             self.__set_table_to_gameplay_mode(game_state_from_setups(self.setups[Side.red], self.setups[Side.blue]))
         else:
@@ -224,11 +286,11 @@ class _SetupManager:
             self.__setup_timeout_task.cancel()
             self.__setup_timeout_task = None
 
-    def get_phase(self) -> _TablePhase:
-        return _TablePhase(self.__phase_init, self.__phase_logic, self.__phase_finish)
+    def get_phase(self) -> TablePhase:
+        return TablePhase(self.__phase_init, self.__phase_logic, self.__phase_finish)
 
 
-class _GameplayManager:
+class GameplayManager:
     def __init__(self, job_manager: JobManager, time_control: TableTimeControl,
                  set_table_to_finished_mode: Callable[[Side | None], None],
                  on_state_change: Callable[[], None]):
@@ -303,11 +365,11 @@ class _GameplayManager:
             self.__player_timeout_task.cancel()
             self.__player_timeout_task = None
 
-    def get_phase(self, state: list[Piece | None]) -> _TablePhase:
-        return _TablePhase(lambda: self.__phase_init(state), self.__phase_logic, self.__phase_finish)
+    def get_phase(self, state: list[Piece | None]) -> TablePhase:
+        return TablePhase(lambda: self.__phase_init(state), self.__phase_logic, self.__phase_finish)
 
 
-class _FinishedStateManager:
+class FinishedStateManager:
     def __init__(self, execute_rematch: Callable):
         self.players_wanting_rematch: list[int] = []  # we are treating this list as a set
         self.__exec_rematch = execute_rematch
@@ -329,8 +391,8 @@ class _FinishedStateManager:
     def __phase_finish(self):
         pass
 
-    def get_phase(self) -> _TablePhase:
-        return _TablePhase(self.__phase_init, self.__phase_logic, self.__phase_finish)
+    def get_phase(self) -> TablePhase:
+        return TablePhase(self.__phase_init, self.__phase_logic, self.__phase_finish)
 
 
 class Table:
@@ -354,11 +416,11 @@ class Table:
                 self.__event_broadcast(event)
 
             if self.__use_readiness:
-                return lambda x: _SeatManagerWithReadyCommand(x, self.__job_manager,
-                                                              self.__start_timer, __on_ready_change,
-                                                              self.__seat_observer)
+                return lambda x: SeatManagerWithReadyCommand(x, self.__job_manager,
+                                                             self.__start_timer, __on_ready_change,
+                                                             self.__seat_observer)
             else:
-                return lambda x: _SeatManager(x, self.__seat_observer)
+                return lambda x: SeatManager(x, self.__seat_observer)
 
         def build(self) -> Table:
             return Table(self.__job_manager, self.__time_control, self.get_sm_constructor(), self.__event_channels)
@@ -398,18 +460,18 @@ class Table:
             return self
 
     def __init__(self, job_manager: JobManager, time_control: TableTimeControl,
-                 seat_manager_constructor: Callable[[Callable], _SeatManager],
+                 seat_manager_constructor: Callable[[Callable], SeatManager],
                  event_channels: dict[Side | None, Callable[[dict], any]]):
         self.job_manager = job_manager
         self.phase_type: TableGamePhase = TableGamePhase.awaiting
 
         self._seat_manager = seat_manager_constructor(self.__change_phase_to_setup)
-        self._setup_manager = _SetupManager(job_manager, time_control.setup_time_ms,
-                                            self.__change_phase_to_gameplay, self.__change_phase_to_finished)
-        self._gameplay_manager = _GameplayManager(job_manager, time_control, self.__change_phase_to_finished,
-                                                  self.__send_state_change_event)
-        self._finished_state_manager = _FinishedStateManager(self.__execute_rematch)
-        self.__phase: _TablePhase = self._seat_manager.get_phase()
+        self._setup_manager = SetupManager(job_manager, time_control.setup_time_ms,
+                                           self.__change_phase_to_gameplay, self.__change_phase_to_finished)
+        self._gameplay_manager = GameplayManager(job_manager, time_control, self.__change_phase_to_finished,
+                                                 self.__send_state_change_event)
+        self._finished_state_manager = FinishedStateManager(self.__execute_rematch)
+        self.__phase: TablePhase = self._seat_manager.get_phase()
         self.__phase.init()
         self.__job = Job(self.__phase.logic)
         self.__generated_events_counter = 0
@@ -419,7 +481,7 @@ class Table:
     def __del__(self):
         self.kill()
 
-    def __change_phase(self, phase: _TablePhase):
+    def __change_phase(self, phase: TablePhase):
         self.__phase.finish()
         self.__job.cancel()
 
@@ -580,14 +642,14 @@ class TableApi:
             return False, f"Field value has incorrect type, expected bool found {type(value)}"
 
         seat_man = self.table.get_seat_manager()
-        if isinstance(seat_man, _SeatManagerWithReadyCommand):
+        if isinstance(seat_man, SeatManagerWithReadyCommand):
             return seat_man.set_readiness(user.id, value)
         else:
             return False, f"This room do not support this command"
 
     def get_player_readiness(self, user: User) -> tuple[bool, str | None] | dict:
         seat_man = self.table.get_seat_manager()
-        if not isinstance(seat_man, _SeatManagerWithReadyCommand):
+        if not isinstance(seat_man, SeatManagerWithReadyCommand):
             return False, f"This room do not support this command"
         return seat_man.get_readiness()
 

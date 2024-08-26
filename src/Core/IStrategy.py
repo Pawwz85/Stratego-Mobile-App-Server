@@ -32,20 +32,41 @@ class IStrategy(ABC):
 class IStrategyRepository(ABC):
     @abstractmethod
     def add_strategy(self, strategy: IStrategy):
+        """
+        Adds provided strategy to repository
+        :param strategy: Strategy meant to be added to repository
+        :return:
+        """
         pass
 
     @abstractmethod
     def remove_strategy(self, strategy: IStrategy):
+        """
+             Deletes given strategy from the repository. Situation if this method with strategy that is not in repository
+             depends on implementation.
+             :param strategy: Strategy meant to be removed from repository
+             :return:
+             """
         pass
 
 
 class IStrategyPicker(ABC):
     def __init__(self, strategy_repository: IStrategyRepository, default_strategy: IStrategy):
+        """
+        Class responsible for picking reaction strategy for given event
+        :param strategy_repository: IStrategyRepository where picker looks up strategies
+        :param default_strategy: Strategy to use in case where no suiting strategy was found in repository
+        """
         self.repository = strategy_repository
         self.default_strategy = default_strategy
 
     @abstractmethod
     def pick_strategy(self, event: any) -> IStrategy:
+        """
+        Picks strategy for given event
+        :param event:
+        :return:
+        """
         pass
 
 

@@ -23,9 +23,6 @@ class _ChatMessage:
 
 
 class Chat:
-    """
-    A component representing chat.
-    """
     def __init__(self, event_broadcaster: Callable, max_size: int = 1024):
         """
          A component representing chat.
@@ -43,7 +40,7 @@ class Chat:
         """
         Shrinks chat to smaller size.
 
-        :param survivor_count: Amount of latest messages to preserve after reset
+        :param survivor_count: Amount of latest messages preserved after reset
         :return: 
         """
         for i in range(survivor_count):
@@ -90,6 +87,10 @@ class Chat:
         return self._messages.__getitem__(item)
 
     def get_capacity(self):
+        """
+        A method that return maximum amount of messages chat can have, before automatically resetting itself
+        :return: int
+        """
         return self._max_size
 
 

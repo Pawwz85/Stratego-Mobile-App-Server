@@ -13,7 +13,36 @@ from src.Events.Events import EventLogicalEndpointWithSignature, Eventmanager
 
 
 class Room:
+    """
+     Represents a room where users can join, interact, and participate in events.
+     This class manages users, broadcasts events, and handles room termination.
+
+     Attributes:
+         users (dict[int, User]): A dictionary mapping user IDs to User objects within the room.
+         user_list_updates (int): A counter tracking the number of user list updates.
+         job_manager (JobManager): Manages jobs and tasks associated with the room.
+         __mark_self_for_deletion (Callable[[str], any]): Callback function to mark the room for deletion.
+         _table (Table): The table associated with the room, handling seat changes and events.
+         _chat (Chat): Chat system associated with the room for user communication.
+         _password (str): Password for room access (optional).
+         _job (Job or None): Job object associated with the room, if any.
+         _inactive_room_auto_termination (DelayedTask or None): Task to automatically terminate the room if inactive.
+         _id (str): Unique identifier for the room.
+         event_manager (EventManager): Manages event distribution within the room.
+     """
     class Builder:
+        """
+        Builder is a fluent interface class that allows the construction of a Room object by setting various
+        attributes and callback functions on the Builder instance. The Room object will be created by calling the
+        `build()` method on the Builder instance.
+
+        Attributes: - job_manager (JobManager): A reference to the JobManager instance used for scheduling tasks -
+        event_manager (Eventmanager): An instance of the Eventmanager class, responsible for managing events in the
+        room - table_builder (Table.Builder): The Builder object for constructing a Table object inside the Room -
+        chat (Chat): A Chat object to store messages and facilitate messaging between users inside the Room -
+        password: Optional password for the Room, which will be enforced during user authentication
+
+        """
         def __init__(self, job_manager: JobManager, mark_for_deletion: Callable[[str], any]):
             self.job_manager = job_manager
             self.event_manager: Eventmanager = Eventmanager(job_manager)
@@ -23,22 +52,55 @@ class Room:
             self.mark_for_deletion: Callable = mark_for_deletion
 
         def set_table_builder(self, table_builder: Table.Builder):
+            """
+            Sets the Table Builder object used to construct a Table object inside the Room. The Builder instance for
+            the Table object can be customized by implementing its own methods.
+
+            :param table_builder: The Table Builder object to set as the builder for the Room's Table
+            :return: The Builder object, allowing method chaining
+            """
             self.table_builder = table_builder
             return self
 
         def set_chat_cap(self, size: int):
+            """
+            Sets the maximum chat message capacity in messages. This attribute will be passed to the Chat object
+            during its construction inside the Room.
+
+            :param size: The maximum chat message capacity in messages
+            :return: The Builder object, allowing method chaining
+            """
             self.chat_cap = size
             return self
 
         def set_password(self, password: str | None):
+            """
+            Sets an optional password for the Room, which will be needed by users to join.
+
+            :param password: The password for the Room (optional)
+            :return: The Builder object, allowing method chaining
+            """
             self.password = password
             return self
 
         def set_event_manager(self, event_manager: Eventmanager):
+            """
+            Sets an instance of the Eventmanager class to manage events inside the Room. This attribute will be
+            passed to the Eventmanager during its construction.
+
+            :param event_manager: The Eventmanager object for managing events inside the Room
+            :return: The Builder object, allowing method chaining
+            """
             self.event_manager = event_manager
             return self
 
         def build(self) -> Room:
+            """
+            Creates a new Room instance using the attributes and callback functions set on the Builder object. This
+            method should be called after all customization has been completed.
+
+            :return: The newly created Room object
+            """
             result: Room = Room(self.job_manager, self.event_manager, self.table_builder, self.mark_for_deletion)
             result._chat = Chat(result.event_broadcast, self.chat_cap)
             result._password = self.password
@@ -46,6 +108,15 @@ class Room:
 
     def __init__(self, job_manager: JobManager, event_manager: Eventmanager,
                  table_builder: Table.Builder, mark_for_deletion: Callable[[str], any]):
+        """
+              Initializes the Room instance with the provided job manager, event manager, and table builder.
+
+              :param job_manager: An instance of JobManager for managing jobs and tasks in the room.
+              :param event_manager: An instance of EventManager for managing event distribution.
+              :param table_builder: A Table.Builder object for constructing the table associated with the room.
+              :param mark_for_deletion: A callable that marks the room for deletion when invoked.
+              :return: None
+        """
         self.users: dict[int, User] = dict()
         self.user_list_updates = 0
         self.job_manager = job_manager
@@ -66,9 +137,21 @@ class Room:
         self.delay_room_termination()
 
     def player_set(self):
+        """
+               Retrieves the current set of players seated at the table.
+
+               :return: A collection of players currently seated.
+               :rtype: Collection[User]
+        """
         return self._table.get_seat_manager().seats.values()
 
     def add_user(self, user: User):
+        """
+               Adds a user to the room and broadcasts the event to other users.
+
+               :param user: The User object to add to the room.
+               :return: None
+        """
         self.users[user.id] = user
         user.room_count += 1
         if self._job is not None:
@@ -91,11 +174,22 @@ class Room:
         self.delay_room_termination()
 
     def __empty_check(self):
+        """
+            Checks if the room is empty and terminates it if so.
+
+            :return: None
+        """
         if len(self.users) == 0:
             self.kill()
             self.__mark_self_for_deletion(self._id)
 
     def delete_user(self, user: User):
+        """
+               Removes a user from the room and broadcasts the event to other users.
+
+               :param user: The User object to remove from the room.
+               :return: None
+        """
         if user.id in self.player_set():
             self.get_table_api().leave_table(user)
 
@@ -112,16 +206,41 @@ class Room:
             self.event_broadcast(del_user_event)
 
     def get_password(self):
+        """
+             Retrieves the password associated with the room, if any.
+
+             :return: The room's password.
+             :rtype: str
+        """
         return self._password
 
     def get_id(self):
+        """
+               Retrieves the unique identifier of the room.
+
+               :return: The room's unique identifier.
+               :rtype: str
+        """
         return self._id
 
     def get_table_api(self):
+        """
+               Retrieves the API for interacting with the room's table.
+
+               :return: The TableApi object for the room's table.
+               :rtype: TableApi
+        """
         self.delay_room_termination()
         return TableApi(self._table)
 
     def get_role_of(self, user: User) -> str:
+        """
+               Determines the role of a user within the room (e.g., blue_player, red_player, spectator).
+
+               :param user: The User object whose role is being determined.
+               :return: The role of the user.
+               :rtype: str
+        """
         seats = self._table.get_seat_manager().seats
         for color in Side:
             if seats[color] == user.id:
@@ -129,31 +248,69 @@ class Room:
         return "spectator"
 
     def __spectator_channel(self, event_body: dict):
+        """
+           Sends an event to all spectators in the room.
+
+           :param event_body: The body of the event to be sent.
+           :return: None
+        """
         player_set = self.player_set()
         users = [user for user in self.users.values() if user.id not in player_set]
         self.send_event_to_range(event_body, users)
     
     def send_event_to_range(self, event: dict, users: collections.Collection[User]):
+        """
+          Sends an event to a specified range of users.
+
+          :param event: The event data to be sent.
+          :param users: The collection of users to receive the event.
+          :return: None
+        """
         event["room_id"] = self._id
         sessions = [user.session for user in users]
         multi_cast_endpoint = EventLogicalEndpointWithSignature.merge(sessions, self.event_manager)
         multi_cast_endpoint.receive(event)
 
     def event_broadcast(self, event: dict):
+        """
+                Broadcasts an event to all users in the room.
+
+                :param event: The event data to broadcast.
+                :return: None
+        """
         self.send_event_to_range(event, self.users.values())
 
     def __players_channel(self, event_body: dict, side: Side):
-        # We can send this directly to users, as mplayer numbers is always small (1 or 0)
+        """
+               Sends an event to the player on the specified side (blue or red).
+
+               :param event_body: The body of the event to be sent.
+               :param side: The side (blue or red) to which the event should be sent.
+               :return: None
+        """
         player_id = self._table.get_seat_manager().seats.get(side, None)
         player = self.users.get(player_id)
         if player is not None:
             self.send_event_to_range(event_body, [player])
 
     def get_chat(self):
+        """
+              Retrieves the chat system associated with the room.
+
+              :return: The Chat object for the room.
+              :rtype: Chat
+        """
         self.delay_room_termination()
         return self._chat
 
     def __on_seat_change(self, player_id, side: Side | None):
+        """
+              Handles seat change events and broadcasts the updated role to other users.
+
+              :param player_id: The ID of the player whose seat has changed.
+              :param side: The new side (red, blue, or None) assigned to the player.
+              :return: None
+        """
         new_role = "spectator"
         if side is Side.red:
             new_role = "red_player"
@@ -174,10 +331,21 @@ class Room:
         self.event_broadcast(role_changed_event)
 
     def get_table(self):
+        """
+               Retrieves the table associated with the room.
+
+               :return: The Table object for the room.
+               :rtype: Table
+        """
         self.delay_room_termination()
         return self._table
 
     def kill(self):
+        """
+            Terminates the room and cancels any ongoing jobs or tasks.
+
+            :return: None
+        """
         self._table.kill()
         if self._job is not None:
             self._job.cancel()
@@ -186,12 +354,22 @@ class Room:
             self._inactive_room_auto_termination.cancel()
 
     def delay_room_termination(self):
+        """
+             Delays the automatic termination of the room by resetting the termination task.
+
+             :return: None
+        """
         if self._inactive_room_auto_termination is not None:
             self._inactive_room_auto_termination.cancel()
         self._inactive_room_auto_termination = DelayedTask(self.close_room, 1000 * 600)
         self.job_manager.add_delayed_task(self._inactive_room_auto_termination)
 
     def close_room(self):
+        """
+           Closes the room, broadcasting the closure event and marking the room for deletion.
+
+           :return: None
+        """
         event = {
             "type": "room_closed"
         }
@@ -200,6 +378,16 @@ class Room:
 
 
 class RoomApi:
+    """
+    RoomApi class provides a set of methods to interact with a specific room in a game. Each method is represented as
+    a callback function that takes the user object and request dictionary as parameters and returns a tuple
+    containing a boolean flag indicating success or failure, and an optional string or dictionary as the response
+    data. The available commands are defined in the `strategies` dictionary, which maps each command type to its
+    corresponding callback function.
+
+    :param Room room: The specific room object that this API will interact with.
+    :return: A tuple containing a boolean flag indicating success or failure, and an optional string or dictionary as the response data.
+    """
     def __init__(self, room: Room):
         self.room = room
         self.strategies: dict[str, Callable[[User, dict], tuple[bool, str | None] | dict]] = {
@@ -333,6 +521,11 @@ class RoomApi:
         return response
 
     def __call__(self, user: User, request: dict) -> tuple[bool, str | None] | dict:
+        """
+        :param User user: The user object that is requesting an action. :param dict request: The dictionary
+        containing the specific command and parameters. :return: A tuple containing a boolean flag indicating success
+        or failure, and an optional string or dictionary as the response data.
+        """
         request_type: str | None = request.get("type", None)
         if type(request_type) is not str:
             return False, f'Field "type" should have type str, found {type(request_type)}'
