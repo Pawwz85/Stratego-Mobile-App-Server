@@ -29,10 +29,10 @@ export class SideSelectorSeatModel{
 
       const newUsername = owner?.username ?? null;
       anyChange = anyChange || newUsername != this.ownerUsername;
-
+    
       this.isUserOwner = newUsername == appGlobalContext.currentUser.username;
       this.ownerUsername = newUsername;
-
+      console.log(this, appGlobalContext)
       if(anyChange)
         this.notify_observers();
   }
@@ -247,7 +247,7 @@ export class SideSelectorView{
     btn.setSize(btn.width, btn.height);
   
     
-
+ 
     toggle_label.setAttribute("x", "25%");
     toggle_label.setAttribute("y", "90%");
     toggle_label.setAttribute("width", "25%");

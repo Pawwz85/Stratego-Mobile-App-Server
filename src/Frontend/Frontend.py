@@ -62,6 +62,12 @@ def login_required(route):
     return wrapper
 
 
+@app.route('/', methods=['GET'])
+@login_required
+def index():
+    return flask.render_template('index.html')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

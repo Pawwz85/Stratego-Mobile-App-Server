@@ -7,23 +7,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="Reworked window visible in awaiting phase">
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="First playable version, introduced controller for board in gameplay phase. A number of bugfixes">
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_stratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_stratego.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/Room.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Room.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/stratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/stratego.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/Frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/Frontend.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/board_model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/board_view.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/chat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/game_fragments.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/game_fragments.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/global_context.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/global_context.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/room_live_image.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/room_live_image.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/room_ui_manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/room_ui_manager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/server_connection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/server_connection.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/static/side_selector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/side_selector.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/ui_primitives.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/ui_primitives.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/templates/board.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/board.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -418,7 +407,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724539299688</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="First playable version, introduced controller for board in gameplay phase. A number of bugfixes">
+      <option name="closed" value="true" />
+      <created>1724608061760</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1724608061760</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -446,7 +443,8 @@
     <MESSAGE value="- Started work on UI, now on /board server would generate a board, that is for now, empty" />
     <MESSAGE value="- Allowed browser user to create and join rooms. Thought, there is no button to set_ready value yet, so users would be stuck in awaiting phase.&#10;- Seat placement and chat features are integrated into browser client" />
     <MESSAGE value="Reworked window visible in awaiting phase" />
-    <option name="LAST_COMMIT_MESSAGE" value="Reworked window visible in awaiting phase" />
+    <MESSAGE value="First playable version, introduced controller for board in gameplay phase. A number of bugfixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="First playable version, introduced controller for board in gameplay phase. A number of bugfixes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

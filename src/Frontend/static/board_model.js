@@ -127,7 +127,7 @@ export class MoveGenerator {
       const result = []
       for (let off of offsets) {
         let move = new Move(sq_id, sq_id + off)
-        //if (this.is_move_valid(move))
+        if (this.is_move_valid(move))
            result.push(move)
       }
       console.log(piece)
