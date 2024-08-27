@@ -666,7 +666,6 @@ class TableApi:
         return self.table.remove_player(user.id)
 
     def get_board(self, user: User) -> dict:
-        # Maybe this method should be moved down, to a table api ?
         nr = self.table.get_event_counter()
         status = self.table.phase_type
         status = {TableGamePhase.gameplay: "gameplay",

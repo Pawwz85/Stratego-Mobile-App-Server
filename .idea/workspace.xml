@@ -9,13 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Added a few testCases and comments">
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Even more testcases">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestResources/table_api_test_correct_setup" beforeDir="false" afterPath="$PROJECT_DIR$/TestResources/table_api_test_correct_setup" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/GameplayScenarioGenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/GameplayScenarioGenerator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/random_setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/stratego_helpers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UnitTests/test_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -142,9 +138,15 @@
     "Python tests.Python tests for test_table.TestTableAwaitPhase.test_table_take_seat2.executor": "Run",
     "Python tests.Python tests for test_table.TestTableAwaitPhase.test_table_take_seat3.executor": "Run",
     "Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission2.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_transmission_to_setup_invokes_board_event_for_all_event_channels.executor": "Run",
     "Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness1.executor": "Run",
     "Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness2.executor": "Run",
     "Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_get_readiness_command_fails.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_set_readiness_command_fails.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_table_setup_transmission.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_transmission_to_setup_invokes_board_event_for_all_event_channels.executor": "Run",
     "Python tests.Python tests for test_table.TestTablePhase.test.executor": "Run",
     "Python tests.Python tests in BlackRedTreeTest.py.executor": "Run",
     "Python tests.Python tests in UnitTests.executor": "Run",
@@ -206,7 +208,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission2">
+  <component name="RunManager" selected="Python tests.Python tests in UnitTests">
     <configuration name="game node" type="PythonConfigurationType" factoryName="Python">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
@@ -253,7 +255,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestTableAwaitPhase" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -264,11 +266,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhase&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission2" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_get_readiness_command_fails" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -279,11 +281,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission2&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithoutReadyCommand.test_get_readiness_command_fails&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness1" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_set_readiness_command_fails" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -294,11 +296,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness1&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithoutReadyCommand.test_set_readiness_command_fails&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness2" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_table_setup_transmission" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -309,7 +311,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness2&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithoutReadyCommand.test_table_setup_transmission&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -331,19 +333,19 @@
     <list>
       <item itemvalue="Python.game node" />
       <item itemvalue="Python.server" />
-      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission" />
-      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission2" />
-      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness1" />
-      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness2" />
+      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhase" />
+      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_get_readiness_command_fails" />
+      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_set_readiness_command_fails" />
+      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_table_setup_transmission" />
       <item itemvalue="Python tests.Python tests in UnitTests" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission2" />
-        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission" />
-        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness2" />
-        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness1" />
         <item itemvalue="Python tests.Python tests in UnitTests" />
+        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhase" />
+        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_get_readiness_command_fails" />
+        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_set_readiness_command_fails" />
+        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_table_setup_transmission" />
       </list>
     </recent_temporary>
   </component>
@@ -491,7 +493,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724714565226</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="- Even more testcases">
+      <option name="closed" value="true" />
+      <created>1724797157741</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1724797157741</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -522,7 +532,8 @@
     <MESSAGE value="First playable version, introduced controller for board in gameplay phase. A number of bugfixes" />
     <MESSAGE value="- Added index.html&#10;- Fixed small bug regarding the loading of user's username in board.html" />
     <MESSAGE value="- Added a few testCases and comments" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Added a few testCases and comments" />
+    <MESSAGE value="- Even more testcases" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Even more testcases" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -247,7 +247,7 @@ class TestSetupManager(unittest.TestCase):
     def __start_transmission(self):
         self.setup_manager.get_phase().init()
 
-    def test_phase_finish_top_transmission(self):
+    def test_phase_finish_stop_transmission(self):
         self.__start_transmission()
         self.setup_manager.get_phase().finish()
         self.__wait_for_transmission()
@@ -460,8 +460,8 @@ class TestTable(unittest.TestCase):
         """
         self.assertIs(self.table_builder.build().phase_type, TableGamePhase.awaiting)
 
-    def _run_job_manager(self, time_ms: int):
-        self.job_manager.add_delayed_task(DelayedTask(self.job_manager.kill, time_ms))
+    def _run_job_manager(self, start_time_ms: int):
+        self.job_manager.add_delayed_task(DelayedTask(self.job_manager.kill, start_time_ms))
         while len(self.job_manager) > 0:
             self.job_manager.iteration_of_job_execution()
 
@@ -540,13 +540,13 @@ class TestTableAwaitPhase(TestTable):
         table = self.table_builder.build()
         table_api = TableApi(table)
 
-        res, msg = table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        table_api.take_seat(self.req_claim_seat('red'), self.user1)
         self.assertTrue(self.seat_observer.called)
         args = self.seat_observer.call_args.args
         self.assertEqual(args[0], self.user1.id)
         self.assertEqual(args[1], Side.red)
 
-        res, msg = table_api.take_seat(self.req_claim_seat('blue'), self.user2)
+        table_api.take_seat(self.req_claim_seat('blue'), self.user2)
         self.assertEqual(self.seat_observer.call_count, 2)
         args = self.seat_observer.call_args.args
         self.assertEqual(args[0], self.user2.id)
@@ -590,6 +590,31 @@ class TestTableAwaitPhase(TestTable):
 
 
 class TestTableAwaitPhaseWithoutReadyCommand(TestTableAwaitPhase):
+    def test_set_readiness_command_fails(self):
+        """
+        Scenario: Table was build without support for ready command but player invoke set readiness
+        Expected outcome: command fails
+        """
+        table = self.table_builder.build()
+        table_api = TableApi(table)
+        table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        req = {
+            "type": "set_ready",
+            "value": True
+        }
+        res, msg = table_api.set_readiness(req, self.user1)
+        self.assertFalse(res, msg)
+
+    def test_get_readiness_command_fails(self):
+        """
+        Scenario: Table was build without support for ready command but player invoke get readiness
+        Expected outcome: command fails
+        """
+        table = self.table_builder.build()
+        table_api = TableApi(table)
+        res, msg = table_api.get_player_readiness(self.user1)
+        self.assertFalse(res, msg)
+
     def test_table_setup_transmission(self):
         """
         Scenario: Table was build without support for ready command
@@ -599,7 +624,25 @@ class TestTableAwaitPhaseWithoutReadyCommand(TestTableAwaitPhase):
         table_api = TableApi(table)
         table_api.take_seat(self.req_claim_seat('red'), self.user1)
         table_api.take_seat(self.req_claim_seat('blue'), self.user2)
+        super()._run_job_manager(100)
         self.assertIs(table.phase_type, TableGamePhase.setup)
+
+    def test_transmission_to_setup_invokes_board_event_for_all_event_channels(self):
+        """
+        Scenario: Table transited to 'setup' phase
+        Expected behaviour: In all channels there was transmitted board event with
+        'game_status' = 'setup'
+        """
+        table = self.table_builder.build()
+        table_api = TableApi(table)
+        table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        table_api.take_seat(self.req_claim_seat('blue'), self.user2)
+        super()._run_job_manager(100)
+        for ch in self.event_channels.values():
+            events = [arg.args[0] for arg in ch.call_args_list]
+            events = [e for e in events if e['type'] == 'board_event'
+                      and e['game_status'] == 'setup']
+            self.assertTrue(len(events) > 0)
 
 
 class TestTableAwaitPhaseWithReadyCommand(TestTableAwaitPhase):
@@ -622,10 +665,10 @@ class TestTableAwaitPhaseWithReadyCommand(TestTableAwaitPhase):
         Expected outcome: commands succeed and ready_event is emitted via event broadcast
         """
         table = self.table_builder.build()
-        tableApi = TableApi(table)
-        status, msg = tableApi.take_seat(self.req_claim_seat('red'), self.user1)
+        table_api = TableApi(table)
+        status, msg = table_api.take_seat(self.req_claim_seat('red'), self.user1)
         self.assertTrue(status, msg)
-        status, msg = tableApi.set_readiness(self.set_ready(True), self.user1)
+        status, msg = table_api.set_readiness(self.set_ready(True), self.user1)
         self.assertTrue(status, msg)
 
         ready_events = [args.args[0] for args in self.event_broadcast.call_args_list
@@ -639,12 +682,12 @@ class TestTableAwaitPhaseWithReadyCommand(TestTableAwaitPhase):
         :return:
         """
         table = self.table_builder.build()
-        tableApi = TableApi(table)
-        status, msg = tableApi.take_seat(self.req_claim_seat('red'), self.user1)
+        table_api = TableApi(table)
+        status, msg = table_api.take_seat(self.req_claim_seat('red'), self.user1)
         self.assertTrue(status, msg)
-        status, msg = tableApi.set_readiness(self.set_ready(True), self.user1)
+        status, msg = table_api.set_readiness(self.set_ready(True), self.user1)
         self.assertTrue(status, msg)
-        status, msg = tableApi.set_readiness(self.set_ready(False), self.user1)
+        status, msg = table_api.set_readiness(self.set_ready(False), self.user1)
         self.assertTrue(status, msg)
         ready_events = [args.args[0] for args in self.event_broadcast.call_args_list
                         if args.args[0]['type'] == 'ready_event']
@@ -658,28 +701,51 @@ class TestTableAwaitPhaseWithReadyCommand(TestTableAwaitPhase):
         Expect outcome: table status is  in 'setup' phase.
         """
         table = self.table_builder.build()
-        tableApi = TableApi(table)
-        tableApi.take_seat(self.req_claim_seat('red'), self.user1)
-        tableApi.take_seat(self.req_claim_seat('blue'), self.user2)
-        tableApi.set_readiness(self.set_ready(True), self.user1)
-        tableApi.set_readiness(self.set_ready(True), self.user2)
+        table_api = TableApi(table)
+        table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        table_api.take_seat(self.req_claim_seat('blue'), self.user2)
+        table_api.set_readiness(self.set_ready(True), self.user1)
+        table_api.set_readiness(self.set_ready(True), self.user2)
         super()._run_job_manager(100)
         self.assertIs(table.phase_type, TableGamePhase.setup)
 
     def test_table_setup_transmission2(self):
         """
-        Scenario: both players have taken their seats and set their status to ready, then one of players set their readiness to false
-        Expect outcome: table status is  in 'setup' phase.
+        Scenario: both players have taken their seats and set their status to ready, then one of players set their
+        readiness to false Expect outcome: table status is  in 'setup' phase.
         """
         table = self.table_builder.build()
-        tableApi = TableApi(table)
-        tableApi.take_seat(self.req_claim_seat('red'), self.user1)
-        tableApi.take_seat(self.req_claim_seat('blue'), self.user2)
-        tableApi.set_readiness(self.set_ready(True), self.user1)
-        tableApi.set_readiness(self.set_ready(True), self.user2)
-        tableApi.set_readiness(self.set_ready(False), self.user1)
+        table_api = TableApi(table)
+        table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        table_api.take_seat(self.req_claim_seat('blue'), self.user2)
+        table_api.set_readiness(self.set_ready(True), self.user1)
+        table_api.set_readiness(self.set_ready(True), self.user2)
+        table_api.set_readiness(self.set_ready(False), self.user1)
         super()._run_job_manager(100)
         self.assertIsNot(table.phase_type, TableGamePhase.setup)
+
+    def test_transmission_to_setup_invokes_board_event_for_all_event_channels(self):
+        """
+        Scenario: Table transited to 'setup' phase
+        Expected behaviour: In all channels there was transmitted board event with
+        'game_status' = 'setup'
+        """
+        table = self.table_builder.build()
+        table_api = TableApi(table)
+        table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        table_api.take_seat(self.req_claim_seat('blue'), self.user2)
+        table_api.set_readiness(self.set_ready(True), self.user1)
+        table_api.set_readiness(self.set_ready(True), self.user2)
+        super()._run_job_manager(100)
+        for ch in self.event_channels.values():
+            events = [arg.args[0] for arg in ch.call_args_list]
+            events = [e for e in events if e['type'] == 'board_event'
+                      and e['game_status'] == 'setup']
+            self.assertTrue(len(events) > 0)
+
+
+class TestTableSetupPhase(TestTable):
+    pass
 
 
 class TestTableApi(unittest.TestCase):
