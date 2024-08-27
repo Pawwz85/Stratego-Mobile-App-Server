@@ -2,20 +2,20 @@
 <project version="4">
   <component name="AnalysisUIOptions">
     <option name="ANALYZE_INJECTED_CODE" value="false" />
+    <option name="SCOPE_TYPE" value="8" />
+    <option name="CUSTOM_SCOPE_NAME" value="src" />
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Added index.html&#10;- Fixed small bug regarding the loading of user's username in board.html">
-      <change afterPath="$PROJECT_DIR$/UnitTests/TestUtil/random_setup.py" afterDir="false" />
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Added a few testCases and comments">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestResources/table_api_test_correct_setup" beforeDir="false" afterPath="$PROJECT_DIR$/TestResources/table_api_test_correct_setup" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/GameplayScenarioGenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/GameplayScenarioGenerator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/random_setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/stratego_helpers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UnitTests/test_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/IStrategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/IStrategy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/IUserRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/IUserRepository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/JobManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/JobManager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/Room.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Room.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/chat.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/chat.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,6 +43,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="NamedScopeManager">
+    <scope name="src" pattern="!file[pythonProject]:*/||file[pythonProject]:src//*" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -80,6 +83,7 @@
     "Python tests.Python tests for test_linked_list.TestLinkedList.test_addition.executor": "Run",
     "Python tests.Python tests for test_linked_list.TestLinkedList.test_deletion.executor": "Run",
     "Python tests.Python tests for test_linked_list.TestLinkedList.test_iteration_after_detach_from_middle.executor": "Run",
+    "Python tests.Python tests for test_room.RoomTestCase.executor": "Run",
     "Python tests.Python tests for test_room.RoomTestCase.test_expected_behaviour.executor": "Run",
     "Python tests.Python tests for test_stratego.MyTestCase.testFlip.executor": "Run",
     "Python tests.Python tests for test_stratego.StrategoGameStateTest.testFinnishMobilePresentNotLegalMoves.executor": "Run",
@@ -92,6 +96,19 @@
     "Python tests.Python tests for test_table.TableTestCase.test_expected_behavior.executor": "Run",
     "Python tests.Python tests for test_table.TableTestCase.test_gameplay_timeout.executor": "Run",
     "Python tests.Python tests for test_table.TableTestCase.test_resign.executor": "Run",
+    "Python tests.Python tests for test_table.TestFinishedGameManager.test_phase_logic_executes_rematch_if_both_players_are_willing.executor": "Run",
+    "Python tests.Python tests for test_table.TestFinishedGameManager.test_set_rematch_willingness_false.executor": "Run",
+    "Python tests.Python tests for test_table.TestGameplayManager.executor": "Run",
+    "Python tests.Python tests for test_table.TestGameplayManager.test_get_move_list_on_opponent_turn.executor": "Run",
+    "Python tests.Python tests for test_table.TestGameplayManager.test_get_move_list_on_player_turn.executor": "Run",
+    "Python tests.Python tests for test_table.TestGameplayManager.test_make_move_cause_async_invoke_of_on_state_change.executor": "Run",
+    "Python tests.Python tests for test_table.TestGameplayManager.test_make_move_causes_side_on_move.executor": "Run",
+    "Python tests.Python tests for test_table.TestGameplayManager.test_make_move_fails_on_illegal_move.executor": "Run",
+    "Python tests.Python tests for test_table.TestGameplayManager.test_make_move_fails_on_invalid_move.executor": "Run",
+    "Python tests.Python tests for test_table.TestGameplayManager.test_phase_init_calls_on_state_change.executor": "Run",
+    "Python tests.Python tests for test_table.TestGameplayManager.test_phase_logic_calls_on_state_change.executor": "Run",
+    "Python tests.Python tests for test_table.TestGameplayManager.test_player_timeout.executor": "Run",
+    "Python tests.Python tests for test_table.TestGameplayManager.test_player_wins.executor": "Run",
     "Python tests.Python tests for test_table.TestSeatManager.executor": "Run",
     "Python tests.Python tests for test_table.TestSeatManager.test_phase_init.executor": "Run",
     "Python tests.Python tests for test_table.TestSeatManager.test_phase_logic.executor": "Run",
@@ -109,6 +126,25 @@
     "Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand.test_release_seat_cancels_transmission.executor": "Run",
     "Python tests.Python tests for test_table.TestSetupManager.test_phase_finish_top_transmission.executor": "Run",
     "Python tests.Python tests for test_table.TestSetupManager.test_players_submit_valid_setups.executor": "Run",
+    "Python tests.Python tests for test_table.TestTable.executor": "Run",
+    "Python tests.Python tests for test_table.TestTable.test_table_starts_in_awaiting_phase.executor": "Run",
+    "Python tests.Python tests for test_table.TestTable.test_table_take_seat.executor": "Run",
+    "Python tests.Python tests for test_table.TestTable.test_table_take_set_invokes_seat_observer.executor": "Run",
+    "Python tests.Python tests for test_table.TestTable.test_table_without_readiness_to_setup_transmission.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableApi.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableApi.test_expected_behavior.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableApi.test_main_loop.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableApi.test_resign.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhase.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhase.test_seat_release_invokes_seat_observer.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhase.test_table_no_readiness_transmission.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhase.test_table_release.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhase.test_table_take_seat2.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhase.test_table_take_seat3.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness1.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness2.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.executor": "Run",
     "Python tests.Python tests for test_table.TestTablePhase.test.executor": "Run",
     "Python tests.Python tests in BlackRedTreeTest.py.executor": "Run",
     "Python tests.Python tests in UnitTests.executor": "Run",
@@ -170,7 +206,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in test_table.py">
+  <component name="RunManager" selected="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission2">
     <configuration name="game node" type="PythonConfigurationType" factoryName="Python">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
@@ -217,7 +253,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestSeatManagerWithReadyCommand" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -228,11 +264,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestSeatManagerWithReadyCommand&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestSeatManagerWithReadyCommand.test_release_seat" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission2" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -243,11 +279,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestSeatManagerWithReadyCommand.test_release_seat&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission2&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestSetupManager.test_phase_finish_top_transmission" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness1" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -258,11 +294,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestSetupManager.test_phase_finish_top_transmission&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestSetupManager.test_players_submit_valid_setups" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness2" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -273,11 +309,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestSetupManager.test_players_submit_valid_setups&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness2&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in test_table.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests in UnitTests" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -288,26 +324,26 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/UnitTests/test_table.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/UnitTests&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Python.game node" />
       <item itemvalue="Python.server" />
-      <item itemvalue="Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand" />
-      <item itemvalue="Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand.test_release_seat" />
-      <item itemvalue="Python tests.Python tests for test_table.TestSetupManager.test_phase_finish_top_transmission" />
-      <item itemvalue="Python tests.Python tests for test_table.TestSetupManager.test_players_submit_valid_setups" />
-      <item itemvalue="Python tests.Python tests in test_table.py" />
+      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission" />
+      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission2" />
+      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness1" />
+      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness2" />
+      <item itemvalue="Python tests.Python tests in UnitTests" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests in test_table.py" />
-        <item itemvalue="Python tests.Python tests for test_table.TestSetupManager.test_players_submit_valid_setups" />
-        <item itemvalue="Python tests.Python tests for test_table.TestSetupManager.test_phase_finish_top_transmission" />
-        <item itemvalue="Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand" />
-        <item itemvalue="Python tests.Python tests for test_table.TestSeatManagerWithReadyCommand.test_release_seat" />
+        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission2" />
+        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_table_setup_transmission" />
+        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness2" />
+        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithReadyCommand.test_user_set_readiness1" />
+        <item itemvalue="Python tests.Python tests in UnitTests" />
       </list>
     </recent_temporary>
   </component>
@@ -447,7 +483,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724630548592</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="- Added a few testCases and comments">
+      <option name="closed" value="true" />
+      <created>1724714565226</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1724714565226</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -477,7 +521,8 @@
     <MESSAGE value="Reworked window visible in awaiting phase" />
     <MESSAGE value="First playable version, introduced controller for board in gameplay phase. A number of bugfixes" />
     <MESSAGE value="- Added index.html&#10;- Fixed small bug regarding the loading of user's username in board.html" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Added index.html&#10;- Fixed small bug regarding the loading of user's username in board.html" />
+    <MESSAGE value="- Added a few testCases and comments" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Added a few testCases and comments" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

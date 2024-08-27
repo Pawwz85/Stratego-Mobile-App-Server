@@ -4,10 +4,11 @@ import unittest.mock as mock
 from TestUtil.MainLoopStub import MainLoopStub
 from TestUtil.UserSimulation import UserSimulationInterpreter
 from TestUtil.GameplayScenarioGenerator import GameplayScenarioGenerator
-from UnitTests.TestUtil.random_setup import generate_random_setup
+from UnitTests.TestUtil.stratego_helpers import generate_random_setup, rand_move, FastWinPosition
 from src.Core.table import *
 from src.Core.table import (TablePhase, SeatManager, SetupManager, GameplayManager,
                             SeatManagerWithReadyCommand, FinishedStateManager)
+from src.Core.stratego import game_state_from_setups
 from src.Events.Events import Eventmanager
 
 
@@ -49,7 +50,8 @@ class TestSeatManager(unittest.TestCase):
             Scenario: seat_manager get_phase().logic() should call 'transmission_to_setup_phase' only if both seats are
             taken
         """
-        testcases = [{Side.red: None, Side.blue: None}, {Side.red: None, Side.blue: 1}, {Side.red: 2, Side.blue: None}, {Side.red: 2, Side.blue: 1}]
+        testcases = [{Side.red: None, Side.blue: None}, {Side.red: None, Side.blue: 1}, {Side.red: 2, Side.blue: None},
+                     {Side.red: 2, Side.blue: 1}]
         for i, case in enumerate(testcases):
             self.seat_manager.seats = case
             self.seat_manager.get_phase().logic()
@@ -284,6 +286,400 @@ class TestSetupManager(unittest.TestCase):
         self.__wait_for_transmission()
         self.assertTrue(self.set_to_finish.called)
         self.assertFalse(self.set_to_gameplay.called)
+
+
+class TestGameplayManager(unittest.TestCase):
+    def setUp(self):
+        self.job_manager = JobManager()
+        self.time_con = TableTimeControl(0, 5000, 5000)
+        self.set_to_finish = mock.Mock()
+        self.on_state_change = mock.Mock()
+        self.initial_state = game_state_from_setups(generate_random_setup(Side.red),
+                                                    generate_random_setup(Side.blue))
+        self.gameplay_manager = GameplayManager(self.job_manager, self.time_con,
+                                                self.set_to_finish, self.on_state_change)
+
+        self.phase = self.gameplay_manager.get_phase(
+            self.initial_state
+        )
+
+    def tearDown(self):
+        del self.gameplay_manager, self.phase, self.initial_state
+        del self.job_manager, self.time_con, self.set_to_finish, self.on_state_change
+
+    def test_phase_logic_calls_on_state_change(self):
+        """
+            Scenario: GameplayManager is initialized. It should invoke on_state_change callback exactly
+            once.
+        """
+        self.phase.init()  # part of init
+        self.phase.logic()  # part of init
+        self.phase.logic()  # post init
+        self.assertTrue(self.on_state_change.call_count == 1)
+
+    def test_make_move_cause_async_invoke_of_on_state_change(self):
+        """
+            This testcase checks if 'make_move' calls on_state_change either implicitly or by
+            phase.logic()
+        """
+        self.phase.init()
+        self.phase.logic()  # first call to logic
+        self.phase.logic()
+        self.assertEqual(self.on_state_change.call_count, 1)
+        state = GameState()
+        state.set_game_state(self.initial_state)
+        moving_side = Side.red if self.gameplay_manager.get_moving_side() == 'red' else Side.blue
+        move = rand_move(state, moving_side)
+        res, msg = self.gameplay_manager.make_move(move, moving_side)
+        self.assertTrue(res, msg)
+        self.phase.logic()
+        self.assertEqual(self.on_state_change.call_count, 2)
+
+    def test_player_timeout(self):
+        """
+            Tests if player would be timeout after his time runs out
+        """
+        moving_side = Side.red if self.gameplay_manager.get_moving_side() == 'red' else Side.blue
+        self.phase.init()
+        self.phase.logic()
+
+        while len(self.job_manager) > 0:
+            self.job_manager.iteration_of_job_execution()
+
+        self.assertTrue(self.set_to_finish.called)
+        args = self.set_to_finish.call_args.args
+        self.assertIs(args[0], moving_side.flip())  # assert side on move has lost
+
+    def test_player_wins(self):
+        """
+            Tests if player winning by capturing enemy flag 'triggers set_to_finish'.
+            As py product, it also checks if make move success on valid move
+        """
+        moving_side = Side.red if self.gameplay_manager.get_moving_side() == 'red' else Side.blue
+        winning_pos = FastWinPosition(moving_side)
+        del self.phase
+        self.phase = self.gameplay_manager.get_phase(winning_pos.game_state)
+        self.phase.init()
+        self.phase.logic()
+        status, msg = self.gameplay_manager.make_move(winning_pos.winning_move, moving_side)
+        self.assertTrue(status, msg)
+        self.phase.logic()
+        self.assertTrue(self.set_to_finish.called)
+        args = self.set_to_finish.call_args.args
+        self.assertIs(args[0], moving_side)  # assert side on move has won
+
+    def test_make_move_fails_on_illegal_move(self):
+        m = (2, 1)
+        moving_side = Side.red if self.gameplay_manager.get_moving_side() == 'red' else Side.blue
+        status, _ = self.gameplay_manager.make_move(m, moving_side)
+        self.assertFalse(status)
+
+    def test_make_move_fails_on_invalid_move(self):
+        moving_side = Side.red if self.gameplay_manager.get_moving_side() == 'red' else Side.blue
+        winning_pos = FastWinPosition(moving_side.flip())
+        del self.phase
+        self.phase = self.gameplay_manager.get_phase(winning_pos.game_state)
+        self.phase.init()
+        self.phase.logic()
+        status, msg = self.gameplay_manager.make_move(winning_pos.winning_move, moving_side)
+        self.assertFalse(status, msg)
+
+    def test_get_move_list_on_player_turn(self):
+        self.phase.init()
+        self.phase.logic()
+        moving_side = Side.red if self.gameplay_manager.get_moving_side() == 'red' else Side.blue
+        self.assertNotEqual(len(self.gameplay_manager.get_move_list(moving_side)), 0)
+
+    def test_get_move_list_on_opponent_turn_returns_empty_list(self):
+        self.phase.init()
+        self.phase.logic()
+        moving_side = Side.red if self.gameplay_manager.get_moving_side() == 'red' else Side.blue
+        self.assertEqual(len(self.gameplay_manager.get_move_list(moving_side.flip())), 0)
+
+    def test_get_move_list_return_empty_if_moving_side_is_none(self):
+        self.phase.init()
+        self.phase.logic()
+        self.assertEqual(len(self.gameplay_manager.get_move_list(None)), 0)
+
+
+class TestFinishedGameManager(unittest.TestCase):
+    def setUp(self):
+        self.execute_rematch = mock.Mock()
+        self.event_man = Eventmanager(JobManager())
+        self.user1 = User("tester", "123", 1, self.event_man, None)
+        self.user2 = User("tester2", "123", 2, self.event_man, None)
+        self.finished_state_manager = FinishedStateManager(self.execute_rematch)
+
+    def tearDown(self):
+        del self.finished_state_manager, self.execute_rematch, self.event_man
+        del self.user1, self.user2
+
+    def test_phase_logic_executes_rematch_if_both_players_are_willing(self):
+        self.finished_state_manager.get_phase().init()
+        self.finished_state_manager.set_rematch_willingness(self.user1, True)
+        self.finished_state_manager.set_rematch_willingness(self.user2, True)
+        self.finished_state_manager.get_phase().logic()
+        self.assertTrue(self.execute_rematch.called)
+
+    def test_set_rematch_willingness_false(self):
+        self.finished_state_manager.get_phase().init()
+        self.finished_state_manager.set_rematch_willingness(self.user1, True)
+        self.finished_state_manager.set_rematch_willingness(self.user1, False)
+        self.finished_state_manager.set_rematch_willingness(self.user2, True)
+        self.finished_state_manager.get_phase().logic()
+        self.assertFalse(self.execute_rematch.called)
+
+
+class TestTable(unittest.TestCase):
+    def setUp(self):
+        self.job_manager = JobManager()
+        self.event_man = Eventmanager(self.job_manager)
+        self.table_builder = Table.Builder(self.job_manager)
+        self.event_broadcast = mock.Mock()
+        self.event_channels = {
+            Side.red: mock.Mock(), Side.blue: mock.Mock(), None: mock.Mock()
+        }
+        self.seat_observer = mock.Mock()
+        self.table_builder.set_event_broadcast(self.event_broadcast).set_event_channels(self.event_channels)
+        self.table_builder.set_seat_observer(self.seat_observer)
+        self.table_builder.set_use_readiness(False)
+        self.user1 = User("tester", '', 1, self.event_man, None)
+        self.user2 = User("tester2", '', 2, self.event_man, None)
+
+    def tearDown(self):
+        del self.user1, self.user2
+        del self.table_builder
+        del self.event_man
+        del self.job_manager
+        del self.seat_observer
+        del self.event_channels
+
+    def test_table_starts_in_awaiting_phase(self):
+        """
+        Scenario: Freshly created table should be in awaiting phase
+        """
+        self.assertIs(self.table_builder.build().phase_type, TableGamePhase.awaiting)
+
+    def _run_job_manager(self, time_ms: int):
+        self.job_manager.add_delayed_task(DelayedTask(self.job_manager.kill, time_ms))
+        while len(self.job_manager) > 0:
+            self.job_manager.iteration_of_job_execution()
+
+
+class TestTableAwaitPhase(TestTable):
+    def setUp(self):
+        super().setUp()
+        self.req_claim_seat = lambda color: {
+            "type": "claim_seat",
+            "side": color
+        }
+        self.req_release_seat = {
+            "type": "release_seat"
+        }
+
+    def tearDown(self):
+        super().tearDown()
+        del self.req_claim_seat
+
+    def test_table_take_seat(self):
+        """
+            Scenario: Users try to claim seat
+
+            Expected outcomes: both users successfully claim the seat
+        """
+        table = self.table_builder.build()
+        table_api = TableApi(table)
+
+        res, msg = table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        self.assertTrue(res, msg)
+
+        res, msg = table_api.take_seat(self.req_claim_seat('blue'), self.user2)
+        self.assertTrue(res, msg)
+
+    def test_table_take_seat2(self):
+        """
+            Scenario: Users try to claim seat owned by other player
+            Expected outcome: Actions fails
+        """
+        table = self.table_builder.build()
+        table_api = TableApi(table)
+
+        res, msg = table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        self.assertTrue(res, msg)
+
+        res, msg = table_api.take_seat(self.req_claim_seat('red'), self.user2)
+        self.assertFalse(res)
+
+    def test_table_take_seat3(self):
+        """
+            Scenario: User already has a seat but tries to claim another one
+            Expected outcome: Seat observer was called 2 times, one time being result of forfeiting the old seat, second
+             one being result of taking that free seat
+        """
+        table = self.table_builder.build()
+        table_api = TableApi(table)
+
+        res, msg = table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        self.assertTrue(res, msg)
+
+        res, msg = table_api.take_seat(self.req_claim_seat('blue'), self.user1)
+        self.assertTrue(res, msg)
+
+        self.assertEqual(self.seat_observer.call_count, 3)
+        expected_value = [Side.red, None, Side.blue]
+        for i, args in enumerate(self.seat_observer.call_args_list):
+            self.assertEqual(args.args[0], self.user1.id)
+            self.assertIs(args.args[1], expected_value[i])
+
+    def test_table_take_set_invokes_seat_observer(self):
+        """
+            Scenario: User claiming seats should invoke seat_observer callback
+
+            Expected outcomes: seat observer passed to builder is invoked
+        """
+        table = self.table_builder.build()
+        table_api = TableApi(table)
+
+        res, msg = table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        self.assertTrue(self.seat_observer.called)
+        args = self.seat_observer.call_args.args
+        self.assertEqual(args[0], self.user1.id)
+        self.assertEqual(args[1], Side.red)
+
+        res, msg = table_api.take_seat(self.req_claim_seat('blue'), self.user2)
+        self.assertEqual(self.seat_observer.call_count, 2)
+        args = self.seat_observer.call_args.args
+        self.assertEqual(args[0], self.user2.id)
+        self.assertEqual(args[1], Side.blue)
+
+    def test_table_release(self):
+        """
+            Scenario: Users takes a seat and then release it
+            Expected outcome: Both actions invoke ready command
+        """
+        table = self.table_builder.build()
+        table_api = TableApi(table)
+        res, msg = table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        self.assertTrue(res, msg)
+        res, msg = table_api.release_seat(self.user1)
+        self.assertTrue(res, msg)
+
+    def test_table_release2(self):
+        """
+            Scenario: Users tries to release seat without claiming it
+            Expected outcome: actions fails
+        """
+        table = self.table_builder.build()
+        table_api = TableApi(table)
+        res, _ = table_api.release_seat(self.user1)
+        self.assertFalse(res)
+
+    def test_seat_release_invokes_seat_observer(self):
+        """
+        Scenario: Users forfeits seat
+        Expected outcome: seat observer is invoked
+        """
+        table = self.table_builder.build()
+        table_api = TableApi(table)
+        table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        table_api.release_seat(self.user1)
+        self.assertEqual(self.seat_observer.call_count, 2)
+        args = self.seat_observer.call_args.args
+        self.assertEqual(args[0], self.user1.id)
+        self.assertEqual(args[1], None)
+
+
+class TestTableAwaitPhaseWithoutReadyCommand(TestTableAwaitPhase):
+    def test_table_setup_transmission(self):
+        """
+        Scenario: Table was build without support for ready command
+        Expected outcome: After both seats are claimed, table enters setup phase
+        """
+        table = self.table_builder.build()
+        table_api = TableApi(table)
+        table_api.take_seat(self.req_claim_seat('red'), self.user1)
+        table_api.take_seat(self.req_claim_seat('blue'), self.user2)
+        self.assertIs(table.phase_type, TableGamePhase.setup)
+
+
+class TestTableAwaitPhaseWithReadyCommand(TestTableAwaitPhase):
+    def setUp(self):
+        super().setUp()
+        self.table_builder.set_use_readiness(True)
+        self.table_builder.set_start_timer(50)
+        self.set_ready = lambda val: {
+            "type": "set_ready",
+            "value": val
+        }
+
+    def tearDown(self):
+        super().tearDown()
+        del self.set_ready
+
+    def test_user_set_readiness1(self):
+        """
+        Scenario: users takes seat and declares readiness
+        Expected outcome: commands succeed and ready_event is emitted via event broadcast
+        """
+        table = self.table_builder.build()
+        tableApi = TableApi(table)
+        status, msg = tableApi.take_seat(self.req_claim_seat('red'), self.user1)
+        self.assertTrue(status, msg)
+        status, msg = tableApi.set_readiness(self.set_ready(True), self.user1)
+        self.assertTrue(status, msg)
+
+        ready_events = [args.args[0] for args in self.event_broadcast.call_args_list
+                        if args.args[0]['type'] == 'ready_event']
+        self.assertEqual(len(ready_events), 1)
+        self.assertTrue(ready_events[0]["value"])
+
+    def test_user_set_readiness2(self):
+        """
+        Scenario: User takes seat, declares readiness and then
+        :return:
+        """
+        table = self.table_builder.build()
+        tableApi = TableApi(table)
+        status, msg = tableApi.take_seat(self.req_claim_seat('red'), self.user1)
+        self.assertTrue(status, msg)
+        status, msg = tableApi.set_readiness(self.set_ready(True), self.user1)
+        self.assertTrue(status, msg)
+        status, msg = tableApi.set_readiness(self.set_ready(False), self.user1)
+        self.assertTrue(status, msg)
+        ready_events = [args.args[0] for args in self.event_broadcast.call_args_list
+                        if args.args[0]['type'] == 'ready_event']
+        self.assertEqual(len(ready_events), 2)
+        self.assertTrue(ready_events[0]["value"])
+        self.assertFalse(ready_events[1]["value"])
+
+    def test_table_setup_transmission(self):
+        """
+        Scenario: both players have taken their seats and set their status to ready.
+        Expect outcome: table status is  in 'setup' phase.
+        """
+        table = self.table_builder.build()
+        tableApi = TableApi(table)
+        tableApi.take_seat(self.req_claim_seat('red'), self.user1)
+        tableApi.take_seat(self.req_claim_seat('blue'), self.user2)
+        tableApi.set_readiness(self.set_ready(True), self.user1)
+        tableApi.set_readiness(self.set_ready(True), self.user2)
+        super()._run_job_manager(100)
+        self.assertIs(table.phase_type, TableGamePhase.setup)
+
+    def test_table_setup_transmission2(self):
+        """
+        Scenario: both players have taken their seats and set their status to ready, then one of players set their readiness to false
+        Expect outcome: table status is  in 'setup' phase.
+        """
+        table = self.table_builder.build()
+        tableApi = TableApi(table)
+        tableApi.take_seat(self.req_claim_seat('red'), self.user1)
+        tableApi.take_seat(self.req_claim_seat('blue'), self.user2)
+        tableApi.set_readiness(self.set_ready(True), self.user1)
+        tableApi.set_readiness(self.set_ready(True), self.user2)
+        tableApi.set_readiness(self.set_ready(False), self.user1)
+        super()._run_job_manager(100)
+        self.assertIsNot(table.phase_type, TableGamePhase.setup)
 
 
 class TestTableApi(unittest.TestCase):

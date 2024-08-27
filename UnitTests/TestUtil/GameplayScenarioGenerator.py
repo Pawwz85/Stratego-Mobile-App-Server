@@ -32,7 +32,7 @@ class GameplayScenarioGenerator:
     def __random_setup(side: Side):
         setup = {}
         piece_counts = _piece_type_setup_count.copy()
-        available_squares = list(range(60, 100)) if side == Side.blue else list(range(40))
+        available_squares = list(range(60, 100)) if side == Side.red else list(range(40))
         random.shuffle(available_squares)
 
         for piece_type, count in piece_counts.items():

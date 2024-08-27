@@ -231,6 +231,7 @@ class SeatManagerWithReadyCommand(SeatManager):
             self._transmission_task = None
         self._readiness[side] = value
         self._on_ready_change(side, value)
+        return True, None
 
     def get_readiness(self):
         """Get readiness status of all players."""
@@ -403,7 +404,7 @@ class Table:
             self.__use_readiness = True
             self.__start_timer = 10000
             self.__event_broadcast: Callable[[dict], any] = lambda x: None
-            self.__event_channels = {side: (lambda d: None) for side in {Side.red, Side.blue, None}}
+            self.__event_channels: dict[Side | None, Callable[[dict], any]] = {side: (lambda d: None) for side in {Side.red, Side.blue, None}}
             self.__seat_observer: Callable[[int, Side | None], any] = lambda x, y: None
 
         def get_sm_constructor(self):
@@ -430,6 +431,11 @@ class Table:
             return self
 
         def set_start_timer(self, value_ms: int) -> Table.Builder:
+            """
+                Sets the initial value of timer to start game
+                :param value_ms: Time between both players declaring readiness and playing the game
+                :return: returns itself for method chaining
+            """
             self.__start_timer = value_ms
             return self
 
@@ -447,7 +453,7 @@ class Table:
 
             return self
 
-        def set_event_channels(self, channels: [Side | None, Callable[[dict], any]]) -> Table.Builder:
+        def set_event_channels(self, channels: dict[Side | None, Callable[[dict], any]]) -> Table.Builder:
             self.__event_channels = channels
             return self
 

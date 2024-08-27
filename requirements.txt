@@ -4,3 +4,4 @@ flask-socketio
 flask-security-too
 psycopg2
 websockets
+# coverage # for unit testing
