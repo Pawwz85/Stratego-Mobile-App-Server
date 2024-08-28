@@ -383,7 +383,7 @@ class FinishedStateManager:
             self.players_wanting_rematch = [user_id for user_id in self.players_wanting_rematch if user_id != user.id]
 
     def __phase_init(self):
-        self.players_wanting_rematch = set()
+        self.players_wanting_rematch = []
 
     def __phase_logic(self):
         if len(self.players_wanting_rematch) == 2:

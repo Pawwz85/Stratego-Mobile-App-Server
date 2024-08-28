@@ -150,6 +150,7 @@ class GameStateView:
     def __getitem__(self, item):
         return self._view[item]
 
+
 class GameState:
     def __init__(self):
         self._board: list[None | Piece] = [None] * 100

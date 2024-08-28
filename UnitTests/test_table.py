@@ -4,7 +4,8 @@ import unittest.mock as mock
 from TestUtil.MainLoopStub import MainLoopStub
 from TestUtil.UserSimulation import UserSimulationInterpreter
 from TestUtil.GameplayScenarioGenerator import GameplayScenarioGenerator
-from UnitTests.TestUtil.stratego_helpers import generate_random_setup, rand_move, FastWinPosition
+from UnitTests.TestUtil.stratego_helpers import generate_random_setup, rand_move, FastWinPosition, \
+    setup_to_protocol_form
 from src.Core.table import *
 from src.Core.table import (TablePhase, SeatManager, SetupManager, GameplayManager,
                             SeatManagerWithReadyCommand, FinishedStateManager)
@@ -443,6 +444,7 @@ class TestTable(unittest.TestCase):
         self.table_builder.set_event_broadcast(self.event_broadcast).set_event_channels(self.event_channels)
         self.table_builder.set_seat_observer(self.seat_observer)
         self.table_builder.set_use_readiness(False)
+
         self.user1 = User("tester", '', 1, self.event_man, None)
         self.user2 = User("tester2", '', 2, self.event_man, None)
 
@@ -644,6 +646,9 @@ class TestTableAwaitPhaseWithoutReadyCommand(TestTableAwaitPhase):
                       and e['game_status'] == 'setup']
             self.assertTrue(len(events) > 0)
 
+        # check if transmission is recorded by get_board
+        self.assertEqual(table_api.get_board(self.user1).get('game_status'), 'setup')
+
 
 class TestTableAwaitPhaseWithReadyCommand(TestTableAwaitPhase):
     def setUp(self):
@@ -743,9 +748,169 @@ class TestTableAwaitPhaseWithReadyCommand(TestTableAwaitPhase):
                       and e['game_status'] == 'setup']
             self.assertTrue(len(events) > 0)
 
+        # check if transmission is recorded by get_board
+        self.assertEqual(table_api.get_board(self.user1).get('game_status'), 'setup')
+
 
 class TestTableSetupPhase(TestTable):
-    pass
+    def setUp(self):
+        super().setUp()
+        self.table = self.table_builder.set_setup_time(100).build()
+        self.table_api = TableApi(self.table)
+        req_claim_seat = lambda color: {
+            "type": "claim_seat",
+            "side": color
+        }
+        self.table_api.take_seat(req_claim_seat('red'), self.user1)
+        self.table_api.take_seat(req_claim_seat('blue'), self.user2)
+        while self.table.phase_type is not TableGamePhase.setup:
+            self.job_manager.iteration_of_job_execution()
+
+    def tearDown(self):
+        super().tearDown()
+        del self.table_api
+        del self.table
+
+    @staticmethod
+    def _send_setup(setup: dict[int, PieceType]):
+        return {
+            'type': "send_setup",
+            'setup': setup_to_protocol_form(setup)
+        }
+
+    def _run_fob_manager(self):
+        self.job_manager.add_delayed_task(DelayedTask(self.job_manager.kill, 150))
+        while len(self.job_manager) > 0:
+            self.job_manager.iteration_of_job_execution()
+
+    def test_time_run_down(self):
+        """
+         Scenario: players did nothing during this phase
+         Expected outcome: Table enters finished state
+        """
+        self._run_fob_manager()
+        self.assertIs(self.table.phase_type, TableGamePhase.finished)
+
+        # check if transmission was recorded in events
+        for ch in self.event_channels.values():
+            events = [arg.args[0] for arg in ch.call_args_list]
+            events = [e for e in events if e['type'] == 'board_event'
+                      and e['game_status'] == 'finished']
+            self.assertTrue(len(events) > 0)
+        # check if transmission is recorded by get_board
+        self.assertEqual(self.table_api.get_board(self.user1).get('game_status'), 'finished')
+
+    def test_transmission_to_gameplay(self):
+        """
+        Scenario: Both players send valid setups for their side
+        Expected outcome: Table enters gameplay state
+        """
+        state = FastWinPosition(Side.red)
+        self.table_api.submit_setup(self._send_setup(state.setups[Side.red]), self.user1)
+        self.table_api.submit_setup(self._send_setup(state.setups[Side.blue]), self.user2)
+        self._run_fob_manager()
+        self.assertIs(self.table.phase_type, TableGamePhase.gameplay)
+
+        # check if transmission was recorded in events
+        for ch in self.event_channels.values():
+            events = [arg.args[0] for arg in ch.call_args_list]
+            events = [e for e in events if e['type'] == 'board_event'
+                      and e['game_status'] == 'gameplay']
+            self.assertTrue(len(events) > 0)
+
+        # check if transmission is recorded by get_board
+        self.assertEqual(self.table_api.get_board(self.user1).get('game_status'), 'gameplay')
+
+
+class TestTableGameplayPhase(TestTable):
+    def setUp(self):
+        # puts table in a gameplay mode
+        super().setUp()
+        self.table = self.table_builder.set_setup_time(100).set_time_control(100, 0).build()
+        self.table_api = TableApi(self.table)
+        req_claim_seat = lambda color: {
+            "type": "claim_seat",
+            "side": color
+        }
+        self.table_api.take_seat(req_claim_seat('red'), self.user1)
+        self.table_api.take_seat(req_claim_seat('blue'), self.user2)
+        while self.table.phase_type is not TableGamePhase.setup:
+            self.job_manager.iteration_of_job_execution()
+
+        state = FastWinPosition(Side.red)
+        self.table_api.submit_setup(self._send_setup(state.setups[Side.red]), self.user1)
+        self.table_api.submit_setup(self._send_setup(state.setups[Side.blue]), self.user2)
+
+        while self.table.phase_type is not TableGamePhase.gameplay:
+            self.job_manager.iteration_of_job_execution()
+
+    def tearDown(self):
+        super().tearDown()
+
+    @staticmethod
+    def _send_setup(setup: dict[int, PieceType]):
+        return {
+            'type': "send_setup",
+            'setup': setup_to_protocol_form(setup)
+        }
+
+    def test_red_starts(self):
+        """
+            Scenario: Board just enter gameplay phase.
+            Expected Scenario: Moving side is red
+
+        """
+        board = self.table_api.get_board(self.user1)
+        self.assertEqual(board.get('moving_side'), 'red')
+
+    def test_player_runs_of_time(self):
+        """
+            Scenario players time runs out.
+            Expected behavior: Table enters the finished state
+        """
+        self.job_manager.add_delayed_task(DelayedTask(self.job_manager.kill, 500))
+        while len(self.job_manager) > 0:
+            self.job_manager.iteration_of_job_execution()
+        self.assertEqual(self.table_api.get_board(self.user1).get('game_status'), 'finished')
+
+
+class TestTableFinishedPhase(TestTable):
+    def setUp(self):
+        super().setUp()
+        self.table = self.table_builder.set_setup_time(20).set_use_readiness(False).build()
+        self.table_api = TableApi(self.table)
+        req_claim_seat = lambda color: {
+            "type": "claim_seat",
+            "side": color
+        }
+        self.set_rematch_willingness = lambda val: {
+            'type': "set_rematch_willingness",
+            'value': val
+        }
+        self.table_api.take_seat(req_claim_seat('red'), self.user1)
+        self.table_api.take_seat(req_claim_seat('blue'), self.user2)
+        while self.table_api.get_board(self.user1).get('game_status') != 'finished':
+            self.job_manager.iteration_of_job_execution()
+
+    def tearDown(self):
+        del self.table_api, self.table
+        super().tearDown()
+
+    def test_players_agreed_to_rematch_causes_transmission_to_awaiting_phase(self):
+        s, msg = self.table_api.set_rematch_willingness(self.user1, self.set_rematch_willingness(True))
+        self.assertTrue(s, msg)
+        s, msg = self.table_api.set_rematch_willingness(self.user2, self.set_rematch_willingness(True))
+        self.assertTrue(s, msg)
+        self.job_manager.add_delayed_task(DelayedTask(self.job_manager.kill, 200))
+
+        def helper():
+            if self.table.phase_type is TableGamePhase.setup:
+                self.job_manager.kill()
+        self.job_manager.add_job(Job(helper))
+
+        while len(self.job_manager) > 0:
+            self.job_manager.iteration_of_job_execution()
+        self.assertEqual(self.table.phase_type, TableGamePhase.setup)
 
 
 class TestTableApi(unittest.TestCase):

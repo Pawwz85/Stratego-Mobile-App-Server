@@ -9,9 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Even more testcases">
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Even more tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/stratego_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/stratego_helpers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UnitTests/test_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/stratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/stratego.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -147,13 +149,19 @@
     "Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_set_readiness_command_fails.executor": "Run",
     "Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_table_setup_transmission.executor": "Run",
     "Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_transmission_to_setup_invokes_board_event_for_all_event_channels.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableFinishedPhase.test_players_agreed_to_rematch_causes_transmission_to_awaiting_phase.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableGameplayPhase.test_player_runs_of_time.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableGameplayPhase.test_red_starts.executor": "Run",
     "Python tests.Python tests for test_table.TestTablePhase.test.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableSetupPhase.test_time_run_down.executor": "Run",
+    "Python tests.Python tests for test_table.TestTableSetupPhase.test_transmission_to_gameplay.executor": "Run",
     "Python tests.Python tests in BlackRedTreeTest.py.executor": "Run",
     "Python tests.Python tests in UnitTests.executor": "Run",
     "Python tests.Python tests in room_unit_tests.py.executor": "Run",
     "Python tests.Python tests in table_unit_test.py.executor": "Run",
     "Python tests.Python tests in test_stratego.py.executor": "Run",
     "Python tests.Python tests in test_table.py.executor": "Run",
+    "Python tests.Unittests for test_table.TestTableFinishedPhase.executor": "Run",
     "Python.AIDocumentationGenerator.executor": "Run",
     "Python.Authenticator.executor": "Run",
     "Python.BackendSystem.executor": "Run",
@@ -255,7 +263,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestTableAwaitPhase" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestFinishedGameManager.test_phase_logic_executes_rematch_if_both_players_are_willing" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -266,11 +274,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhase&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestFinishedGameManager.test_phase_logic_executes_rematch_if_both_players_are_willing&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_get_readiness_command_fails" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestTableFinishedPhase.test_players_agreed_to_rematch_causes_transmission_to_awaiting_phase" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -281,11 +289,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithoutReadyCommand.test_get_readiness_command_fails&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestTableFinishedPhase.test_players_agreed_to_rematch_causes_transmission_to_awaiting_phase&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_set_readiness_command_fails" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_table.TestTableGameplayPhase.test_player_runs_of_time" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -296,22 +304,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithoutReadyCommand.test_set_readiness_command_fails&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_table_setup_transmission" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="pythonProject" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestTableAwaitPhaseWithoutReadyCommand.test_table_setup_transmission&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestTableGameplayPhase.test_player_runs_of_time&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -330,22 +323,37 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Unittests for test_table.TestTableFinishedPhase" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="pythonProject" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\.venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_table.TestTableFinishedPhase&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.game node" />
       <item itemvalue="Python.server" />
-      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhase" />
-      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_get_readiness_command_fails" />
-      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_set_readiness_command_fails" />
-      <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_table_setup_transmission" />
+      <item itemvalue="Python tests.Python tests for test_table.TestFinishedGameManager.test_phase_logic_executes_rematch_if_both_players_are_willing" />
+      <item itemvalue="Python tests.Python tests for test_table.TestTableFinishedPhase.test_players_agreed_to_rematch_causes_transmission_to_awaiting_phase" />
+      <item itemvalue="Python tests.Python tests for test_table.TestTableGameplayPhase.test_player_runs_of_time" />
+      <item itemvalue="Python tests.Unittests for test_table.TestTableFinishedPhase" />
       <item itemvalue="Python tests.Python tests in UnitTests" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.Python tests in UnitTests" />
-        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhase" />
-        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_get_readiness_command_fails" />
-        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_set_readiness_command_fails" />
-        <item itemvalue="Python tests.Python tests for test_table.TestTableAwaitPhaseWithoutReadyCommand.test_table_setup_transmission" />
+        <item itemvalue="Python tests.Python tests for test_table.TestTableFinishedPhase.test_players_agreed_to_rematch_causes_transmission_to_awaiting_phase" />
+        <item itemvalue="Python tests.Unittests for test_table.TestTableFinishedPhase" />
+        <item itemvalue="Python tests.Python tests for test_table.TestFinishedGameManager.test_phase_logic_executes_rematch_if_both_players_are_willing" />
+        <item itemvalue="Python tests.Python tests for test_table.TestTableGameplayPhase.test_player_runs_of_time" />
       </list>
     </recent_temporary>
   </component>
@@ -501,7 +509,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724797157741</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="- Even more tests">
+      <option name="closed" value="true" />
+      <created>1724800096927</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1724800096927</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -533,7 +549,8 @@
     <MESSAGE value="- Added index.html&#10;- Fixed small bug regarding the loading of user's username in board.html" />
     <MESSAGE value="- Added a few testCases and comments" />
     <MESSAGE value="- Even more testcases" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Even more testcases" />
+    <MESSAGE value="- Even more tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Even more tests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
