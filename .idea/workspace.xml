@@ -2,19 +2,29 @@
 <project version="4">
   <component name="AnalysisUIOptions">
     <option name="ANALYZE_INJECTED_CODE" value="false" />
-    <option name="SCOPE_TYPE" value="8" />
     <option name="CUSTOM_SCOPE_NAME" value="src" />
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Even more tests">
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Even more tests for table.py">
+      <change afterPath="$PROJECT_DIR$/TestResources/TestPositions/pos000.pos" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestResources/TestPositions/pos001.pos" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestResources/TestPositions/pos002.pos" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UnitTests/TestUtil/PositionParser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Core/stratego_gamestate.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PerfTests/test_stratego_core.py" beforeDir="false" afterPath="$PROJECT_DIR$/PerfTests/test_stratego_core.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StrategoCLI.py" beforeDir="false" afterPath="$PROJECT_DIR$/StrategoCLI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/GameplayScenarioGenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/GameplayScenarioGenerator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/stratego_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/stratego_helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/test_stratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_stratego.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UnitTests/test_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/Room.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Room.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/stratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/stratego.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ProtocolObjects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ProtocolObjects.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,13 +200,14 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Pawwz/OneDrive/Desktop/Stratego - server/Python_Implementation/pythonProject/src/Frontend",
+    "last_opened_file_path": "C:/Users/Pawwz/OneDrive/Desktop/Stratego - server/Python_Implementation/pythonProject/src/Core/stratego_gamestate.py",
     "run.code.analysis.last.selected.profile": "aDefault",
     "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\TestResources\TestPositions" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject" />
       <recent name="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\DataStructures" />
     </key>
@@ -517,7 +528,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724800096927</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="- Even more tests for table.py">
+      <option name="closed" value="true" />
+      <created>1724869881251</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1724869881251</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -550,7 +569,8 @@
     <MESSAGE value="- Added a few testCases and comments" />
     <MESSAGE value="- Even more testcases" />
     <MESSAGE value="- Even more tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Even more tests" />
+    <MESSAGE value="- Even more tests for table.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Even more tests for table.py" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

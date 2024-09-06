@@ -6,26 +6,27 @@ from __future__ import annotations
 import json
 import random
 
-from src.Core.stratego import _piece_type_setup_count, _piece_type_to_str, GameState, Side, game_state_from_setups
+from src.Core.stratego import GameInstance
+from src.Core.stratego_gamestate import _piece_type_setup_count, Side, _piece_type_to_str, game_state_from_setups
 from typing import Callable
 
 
 class GameplayScenarioGenerator:
 
-    def __init__(self, ai: Callable[[GameState, Side], tuple[int, int]] = None):
-        self.game_state = GameState()
+    def __init__(self, ai: Callable[[GameInstance, Side], tuple[int, int]] = None):
+        self.game_state = GameInstance()
         if ai is not None:
             self.ai = ai
         else:
             self.ai = GameplayScenarioGenerator._rand_move
 
     @staticmethod
-    def _rand_move(game_state: GameState, side: Side) -> tuple[int, int]:
+    def _rand_move(game_state: GameInstance, side: Side) -> tuple[int, int]:
         try:
             moves = game_state.move_gen(side)
             return random.choice(moves)
         except Exception as e:
-            print(json.dumps(game_state.get_game_state()))
+            print(json.dumps(game_state.get_board()))
             raise e
 
     @staticmethod
@@ -78,7 +79,7 @@ class GameplayScenarioGenerator:
 
     def create_match(self):
         setup = game_state_from_setups(self.__random_setup(Side.red), self.__random_setup(Side.blue))
-        gs = GameState()
+        gs = GameInstance()
         gs.set_game_state(setup)
 
         while not gs.is_game_finish():

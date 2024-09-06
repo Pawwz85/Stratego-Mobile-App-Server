@@ -3,8 +3,10 @@
 """
 
 from src.Core.stratego import *
-from src.Core.stratego import _piece_type_setup_count, _lake_set
 import random
+
+from src.Core.stratego_gamestate import PieceType, _lake_set, _piece_type_setup_count, Side, verify_setup_dict, \
+    game_state_from_setups
 
 
 def generate_random_setup(side: Side) -> dict[int, PieceType]:
@@ -51,7 +53,7 @@ def print_board(game_state_view):
 def main():
 
     # Initialize game state
-    game = GameState()
+    game = GameInstance()
 
     # Create setups for red and blue sides
     red_setup = generate_random_setup(Side.red)

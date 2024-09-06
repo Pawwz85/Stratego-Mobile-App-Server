@@ -5,8 +5,10 @@
 """
 from __future__ import annotations
 
+from enum import Enum
 from typing import Callable
 
+from src.Core.stratego_gamestate import verify_setup_dict, game_state_from_setups
 from src.ProtocolObjects import ParsingException, PieceToken, Move
 from src.Core.JobManager import Job, DelayedTask, JobManager, time_ms
 from src.Core.User import User
@@ -55,13 +57,13 @@ class TableTimeControl:
 
 class TablePhase:
     """
-        This class represents a phase in a table's execution. It is initialized with three callables:
-        1. `phase_init` - called at the beginning of the phase to prepare it.
-        2. `phase_logic` - called during the actual execution of the phase.
-        3. `phase_finish` - called at the end of the phase to perform any cleanup or finalization tasks.
-        :param phase_init: A callable function that should not take any arguments and should be used to initialize the phase.
-        :param phase_logic: A callable function that takes no arguments and performs the logic for this phase.
-        :param phase_finish: A callable function that does not take any arguments and performs cleanup or finalization tasks at the end of the phase.
+    This class represents a phase in a table's execution. It is initialized with three callables: 1. `phase_init` -
+    called at the beginning of the phase to prepare it. 2. `phase_logic` - called during the actual execution of the
+    phase. 3. `phase_finish` - called at the end of the phase to perform any cleanup or finalization tasks. :param
+    phase_init: A callable function that should not take any arguments and should be used to initialize the phase.
+    :param phase_logic: A callable function that takes no arguments and performs the logic for this phase. :param
+    phase_finish: A callable function that does not take any arguments and performs cleanup or finalization tasks at
+    the end of the phase.
     """
     def __init__(self, phase_init: Callable, phase_logic: Callable, phase_finish: Callable):
         self._phase_init = phase_init
@@ -168,11 +170,11 @@ class SeatManagerWithReadyCommand(SeatManager):
         After this flag is seat, seat manager will wait transmission_time_ms ms to give
         user chance to change their mind.
 
-        :param set_table_to_setup_phase: Callable that sets the table to setup phase.
-        :param job_manager: JobManager instance used for delayed tasks management.
-        :param transmission_time_ms: Delay (in milliseconds) after both players are ready and before game starts.
-        :param on_ready_change: Callback function taking Side and boolean as arguments, called when readiness is changed.
-        :param seat_observer: Callback function taking seat ID and Side as arguments, called when a seat is released or occupied.
+        :param set_table_to_setup_phase: Callable that sets the table to setup phase. :param job_manager: JobManager
+        instance used for delayed tasks management. :param transmission_time_ms: Delay (in milliseconds) after both
+        players are ready and before game starts. :param on_ready_change: Callback function taking Side and boolean
+        as arguments, called when readiness is changed :param seat_observer: Callback function taking seat ID and
+        Side as arguments, called when a seat is released or occupied.
     """
 
     def __init__(self, set_table_to_setup_phase: Callable,
@@ -245,7 +247,7 @@ class SeatManagerWithReadyCommand(SeatManager):
 
 class SetupManager:
     def __init__(self, job_manager: JobManager, time_for_setup_ms: int,
-                 set_table_to_gameplay_mode: Callable[[list[Piece | None]], None],
+                 set_table_to_gameplay_mode: Callable[[GameState], None],
                  set_table_to_finished_mode: Callable[[Side | None], None]):
         self.setups: dict[Side, dict[int, PieceType] | None] = {Side.red: None, Side.blue: None}
         self.__setup_timeout_task: DelayedTask | None = None
@@ -295,7 +297,7 @@ class GameplayManager:
     def __init__(self, job_manager: JobManager, time_control: TableTimeControl,
                  set_table_to_finished_mode: Callable[[Side | None], None],
                  on_state_change: Callable[[], None]):
-        self._game_state = GameState()
+        self._game_state = GameInstance()
         self.__job_manager = job_manager
         self.__set_table_to_finished_mode = set_table_to_finished_mode
         self.__player_timeout_task: DelayedTask | None = None
@@ -305,7 +307,7 @@ class GameplayManager:
         self.__turn_start: int = 0
         self.on_state_change = on_state_change
 
-    def set_game_state(self, state: list[Piece | None]):
+    def set_game_state(self, state: GameState):
         self._game_state.set_game_state(state)
 
     def make_move(self, move: tuple[int, int], side: Side) -> tuple[bool, str | None]:
@@ -349,7 +351,7 @@ class GameplayManager:
         self.__turn_start = time_ms()
         self.__job_manager.add_delayed_task(self.__player_timeout_task)
 
-    def __phase_init(self, state: list[Piece | None]):
+    def __phase_init(self, state: GameState):
         self.set_game_state(state)
         self.__time_budget = {Side.red: self.time_control.red_time_control_ms[0],
                               Side.blue: self.time_control.blue_time_control_ms[0]}
@@ -366,7 +368,7 @@ class GameplayManager:
             self.__player_timeout_task.cancel()
             self.__player_timeout_task = None
 
-    def get_phase(self, state: list[Piece | None]) -> TablePhase:
+    def get_phase(self, state: GameState) -> TablePhase:
         return TablePhase(lambda: self.__phase_init(state), self.__phase_logic, self.__phase_finish)
 
 
@@ -501,7 +503,7 @@ class Table:
         self.phase_type = TableGamePhase.setup
         self.__generate_event()
 
-    def __change_phase_to_gameplay(self, state: list[Piece | None]):
+    def __change_phase_to_gameplay(self, state: GameState):
         self.__change_phase(self._gameplay_manager.get_phase(state))
         self.phase_type = TableGamePhase.gameplay
         self.__generate_event()

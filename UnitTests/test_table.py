@@ -9,7 +9,7 @@ from UnitTests.TestUtil.stratego_helpers import generate_random_setup, rand_move
 from src.Core.table import *
 from src.Core.table import (TablePhase, SeatManager, SetupManager, GameplayManager,
                             SeatManagerWithReadyCommand, FinishedStateManager)
-from src.Core.stratego import game_state_from_setups
+from src.Core.stratego_gamestate import game_state_from_setups
 from src.Events.Events import Eventmanager
 
 
@@ -327,7 +327,7 @@ class TestGameplayManager(unittest.TestCase):
         self.phase.logic()  # first call to logic
         self.phase.logic()
         self.assertEqual(self.on_state_change.call_count, 1)
-        state = GameState()
+        state = GameInstance()
         state.set_game_state(self.initial_state)
         moving_side = Side.red if self.gameplay_manager.get_moving_side() == 'red' else Side.blue
         move = rand_move(state, moving_side)

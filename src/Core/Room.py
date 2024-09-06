@@ -6,7 +6,7 @@ import uuid
 
 from src.Core.JobManager import JobManager, Job, DelayedTask
 from src.Core.User import User
-from src.Core.stratego import Side
+from src.Core.stratego_gamestate import Side
 from src.Core.table import Table, TableApi, TableGamePhase
 from src.Core.chat import Chat, ChatApi
 from src.Events.Events import EventLogicalEndpointWithSignature, Eventmanager

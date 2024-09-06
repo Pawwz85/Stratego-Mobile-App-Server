@@ -2,7 +2,7 @@ import time
 import unittest
 from collections import deque
 from UnitTests.TestUtil.GameplayScenarioGenerator import GameplayScenarioGenerator
-from src.Core.stratego import Piece
+from src.Core.stratego_gamestate import Piece
 import cProfile, pstats, io
 from pstats import SortKey
 
