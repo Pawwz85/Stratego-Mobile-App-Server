@@ -8,23 +8,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Even more tests for table.py">
-      <change afterPath="$PROJECT_DIR$/TestResources/TestPositions/pos000.pos" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TestResources/TestPositions/pos001.pos" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TestResources/TestPositions/pos002.pos" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/UnitTests/TestUtil/PositionParser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Core/stratego_gamestate.py" afterDir="false" />
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Refactored game representation from stratego.py into stratego_gamestate.py, while leaving game login in stratego.py.&#10;- Added a position parser in test utils to load test positions.">
+      <change afterPath="$PROJECT_DIR$/TestResources/TestPositions/pos003.pos" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TestResources/TestPositions/pos004.pos" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UnitTests/test_move_generator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PerfTests/test_stratego_core.py" beforeDir="false" afterPath="$PROJECT_DIR$/PerfTests/test_stratego_core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StrategoCLI.py" beforeDir="false" afterPath="$PROJECT_DIR$/StrategoCLI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/GameplayScenarioGenerator.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/GameplayScenarioGenerator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/stratego_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/stratego_helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestResources/TestPositions/pos000.pos" beforeDir="false" afterPath="$PROJECT_DIR$/TestResources/TestPositions/pos000.pos" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/PositionParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/PositionParser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UnitTests/test_stratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_stratego.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/Room.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Room.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/stratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/stratego.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ProtocolObjects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ProtocolObjects.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,6 +82,12 @@
     "Python tests.Python tests for test_linked_list.TestLinkedList.test_addition.executor": "Run",
     "Python tests.Python tests for test_linked_list.TestLinkedList.test_deletion.executor": "Run",
     "Python tests.Python tests for test_linked_list.TestLinkedList.test_iteration_after_detach_from_middle.executor": "Run",
+    "Python tests.Python tests for test_move_generator.TestMoveGen.executor": "Run",
+    "Python tests.Python tests for test_move_generator.TestMoveGen.test_pos000.executor": "Run",
+    "Python tests.Python tests for test_move_generator.TestMoveGen.test_pos001.executor": "Run",
+    "Python tests.Python tests for test_move_generator.TestMoveGen.test_pos002.executor": "Run",
+    "Python tests.Python tests for test_move_generator.TestMoveGen.test_pos003.executor": "Run",
+    "Python tests.Python tests for test_move_generator.TestMoveGen.test_pos004.executor": "Run",
     "Python tests.Python tests for test_room.RoomTestCase.executor": "Run",
     "Python tests.Python tests for test_room.RoomTestCase.test_expected_behaviour.executor": "Run",
     "Python tests.Python tests for test_stratego.MyTestCase.testFlip.executor": "Run",
@@ -200,7 +197,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Pawwz/OneDrive/Desktop/Stratego - server/Python_Implementation/pythonProject/src/Core/stratego_gamestate.py",
+    "last_opened_file_path": "C:/Users/Pawwz/OneDrive/Desktop/Stratego - server/Python_Implementation/pythonProject/TestResources/TestPositions",
     "run.code.analysis.last.selected.profile": "aDefault",
     "settings.editor.selected.configurable": "preferences.pluginManager"
   }
@@ -227,7 +224,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in UnitTests">
+  <component name="RunManager" selected="Python tests.Python tests for test_move_generator.TestMoveGen">
     <configuration name="game node" type="PythonConfigurationType" factoryName="Python">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
@@ -274,7 +271,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestFinishedGameManager.test_phase_logic_executes_rematch_if_both_players_are_willing" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_move_generator.TestMoveGen" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -285,11 +282,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestFinishedGameManager.test_phase_logic_executes_rematch_if_both_players_are_willing&quot;" />
+      <option name="_new_target" value="&quot;test_move_generator.TestMoveGen&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestTableFinishedPhase.test_players_agreed_to_rematch_causes_transmission_to_awaiting_phase" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_move_generator.TestMoveGen.test_pos001" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -300,11 +297,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestTableFinishedPhase.test_players_agreed_to_rematch_causes_transmission_to_awaiting_phase&quot;" />
+      <option name="_new_target" value="&quot;test_move_generator.TestMoveGen.test_pos001&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_table.TestTableGameplayPhase.test_player_runs_of_time" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_move_generator.TestMoveGen.test_pos002" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -315,11 +312,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestTableGameplayPhase.test_player_runs_of_time&quot;" />
+      <option name="_new_target" value="&quot;test_move_generator.TestMoveGen.test_pos002&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in UnitTests" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_move_generator.TestMoveGen.test_pos003" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -330,41 +327,41 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/UnitTests&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <option name="_new_target" value="&quot;test_move_generator.TestMoveGen.test_pos003&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for test_table.TestTableFinishedPhase" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for test_move_generator.TestMoveGen.test_pos004" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\.venv\Scripts\python.exe" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_table.TestTableFinishedPhase&quot;" />
+      <option name="_new_target" value="&quot;test_move_generator.TestMoveGen.test_pos004&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Python.game node" />
       <item itemvalue="Python.server" />
-      <item itemvalue="Python tests.Python tests for test_table.TestFinishedGameManager.test_phase_logic_executes_rematch_if_both_players_are_willing" />
-      <item itemvalue="Python tests.Python tests for test_table.TestTableFinishedPhase.test_players_agreed_to_rematch_causes_transmission_to_awaiting_phase" />
-      <item itemvalue="Python tests.Python tests for test_table.TestTableGameplayPhase.test_player_runs_of_time" />
-      <item itemvalue="Python tests.Unittests for test_table.TestTableFinishedPhase" />
-      <item itemvalue="Python tests.Python tests in UnitTests" />
+      <item itemvalue="Python tests.Python tests for test_move_generator.TestMoveGen" />
+      <item itemvalue="Python tests.Python tests for test_move_generator.TestMoveGen.test_pos001" />
+      <item itemvalue="Python tests.Python tests for test_move_generator.TestMoveGen.test_pos002" />
+      <item itemvalue="Python tests.Python tests for test_move_generator.TestMoveGen.test_pos003" />
+      <item itemvalue="Python tests.Python tests for test_move_generator.TestMoveGen.test_pos004" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests in UnitTests" />
-        <item itemvalue="Python tests.Python tests for test_table.TestTableFinishedPhase.test_players_agreed_to_rematch_causes_transmission_to_awaiting_phase" />
-        <item itemvalue="Python tests.Unittests for test_table.TestTableFinishedPhase" />
-        <item itemvalue="Python tests.Python tests for test_table.TestFinishedGameManager.test_phase_logic_executes_rematch_if_both_players_are_willing" />
-        <item itemvalue="Python tests.Python tests for test_table.TestTableGameplayPhase.test_player_runs_of_time" />
+        <item itemvalue="Python tests.Python tests for test_move_generator.TestMoveGen" />
+        <item itemvalue="Python tests.Python tests for test_move_generator.TestMoveGen.test_pos004" />
+        <item itemvalue="Python tests.Python tests for test_move_generator.TestMoveGen.test_pos003" />
+        <item itemvalue="Python tests.Python tests for test_move_generator.TestMoveGen.test_pos002" />
+        <item itemvalue="Python tests.Python tests for test_move_generator.TestMoveGen.test_pos001" />
       </list>
     </recent_temporary>
   </component>
@@ -536,7 +533,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724869881251</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="- Refactored game representation from stratego.py into stratego_gamestate.py, while leaving game login in stratego.py.&#10;- Added a position parser in test utils to load test positions.">
+      <option name="closed" value="true" />
+      <created>1725580904125</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1725580904125</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -570,7 +575,8 @@
     <MESSAGE value="- Even more testcases" />
     <MESSAGE value="- Even more tests" />
     <MESSAGE value="- Even more tests for table.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Even more tests for table.py" />
+    <MESSAGE value="- Refactored game representation from stratego.py into stratego_gamestate.py, while leaving game login in stratego.py.&#10;- Added a position parser in test utils to load test positions." />
+    <option name="LAST_COMMIT_MESSAGE" value="- Refactored game representation from stratego.py into stratego_gamestate.py, while leaving game login in stratego.py.&#10;- Added a position parser in test utils to load test positions." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -8,9 +8,9 @@ from src.Core.stratego_gamestate import GameState, Side, Piece, PieceType
 
 
 class PositionParser(ABC):
-
+    @staticmethod
     @abstractmethod
-    def parse(self, path: Path) -> GameState:
+    def parse(path: Path) -> GameState:
         pass
 
 
@@ -37,12 +37,13 @@ class BinaryTestPositionParser(PositionParser):
     #       ############################
     #                 type_id             is_red   disc   exist     -
     #
-    def parse(self, path: Path) -> GameState:
+    @staticmethod
+    def parse(path: Path) -> GameState:
         with open(path, "rb") as f:
             data = f.read(128)
 
         mov_side = Side.red if data[7] & 1 else Side.blue
-        board = [self.parse_piece(data[8 + i]) for i in range(100)]
+        board = [BinaryTestPositionParser.parse_piece(data[8 + i]) for i in range(100)]
         return GameState(board, mov_side)
 
     @staticmethod

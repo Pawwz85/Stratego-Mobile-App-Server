@@ -91,10 +91,6 @@ class StrategoUtilsTest(unittest.TestCase):
 
 class StrategoGameStateTest(unittest.TestCase):
 
-    # TODO: compose or gather a few positions to test move generator
-    def testMoveGen(self):
-        self.assertTrue(False)
-
     def testTrackers(self):
         generator = GameplayScenarioGenerator()
         to_type = lambda p: None if p is None else p.type
