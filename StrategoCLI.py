@@ -53,7 +53,7 @@ def print_board(game_state_view):
 def main():
 
     # Initialize game state
-    game = GameInstance()
+    game = PurePythonGameInstance()
 
     # Create setups for red and blue sides
     red_setup = generate_random_setup(Side.red)

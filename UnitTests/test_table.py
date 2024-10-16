@@ -327,7 +327,7 @@ class TestGameplayManager(unittest.TestCase):
         self.phase.logic()  # first call to logic
         self.phase.logic()
         self.assertEqual(self.on_state_change.call_count, 1)
-        state = GameInstance()
+        state = PurePythonGameInstance()
         state.set_game_state(self.initial_state)
         moving_side = Side.red if self.gameplay_manager.get_moving_side() == 'red' else Side.blue
         move = rand_move(state, moving_side)
@@ -778,7 +778,7 @@ class TestTableSetupPhase(TestTable):
             'setup': setup_to_protocol_form(setup)
         }
 
-    def _run_fob_manager(self):
+    def _run_job_manager(self):
         self.job_manager.add_delayed_task(DelayedTask(self.job_manager.kill, 150))
         while len(self.job_manager) > 0:
             self.job_manager.iteration_of_job_execution()
@@ -788,7 +788,7 @@ class TestTableSetupPhase(TestTable):
          Scenario: players did nothing during this phase
          Expected outcome: Table enters finished state
         """
-        self._run_fob_manager()
+        self._run_job_manager()
         self.assertIs(self.table.phase_type, TableGamePhase.finished)
 
         # check if transmission was recorded in events
@@ -808,7 +808,7 @@ class TestTableSetupPhase(TestTable):
         state = FastWinPosition(Side.red)
         self.table_api.submit_setup(self._send_setup(state.setups[Side.red]), self.user1)
         self.table_api.submit_setup(self._send_setup(state.setups[Side.blue]), self.user2)
-        self._run_fob_manager()
+        self._run_job_manager()
         self.assertIs(self.table.phase_type, TableGamePhase.gameplay)
 
         # check if transmission was recorded in events

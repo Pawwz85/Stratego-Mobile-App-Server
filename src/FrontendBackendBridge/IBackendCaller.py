@@ -10,6 +10,7 @@ from redis import Redis
 from src.Core.User import UserDto
 from src.FrontendBackendBridge.FrontendChannelListener import BackendResponseStrategy, BackendResponseStrategyRepository
 
+
 class IBackendCaller(ABC):
 
     def __init__(self, strategy_repository: BackendResponseStrategyRepository, redis: Redis, config: dict):

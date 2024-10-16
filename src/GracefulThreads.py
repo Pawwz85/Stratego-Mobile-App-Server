@@ -58,6 +58,7 @@ def loop_forever_gracefully(foo: Callable) -> _GracefulCallable:
     """
     return __GracefulInfiniteLoop(foo)
 
+
 def GracefulThread(thread_class: threading.Thread.__class__):
     """
     A decorator that defines a GracefulThread

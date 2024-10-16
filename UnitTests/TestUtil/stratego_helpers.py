@@ -44,7 +44,7 @@ class FastWinPosition:
     def __init__(self, moving_side: src.Core.stratego_gamestate.Side):
         self.setups: dict = dict()
         self.moving_side = moving_side
-        self.game_state = stratego.GameInstance()
+        self.game_state = stratego.PurePythonGameInstance()
         self.winning_move = (0, 0)
         self.__fun_squares = {src.Core.stratego_gamestate.Side.red: 69, src.Core.stratego_gamestate.Side.blue: 39}
         self.create_fast_win_pos()

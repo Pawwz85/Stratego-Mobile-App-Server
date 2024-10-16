@@ -1,6 +1,7 @@
 import random
 import unittest
 import src.Core.stratego as stratego
+from src.Core.GameInstanceFactory import GameInstanceFactory
 import src.Core.stratego_gamestate
 from TestUtil.GameplayScenarioGenerator import GameplayScenarioGenerator
 
@@ -98,7 +99,7 @@ class StrategoGameStateTest(unittest.TestCase):
         count_movable = lambda color: len([p for p in state.get_board() if pred(p, color)])
 
         for _ in range(100):
-            state = stratego.GameInstance()
+            state = stratego.PurePythonGameInstance()
             state.set_game_state(
                 src.Core.stratego_gamestate.game_state_from_setups(StrategoUtilsTest.generate_random_setup(
                     src.Core.stratego_gamestate.Side.red),

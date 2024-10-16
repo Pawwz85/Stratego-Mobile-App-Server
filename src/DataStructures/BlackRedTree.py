@@ -246,7 +246,7 @@ class BlackRedTree:
 
         while node is None or node.parent is not None:
             if node is not None:
-                p: BlackRedTree = node.parent
+                p: BlackRedTree.Node = node.parent
                 if node is p.left_son:
                     s: BlackRedTree.Node = p.right_son
                     d = s.right_son

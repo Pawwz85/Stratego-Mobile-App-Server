@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 import random
 
-from src.Core.stratego import GameInstance
+from src.Core.stratego import GameInstance, PurePythonGameInstance
 from src.Core.stratego_gamestate import _piece_type_setup_count, Side, _piece_type_to_str, game_state_from_setups
 from typing import Callable
 
@@ -14,7 +14,7 @@ from typing import Callable
 class GameplayScenarioGenerator:
 
     def __init__(self, ai: Callable[[GameInstance, Side], tuple[int, int]] = None):
-        self.game_state = GameInstance()
+        self.game_state = PurePythonGameInstance()
         if ai is not None:
             self.ai = ai
         else:
@@ -77,9 +77,8 @@ class GameplayScenarioGenerator:
         result += "AUTOWAIT FALSE"
         return result
 
-    def create_match(self):
+    def create_match(self, gs: GameInstance):
         setup = game_state_from_setups(self.__random_setup(Side.red), self.__random_setup(Side.blue))
-        gs = GameInstance()
         gs.set_game_state(setup)
 
         while not gs.is_game_finish():

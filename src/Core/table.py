@@ -8,6 +8,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Callable
 
+from src.Core.GameInstanceFactory import GameInstanceFactory
 from src.Core.stratego_gamestate import verify_setup_dict, game_state_from_setups
 from src.ProtocolObjects import ParsingException, PieceToken, Move
 from src.Core.JobManager import Job, DelayedTask, JobManager, time_ms
@@ -297,7 +298,7 @@ class GameplayManager:
     def __init__(self, job_manager: JobManager, time_control: TableTimeControl,
                  set_table_to_finished_mode: Callable[[Side | None], None],
                  on_state_change: Callable[[], None]):
-        self._game_state = GameInstance()
+        self._game_instance = GameInstanceFactory().create_default()
         self.__job_manager = job_manager
         self.__set_table_to_finished_mode = set_table_to_finished_mode
         self.__player_timeout_task: DelayedTask | None = None
@@ -308,14 +309,14 @@ class GameplayManager:
         self.on_state_change = on_state_change
 
     def set_game_state(self, state: GameState):
-        self._game_state.set_game_state(state)
+        self._game_instance.set_game_state(state)
 
     def make_move(self, move: tuple[int, int], side: Side) -> tuple[bool, str | None]:
 
-        if self._game_state.get_side() is not side:
+        if self._game_instance.get_side() is not side:
             return False, "This is not your turn"
 
-        if not self._game_state.is_move_legal(move):
+        if not self._game_instance.is_move_legal(move):
             return False, "This is illegal move"
 
         if self.__player_timeout_task is not None:
@@ -325,27 +326,27 @@ class GameplayManager:
         tm_inc = self.time_control.red_time_control_ms if side is Side.red else self.time_control.blue_time_control_ms
         self.__time_budget[side] -= time_ms() - self.__turn_start
         self.__time_budget[side] += tm_inc[1]
-        self._game_state.execute_move(move)
+        self._game_instance.execute_move(move)
 
         return True, None
 
     def get_moving_side(self):
-        return "blue" if self._game_state.get_side().value else "red"
+        return "blue" if self._game_instance.get_side().value else "red"
 
     def get_view(self, perspective: Side | None):
-        return self._game_state.get_view(perspective)
+        return self._game_instance.get_view(perspective)
 
     def get_move_list(self,  perspective: Side | None) -> list[dict]:
-        if perspective is None or perspective is not self._game_state.get_side():
+        if perspective is None or perspective is not self._game_instance.get_side():
             return []
-        result = self._game_state.move_gen(self._game_state.get_side())
+        result = self._game_instance.move_gen(self._game_instance.get_side())
         return [Move(from_, to_).to_dict() for from_, to_ in result]
 
     def __player_timeout(self, side: Side):
         self.__set_table_to_finished_mode(side.flip())
 
     def __schedule_player_timeout(self):
-        side_on_move = self._game_state.get_side()
+        side_on_move = self._game_instance.get_side()
         self.__player_timeout_task = DelayedTask(lambda: self.__player_timeout(side_on_move),
                                                  self.__time_budget[side_on_move])
         self.__turn_start = time_ms()
@@ -357,8 +358,8 @@ class GameplayManager:
                               Side.blue: self.time_control.blue_time_control_ms[0]}
 
     def __phase_logic(self):
-        if self._game_state.is_game_finish():
-            self.__set_table_to_finished_mode(self._game_state.get_winner())
+        if self._game_instance.is_game_finish():
+            self.__set_table_to_finished_mode(self._game_instance.get_winner())
         elif self.__player_timeout_task is None:
             self.__schedule_player_timeout()
             self.on_state_change()

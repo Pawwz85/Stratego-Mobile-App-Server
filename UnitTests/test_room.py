@@ -21,6 +21,7 @@ class RoomTestCase(unittest.TestCase):
         "set_rematch_willingness": "set_rematch_willingness"
     }
 
+
     def test_expected_behaviour(self):
         main_loop = MainLoopStub()
         event_man = Eventmanager(main_loop.get_resource_manager())

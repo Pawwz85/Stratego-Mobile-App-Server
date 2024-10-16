@@ -2,12 +2,15 @@ from pathlib import Path
 import unittest
 
 from UnitTests.TestUtil.PositionParser import BinaryTestPositionParser
-from src.Core.stratego import GameInstance
+from src.Core.GameInstanceFactory import GameInstanceFactory, DynamicLibraryNotFound
+from src.Core.stratego import PurePythonGameInstance
 from src.Core.stratego_gamestate import GameState, Side
-from src.ProtocolObjects import Move
 
 
-class TestMoveGen(unittest.TestCase):
+class TestPythonMoveGen(unittest.TestCase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
 
     @staticmethod
     def sort_move_list(move_list: list[tuple[int, int]]):
@@ -19,8 +22,8 @@ class TestMoveGen(unittest.TestCase):
 
     @staticmethod
     def comp_m_list(move_list1: list[tuple[int, int]], move_list2: list[tuple[int, int]]) -> bool:
-        TestMoveGen.sort_move_list(move_list1)
-        TestMoveGen.sort_move_list(move_list2)
+        TestPythonMoveGen.sort_move_list(move_list1)
+        TestPythonMoveGen.sort_move_list(move_list2)
         print("Move list 1", move_list1)
         print("Move list 2", move_list2)
         if len(move_list1) != len(move_list2):
@@ -35,10 +38,11 @@ class TestMoveGen(unittest.TestCase):
 
     def setUp(self):
         self.game_state: GameState = GameState([None] * 100, Side.red)
-        self.game_instance = GameInstance()
+        self.game_instance_factory = GameInstanceFactory()
+        self.game_instance = self.game_instance_factory.create_pure_python_game_instance()
 
     def tearDown(self):
-        del self.game_state, self.game_instance
+        del self.game_state, self.game_instance, self.game_instance_factory
 
     def load_position(self, path: str):
         path: Path = Path(path)
@@ -50,6 +54,7 @@ class TestMoveGen(unittest.TestCase):
         scout_m = [90, 81, 82, 83, 84, 85, 86, 87, 88, 89, 70, 60, 50, 40, 30, 20, 10, 0]
         expected_moves = self.fast_move_composer(80, scout_m)
         generated_moves = self.game_instance.move_gen(self.game_state.get_side_to_move())
+        print(generated_moves)
         self.assertTrue(self.comp_m_list(expected_moves, generated_moves))
         self.assertFalse(self.game_instance.is_game_finish())
 
@@ -58,6 +63,7 @@ class TestMoveGen(unittest.TestCase):
         spy_m = [1, 3, 12]
         expected_moves = self.fast_move_composer(2, spy_m)
         generated_moves = self.game_instance.move_gen(self.game_state.get_side_to_move())
+        print(self.game_instance.get_side())
         self.assertTrue(self.comp_m_list(expected_moves, generated_moves))
         self.assertFalse(self.game_instance.is_game_finish())
 
@@ -73,6 +79,7 @@ class TestMoveGen(unittest.TestCase):
         scout_m = self.fast_move_composer(54, [24, 34, 44, 55, 64, 74, 84, 94])
         miner_m = self.fast_move_composer(49, [39, 48, 59])
         expected_moves = scout_m + miner_m
+        print(self.game_instance.get_board()[64])
         self.assertTrue(self.comp_m_list(expected_moves, generated_moves))
         self.assertFalse(self.game_instance.is_game_finish())
 
@@ -82,7 +89,18 @@ class TestMoveGen(unittest.TestCase):
         miner1_m = self.fast_move_composer(44, [34])
         miner2_m = self.fast_move_composer(45, [35])
         miner3_m = self.fast_move_composer(54, [64])
-        scout_m  = self.fast_move_composer(55, [65, 75, 85, 95])
+        scout_m = self.fast_move_composer(55, [65, 75, 85, 95])
         expected_moves = miner1_m + miner2_m + miner3_m + scout_m
+        print(self.game_instance.get_board()[45].type, self.game_instance.get_board()[45].color)
         self.assertTrue(self.comp_m_list(expected_moves, generated_moves))
         self.assertFalse(self.game_instance.is_game_finish())
+
+
+class TestCMoveGen(TestPythonMoveGen):
+    def setUp(self):
+        super().setUp()
+        del self.game_instance
+        try:
+            self.game_instance = self.game_instance_factory.create_c_game_instance()
+        except DynamicLibraryNotFound:
+            self.fail("Dynamic library not found")
