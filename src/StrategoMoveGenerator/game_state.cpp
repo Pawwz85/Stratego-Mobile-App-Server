@@ -309,7 +309,13 @@ STRATEGO_MOVE_GEN_API int game_state_set_state(const void * handle, piece* piece
 
 STRATEGO_MOVE_GEN_API int game_state_make_move(const void * handle, const move* m)
 {
+
 	GameState* state = (GameState*)handle;
+	
+	if (state->player_to_move == none) {
+		return 0;
+	}
+		
 	piece winner = who_would_win(state->instance.pieces[m->from_], state->instance.pieces[m->to_]);
 
 	// Step 2. despawn old pieces to update book keeping
@@ -318,7 +324,7 @@ STRATEGO_MOVE_GEN_API int game_state_make_move(const void * handle, const move* 
 	spawn(state, &winner, m->to_);
 
 
-	// TODO: check player turn or smth
+	state->player_to_move = (state->player_to_move == red_player) ? blue_player : red_player;
 	
 	state->trackers.gen_called_flag = 0;
 	return 1;
