@@ -317,7 +317,7 @@ STRATEGO_MOVE_GEN_API int game_state_make_move(const void * handle, const move* 
 	}
 		
 	piece winner = who_would_win(state->instance.pieces[m->from_], state->instance.pieces[m->to_]);
-
+	winner.discovered = true;
 	// Step 2. despawn old pieces to update book keeping
 	despawn(state, m->from_);
 	despawn(state, m->to_);
