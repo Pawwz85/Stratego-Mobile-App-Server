@@ -1,6 +1,7 @@
 import {BoardModel, BoardState, MoveGenerator, PieceType} from  "./board_model.js";
 import { SeatSelectorWindowModel } from "./side_selector.js";
 import { GeneralChatModel } from "./chat.js";
+import {Clock} from "./clock.js"
 export class User{
     constructor(){
         this.profilePicture = null;
@@ -60,6 +61,8 @@ class AppGlobalContext{
         this.table = new TableModel();
         this.chatModel = new GeneralChatModel();
         this.seatWindowModel = new SeatSelectorWindowModel();
+        this.red_clock = new Clock(100);
+        this.blue_clock = new Clock(100);
         this.userList = [];
     }
     update_ready_status(statuses){

@@ -21,7 +21,7 @@ class MoveGenPerf(unittest.TestCase):
         pos_per_sec = cnt/(time.time() - start)
         print(f"C implementation: {pos_per_sec} positions per second")
 
-    def test_pythonmove_gen(self, games=1000):
+    def test_pythonmove_gen(self, games=100):
         cnt = 0
         start = time.time()
         for _ in range(games):

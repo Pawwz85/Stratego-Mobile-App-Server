@@ -13,6 +13,9 @@ export class RoomUIManager{
             roomLiveImage.userListImage.add_observer(appGlobalContext.table);
             roomLiveImage.userListImage.add_observer(this);
 
+            appGlobalContext.red_clock = roomLiveImage.timersLiveImage.red_clock;
+            appGlobalContext.blue_clock = roomLiveImage.timersLiveImage.blue_clock;
+
             this.currentUserRole = null;
             this.currentGamePhase = null;
         }

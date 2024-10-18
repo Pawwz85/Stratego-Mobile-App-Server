@@ -32,10 +32,11 @@ class TestSeatManager(unittest.TestCase):
     def setUp(self):
         self.transmission_to_setup_phase = mock.Mock()
         self.seat_observer = mock.Mock()
-        self.seat_manager = SeatManager(self.transmission_to_setup_phase, self.seat_observer)
+        self.playerInfoMan = PlayerInfoManager()
+        self.seat_manager = SeatManager(self.transmission_to_setup_phase, self.seat_observer, self.playerInfoMan)
 
     def tearDown(self):
-        del self.transmission_to_setup_phase, self.seat_manager, self.seat_observer
+        del self.transmission_to_setup_phase, self.seat_manager, self.seat_observer, self.playerInfoMan
 
     def test_phase_init(self):
         """
@@ -144,15 +145,17 @@ class TestSeatManagerWithReadyCommand(unittest.TestCase):
         self.on_ready_change = mock.Mock()
         self.job_manager = JobManager()
         self.transmission_time = 50
+        self.playerInfoMan = PlayerInfoManager()
         self.seat_manager = SeatManagerWithReadyCommand(self.transmission_to_setup_phase,
                                                         self.job_manager,
                                                         self.transmission_time,
                                                         self.on_ready_change,
-                                                        self.seat_observer)
+                                                        self.seat_observer,
+                                                        self.playerInfoMan)
 
     def tearDown(self):
         del self.transmission_to_setup_phase, self.seat_manager, self.seat_observer
-        del self.on_ready_change, self.job_manager
+        del self.on_ready_change, self.job_manager, self.playerInfoMan
 
     def __start_transmission(self):
         self.seat_manager.get_phase().init()
@@ -229,15 +232,17 @@ class TestSeatManagerWithReadyCommand(unittest.TestCase):
 class TestSetupManager(unittest.TestCase):
     def setUp(self):
         self.job_manager = JobManager()
+        self.player_info_manager = PlayerInfoManager()
         self.setup_time = 50
         self.set_to_gameplay = mock.Mock()
         self.set_to_finish = mock.Mock()
 
         self.setup_manager = SetupManager(self.job_manager, self.setup_time,
-                                          self.set_to_gameplay, self.set_to_finish)
+                                          self.set_to_gameplay, self.set_to_finish, self.player_info_manager)
 
     def tearDown(self):
         del self.setup_manager, self.job_manager, self.setup_time, self.set_to_finish, self.set_to_gameplay
+        del self.player_info_manager
 
     def __wait_for_transmission(self):
         stop = DelayedTask(self.job_manager.kill, 2 * self.setup_time)
@@ -292,20 +297,22 @@ class TestSetupManager(unittest.TestCase):
 class TestGameplayManager(unittest.TestCase):
     def setUp(self):
         self.job_manager = JobManager()
+        self.player_info_manager = PlayerInfoManager()
         self.time_con = TableTimeControl(0, 5000, 5000)
         self.set_to_finish = mock.Mock()
         self.on_state_change = mock.Mock()
         self.initial_state = game_state_from_setups(generate_random_setup(Side.red),
                                                     generate_random_setup(Side.blue))
         self.gameplay_manager = GameplayManager(self.job_manager, self.time_con,
-                                                self.set_to_finish, self.on_state_change)
+                                                self.set_to_finish, self.on_state_change,
+                                                self.player_info_manager)
 
         self.phase = self.gameplay_manager.get_phase(
             self.initial_state
         )
 
     def tearDown(self):
-        del self.gameplay_manager, self.phase, self.initial_state
+        del self.gameplay_manager, self.phase, self.initial_state, self.player_info_manager
         del self.job_manager, self.time_con, self.set_to_finish, self.on_state_change
 
     def test_phase_logic_calls_on_state_change(self):
@@ -778,7 +785,7 @@ class TestTableSetupPhase(TestTable):
             'setup': setup_to_protocol_form(setup)
         }
 
-    def _run_job_manager(self):
+    def _run_job_manager(self, **kwargs):
         self.job_manager.add_delayed_task(DelayedTask(self.job_manager.kill, 150))
         while len(self.job_manager) > 0:
             self.job_manager.iteration_of_job_execution()
@@ -926,8 +933,8 @@ class TestTableApi(unittest.TestCase):
         event_man = Eventmanager(main_loop.get_resource_manager())
         table = (Table.
                  Builder(main_loop.get_resource_manager()).
-                 set_start_timer(100).
-                 set_setup_time(300).
+                 set_start_timer(1000).
+                 set_setup_time(3000).
                  build())
         usi = UserSimulationInterpreter({"$TableApi": TableApi(table)}, main_loop.get_resource_manager(), event_man)
         player_sim = GameplayScenarioGenerator()
@@ -938,11 +945,11 @@ class TestTableApi(unittest.TestCase):
             usi.run_script("../TestResources/table_api_test_players_ready")
             check1 = DelayedTask(lambda: self.assertIs(table.phase_type, TableGamePhase.awaiting), usi.now + 20)
             main_loop.get_resource_manager().add_delayed_task(check1)
-            usi.run_command("WAIT 120")
+            usi.run_command("WAIT 1200")
             usi.run_command(setup_script)
             check2 = DelayedTask(lambda: self.assertIs(table.phase_type, TableGamePhase.setup), usi.now + 50)
             main_loop.get_resource_manager().add_delayed_task(check2)
-            usi.run_command("WAIT 300")
+            usi.run_command("WAIT 3020")
             check3 = DelayedTask(lambda: self.assertIs(table.phase_type, TableGamePhase.gameplay), usi.now + 10)
             main_loop.get_resource_manager().add_delayed_task(check3)
             usi.run_command(gameplay_script)

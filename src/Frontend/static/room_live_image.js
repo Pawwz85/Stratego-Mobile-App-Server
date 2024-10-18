@@ -1,6 +1,7 @@
 import { GeneralChatModel } from "./chat.js";
 import {PieceType, Color, Piece} from "./board_model.js"
 import { PieceEncoder } from "./PieceEncoder.js";
+import {Clock} from "./clock.js"
 export class LiveChatImage{
     constructor(serverConnection, room_id){
         this.chatModel = new GeneralChatModel();
@@ -106,6 +107,8 @@ class BoardLiveImage{
         this.roomId = room_id;
         this.position = null;
         this.phase = "awaiting";
+        this.red_clock = {mode: "paused", value: 0}
+        this.blue_clock = {mode: "paused", value: 0}
         this.observers = [];
     }
 
@@ -130,6 +133,8 @@ class BoardLiveImage{
             this.orderNumber = event.nr;
             this.phase = event.game_status;
             this.position = event.board;
+            this.red_clock = event.red_clock;
+            this.blue_clock = event.blue_clock;
             this.notify_observers();
         }
     }
@@ -246,6 +251,21 @@ class BoardPositionLiveImage{
     }
 }
 
+class TimersLiveImage {
+    constructor(boardLiveImage){
+        const clock_tick_rate = 100; 
+        this.timers_observers = [];
+        this.red_clock = new Clock(clock_tick_rate);
+        this.blue_clock = new Clock(clock_tick_rate);
+        boardLiveImage.add_observer(this);
+    }
+
+    update(boardLiveImage){
+        this.red_clock.update_clock_target(boardLiveImage.red_clock);
+        this.blue_clock.update_clock_target(boardLiveImage.blue_clock);
+    }
+
+}
 class UserListOrderedOperationsList{
     constructor(userList, serverConnection, roomId){
         this.userList = userList;
@@ -452,7 +472,8 @@ export class RoomLiveImage{
         this.playerReadyStatusLiveImage = new PlayerReadyStatusLiveImage(serverConnection, roomId);
         this.boardLiveImage = new BoardLiveImage(serverConnection, roomId); 
         this.positionLiveImage = new BoardPositionLiveImage(this.boardLiveImage);
-        this.gamePhaseLiveImage = new GamePhaseLiveImage(this.boardLiveImage);    
+        this.gamePhaseLiveImage = new GamePhaseLiveImage(this.boardLiveImage); 
+        this.timersLiveImage = new TimersLiveImage(this.boardLiveImage);   
     }
 
     sync(){

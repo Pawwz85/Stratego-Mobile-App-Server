@@ -5,10 +5,13 @@
 """
 from __future__ import annotations
 
+import time
 from enum import Enum
+from math import floor
 from typing import Callable
 
 from src.Core.GameInstanceFactory import GameInstanceFactory
+from src.Core.PlayerInfo import PlayerInfo, TimerMode, Timer
 from src.Core.stratego_gamestate import verify_setup_dict, game_state_from_setups
 from src.ProtocolObjects import ParsingException, PieceToken, Move
 from src.Core.JobManager import Job, DelayedTask, JobManager, time_ms
@@ -49,11 +52,42 @@ class TableTimeControl:
 
     :custom: This is a custom class defined for this specific use case.
     """
+
     def __init__(self, setup_time_ms: int, red_base_time_ms: int,
                  blue_base_time_ms: int, red_increment_ms=0, blue_increment_ms=0):
         self.red_time_control_ms = red_base_time_ms, red_increment_ms
         self.blue_time_control_ms = blue_base_time_ms, blue_increment_ms
         self.setup_time_ms = setup_time_ms
+
+
+class PlayerInfoManager:
+    """
+       This class manages players info.
+    """
+    def __init__(self):
+        self.player_info = {s: PlayerInfo() for s in Side}
+        self.on_player_info_change: Callable[[Side, PlayerInfo], any] = lambda x, y: None
+
+    @abstractmethod
+    def __sync_task_with_timer(self, func: Callable, timers: list[Timer]) -> Callable:
+        def _(*args, **kwargs):
+            for timer in timers:
+                timer.mode = TimerMode.PAUSED
+                timer.value = 0
+
+            func(*args, **kwargs)
+
+        return _
+
+    def count_down_both_clocks(self, delay: int, on_time_runs_down: Callable) -> DelayedTask:
+        result = DelayedTask(on_time_runs_down, delay)
+        timers = [self.player_info[s].timer for s in Side]
+        result.cancel = self.__sync_task_with_timer(result.cancel, timers)
+        for timer in timers:
+            timer.mode = TimerMode.COUNT_DOWN
+            timer.value = floor(1000*time.time()) + delay
+
+        return result
 
 
 class TablePhase:
@@ -66,6 +100,7 @@ class TablePhase:
     phase_finish: A callable function that does not take any arguments and performs cleanup or finalization tasks at
     the end of the phase.
     """
+
     def __init__(self, phase_init: Callable, phase_logic: Callable, phase_finish: Callable):
         self._phase_init = phase_init
         self._phase_logic = phase_logic
@@ -106,9 +141,11 @@ class SeatManager:
                             some action, such as sending a notification to the player.
     """
 
-    def __init__(self, set_table_to_setup_phase: Callable, seat_observer: Callable[[int, Side | None], any]):
+    def __init__(self, set_table_to_setup_phase: Callable, seat_observer: Callable[[int, Side | None], any],
+                 player_info_manager: PlayerInfoManager):
         self.seats: dict[Side, None | int] = {Side.red: None, Side.blue: None}
         self._set_table_to_setup_phase = set_table_to_setup_phase
+        self._player_info_manager = player_info_manager
         self._seat_observer = seat_observer
 
     def _phase_init(self, clear_seats=True):
@@ -181,8 +218,9 @@ class SeatManagerWithReadyCommand(SeatManager):
     def __init__(self, set_table_to_setup_phase: Callable,
                  job_manager: JobManager, transmission_time_ms: int,
                  on_ready_change: Callable[[Side, bool], any],
-                 seat_observer: Callable[[int, Side], any]):
-        super().__init__(set_table_to_setup_phase, seat_observer)
+                 seat_observer: Callable[[int, Side], any],
+                 player_info_manager: PlayerInfoManager):
+        super().__init__(set_table_to_setup_phase, seat_observer, player_info_manager)
         self._on_ready_change = on_ready_change
         self._readiness: dict[Side, bool] = {Side.red: False, Side.blue: False}
         self._transmission_task: DelayedTask | None = None
@@ -197,9 +235,9 @@ class SeatManagerWithReadyCommand(SeatManager):
     def _phase_logic(self):
         """Main game logic in active phase."""
         if self._readiness[Side.red] and self._readiness[Side.blue] and self._transmission_task is None:
-            self._transmission_task = DelayedTask(lambda: self._set_table_to_setup_phase(),
-                                                  self._transmission_time_ms)
-            self.job_manager.add_delayed_task(self._transmission_task)
+            task = DelayedTask(lambda: self._set_table_to_setup_phase(), self._transmission_time_ms)
+            self.job_manager.add_delayed_task(task)
+            self._transmission_task = task
 
     def _phase_finish(self):
         """Clean up phase."""
@@ -249,13 +287,15 @@ class SeatManagerWithReadyCommand(SeatManager):
 class SetupManager:
     def __init__(self, job_manager: JobManager, time_for_setup_ms: int,
                  set_table_to_gameplay_mode: Callable[[GameState], None],
-                 set_table_to_finished_mode: Callable[[Side | None], None]):
+                 set_table_to_finished_mode: Callable[[Side | None], None],
+                 player_info_manager: PlayerInfoManager):
         self.setups: dict[Side, dict[int, PieceType] | None] = {Side.red: None, Side.blue: None}
         self.__setup_timeout_task: DelayedTask | None = None
         self.__set_table_to_gameplay_mode = set_table_to_gameplay_mode
         self.__set_table_to_finished_mode = set_table_to_finished_mode
         self.time_for_setup_ms = time_for_setup_ms
         self.__job_manager = job_manager
+        self.__player_info_manager: PlayerInfoManager = player_info_manager
 
     def propose_setup(self, color: Side, setup: dict[int, PieceType]) -> tuple[bool, str | None]:
         if not verify_setup_dict(setup, color):
@@ -279,7 +319,8 @@ class SetupManager:
 
     def __phase_init(self):
         self.setups = {Side.red: None, Side.blue: None}
-        self.__setup_timeout_task = DelayedTask(self.__on_timeout, self.time_for_setup_ms)
+        self.__setup_timeout_task = self.__player_info_manager.count_down_both_clocks(self.time_for_setup_ms,
+                                                                                      self.__on_timeout)
         self.__job_manager.add_delayed_task(self.__setup_timeout_task)
 
     def __phase_logic(self):
@@ -297,13 +338,15 @@ class SetupManager:
 class GameplayManager:
     def __init__(self, job_manager: JobManager, time_control: TableTimeControl,
                  set_table_to_finished_mode: Callable[[Side | None], None],
-                 on_state_change: Callable[[], None]):
+                 on_state_change: Callable[[], None],
+                 player_info_manager: PlayerInfoManager):
         self._game_instance = GameInstanceFactory().create_default()
         self.__job_manager = job_manager
         self.__set_table_to_finished_mode = set_table_to_finished_mode
         self.__player_timeout_task: DelayedTask | None = None
         self.__time_budget: dict[Side:int] = {Side.red: time_control.red_time_control_ms[0],
                                               Side.blue: time_control.blue_time_control_ms[0]}
+        self.__player_info_manager = player_info_manager
         self.time_control = time_control
         self.__turn_start: int = 0
         self.on_state_change = on_state_change
@@ -326,6 +369,7 @@ class GameplayManager:
         tm_inc = self.time_control.red_time_control_ms if side is Side.red else self.time_control.blue_time_control_ms
         self.__time_budget[side] -= time_ms() - self.__turn_start
         self.__time_budget[side] += tm_inc[1]
+        self.__player_info_manager.player_info[side].timer.set_paused_value(self.__time_budget[side])
         self._game_instance.execute_move(move)
 
         return True, None
@@ -336,7 +380,7 @@ class GameplayManager:
     def get_view(self, perspective: Side | None):
         return self._game_instance.get_view(perspective)
 
-    def get_move_list(self,  perspective: Side | None) -> list[dict]:
+    def get_move_list(self, perspective: Side | None) -> list[dict]:
         if perspective is None or perspective is not self._game_instance.get_side():
             return []
         result = self._game_instance.move_gen(self._game_instance.get_side())
@@ -347,8 +391,9 @@ class GameplayManager:
 
     def __schedule_player_timeout(self):
         side_on_move = self._game_instance.get_side()
-        self.__player_timeout_task = DelayedTask(lambda: self.__player_timeout(side_on_move),
-                                                 self.__time_budget[side_on_move])
+        timer = self.__player_info_manager.player_info[side_on_move].timer
+        self.__player_timeout_task = timer.count_down(self.__time_budget[side_on_move],
+                                                      lambda: self.__player_timeout(side_on_move))
         self.__turn_start = time_ms()
         self.__job_manager.add_delayed_task(self.__player_timeout_task)
 
@@ -356,6 +401,8 @@ class GameplayManager:
         self.set_game_state(state)
         self.__time_budget = {Side.red: self.time_control.red_time_control_ms[0],
                               Side.blue: self.time_control.blue_time_control_ms[0]}
+        for s in Side:
+            self.__player_info_manager.player_info[s].timer.set_paused_value(self.__time_budget[s])
 
     def __phase_logic(self):
         if self._game_instance.is_game_finish():
@@ -407,27 +454,30 @@ class Table:
             self.__use_readiness = True
             self.__start_timer = 10000
             self.__event_broadcast: Callable[[dict], any] = lambda x: None
-            self.__event_channels: dict[Side | None, Callable[[dict], any]] = {side: (lambda d: None) for side in {Side.red, Side.blue, None}}
+            self.__event_channels: dict[Side | None, Callable[[dict], any]] = \
+                {side: (lambda d: None) for side in {Side.red, Side.blue, None}}
             self.__seat_observer: Callable[[int, Side | None], any] = lambda x, y: None
+            self.__player_info_manager = PlayerInfoManager()
 
         def get_sm_constructor(self):
             def __on_ready_change(side: Side, value: bool):
                 event = {
-                   "type": "ready_event",
-                   "side": "red" if side is Side.red else "blue",
-                   "value": value
+                    "type": "ready_event",
+                    "side": "red" if side is Side.red else "blue",
+                    "value": value
                 }
                 self.__event_broadcast(event)
 
             if self.__use_readiness:
                 return lambda x: SeatManagerWithReadyCommand(x, self.__job_manager,
                                                              self.__start_timer, __on_ready_change,
-                                                             self.__seat_observer)
+                                                             self.__seat_observer, self.__player_info_manager)
             else:
-                return lambda x: SeatManager(x, self.__seat_observer)
+                return lambda x: SeatManager(x, self.__seat_observer, self.__player_info_manager)
 
         def build(self) -> Table:
-            return Table(self.__job_manager, self.__time_control, self.get_sm_constructor(), self.__event_channels)
+            return Table(self.__job_manager, self.__time_control, self.get_sm_constructor(),
+                         self.__player_info_manager, self.__event_channels)
 
         def set_use_readiness(self, val: bool) -> Table.Builder:
             self.__use_readiness = val
@@ -470,15 +520,18 @@ class Table:
 
     def __init__(self, job_manager: JobManager, time_control: TableTimeControl,
                  seat_manager_constructor: Callable[[Callable], SeatManager],
+                 player_info_manager: PlayerInfoManager,
                  event_channels: dict[Side | None, Callable[[dict], any]]):
         self.job_manager = job_manager
         self.phase_type: TableGamePhase = TableGamePhase.awaiting
 
+        self._player_info_manager = player_info_manager
         self._seat_manager = seat_manager_constructor(self.__change_phase_to_setup)
         self._setup_manager = SetupManager(job_manager, time_control.setup_time_ms,
-                                           self.__change_phase_to_gameplay, self.__change_phase_to_finished)
+                                           self.__change_phase_to_gameplay, self.__change_phase_to_finished,
+                                           self._player_info_manager)
         self._gameplay_manager = GameplayManager(job_manager, time_control, self.__change_phase_to_finished,
-                                                 self.__send_state_change_event)
+                                                 self.__send_state_change_event, self._player_info_manager)
         self._finished_state_manager = FinishedStateManager(self.__execute_rematch)
         self.__phase: TablePhase = self._seat_manager.get_phase()
         self.__phase.init()
@@ -553,6 +606,8 @@ class Table:
         if color is None:
             return
 
+        self._player_info_manager.player_info[color].set_user(None)
+
         if self.phase_type is TableGamePhase.setup or self.phase_type is TableGamePhase.gameplay:
             self.__change_phase_to_finished(color.flip())
 
@@ -566,8 +621,12 @@ class Table:
                   TableGamePhase.setup: "setup",
                   TableGamePhase.finished: "finished"}
 
-        event_body = {"type": "board_event", "nr": self.__generated_events_counter, "game_status": status[self.phase_type],
-                      "moving_side": self._gameplay_manager.get_moving_side()}
+        event_body = {"type": "board_event", "nr": self.__generated_events_counter,
+                      "game_status": status[self.phase_type],
+                      "moving_side": self._gameplay_manager.get_moving_side(),
+                      "red_clock": self._player_info_manager.player_info[Side.red].timer.to_dict(),
+                      "blue_clock": self._player_info_manager.player_info[Side.blue].timer.to_dict()
+                      }
 
         for perspective in {Side.red, Side.blue, None}:
             event_body["board"] = self._gameplay_manager.get_view(perspective).get_view()
@@ -579,6 +638,9 @@ class Table:
 
     def get_finished_state_manager(self):
         return self._finished_state_manager
+
+    def get_player_info_manager(self):
+        return self._player_info_manager
 
 
 class TableApi:
@@ -596,7 +658,12 @@ class TableApi:
             return False, "Field side has invalid value"
 
         side = Side.red if color == "red" else Side.blue
-        return self.table.get_seat_manager().take_seat(user.id, side)
+        result = self.table.get_seat_manager().take_seat(user.id, side)
+
+        if result[0]:
+            self.table.get_player_info_manager().player_info[side].set_user(user)
+
+        return result
 
     def submit_setup(self, request: dict, user: User) -> tuple[bool, str | None]:
         if self.table.phase_type is not TableGamePhase.setup:
@@ -682,6 +749,8 @@ class TableApi:
                     "game_status": status,
                     "moving_side": self.table.get_gameplay_manager().get_moving_side(),
                     "board": self.table.get_gameplay_manager().get_view(perspective).get_view(),
+                    "red_clock": self.table.get_player_info_manager().player_info[Side.red].timer.to_dict(),
+                    "blue_clock": self.table.get_player_info_manager().player_info[Side.blue].timer.to_dict(),
                     "move_list": move_list
                     }
         return response

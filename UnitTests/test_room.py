@@ -27,8 +27,8 @@ class RoomTestCase(unittest.TestCase):
         event_man = Eventmanager(main_loop.get_resource_manager())
         room = Room.Builder(main_loop.get_resource_manager(), lambda x: None).set_table_builder(
             Table.Builder(main_loop.get_resource_manager()).
-            set_start_timer(100).
-            set_setup_time(300)
+            set_start_timer(1000).
+            set_setup_time(3000)
         ).build()
         gameplay_scenario_gen = GameplayScenarioGenerator()
         setup_script = gameplay_scenario_gen.assume_random_setup("User1", "User2")
@@ -40,9 +40,9 @@ class RoomTestCase(unittest.TestCase):
         try:
             usi.run_command("$RoomApi\nUser1 join > {}\nWAIT 20\nUser2 join > {}\nWAIT 20")
             usi.run_script("../TestResources/table_api_test_players_ready", "$RoomApi", RoomTestCase.table_api_to_room_api_mapping)
-            usi.run_command("WAIT 120")
+            usi.run_command("WAIT 1200")
             usi.run_command(setup_script)
-            usi.run_command("WAIT 310")
+            usi.run_command("WAIT 3010")
             usi.run_command(gameplay_script)
             usi.run_command("WAIT 20")
 
@@ -61,7 +61,7 @@ class RoomTestCase(unittest.TestCase):
             usi.run_command("WAIT 50")
             usi.run_command("User1 release_seat > {}")
 
-            main_loop.run(usi.now + 1250)
+            main_loop.run(usi.now + 1550)
 
         except Exception as e:
             print("Test Failed. Saving generating script into aa file ...")

@@ -8,6 +8,7 @@ import {SelectorWithQuantityView, SelectorWithQuantityModel} from "../static/uni
 import { ServerConnection } from "./server_connection.js";
 import { extract_setup } from "./PieceEncoder.js";
 import {OnlineGameplayBoardController} from "./gameplay_board_controller.js"
+import { Clock, SimpleClock } from "./clock.js";
 
 export const user_game_roles = {
     red_player: "red_player",
@@ -271,6 +272,11 @@ export class SetupFragment{
         this.boardModel = new BoardModel(new MoveGenerator(), new BoardState());
         this.boardView = new BoardView();
         this.chatFrag = new ChatFragment(appGlobalContext.chatModel);
+        this.setupClock = new SimpleClock();
+
+        // Both red and blue clock have the same behaviour now, so it doesn't matter with one we choose to track here
+        appGlobalContext.red_clock.observers.push(this.setupClock); 
+
         this.chatFrag.onSend = (msg) => serverConnection.commandMannager.send_message(msg);
         this.boardModel.boardstate.observers.push(this.boardView);
 
@@ -297,6 +303,7 @@ export class SetupFragment{
     }
 
     onCreate(){
+        this.fragmentElement.append(this.setupClock.element);
         this.fragmentElement.append(this.boardView.boardElement);
         this.fragmentElement.append(this.unitSelectorView.viewElement);
         this.fragmentElement.append(this.chatFrag.chatWrapper);
@@ -319,9 +326,13 @@ export class SetupFragment{
     resize_fragment(page_size_x, page_size_y){
         let board_size = Math.floor(page_size_x * 0.66);
         this.boardView.set_size(board_size);
+        
+        this.boardView.boardElement.style.position = "absolute";
+        this.boardView.boardElement.style.top = Math.floor(page_size_y * 0.1) + "px";
+
         this.unitSelectorView.set_size(board_size);
         this.unitSelectorView.viewElement.style.position = "absolute";
-        this.unitSelectorView.viewElement.style.top = parseInt(this.boardView.boardElement.x) + parseInt(this.boardView.boardElement.height) +"";
+        this.unitSelectorView.viewElement.style.top = Math.floor(page_size_y * 0.1 + page_size_x * 0.66) + "px";
 
         this.chatFrag.setSize(Math.floor(0.33 * page_size_x), board_size);
         this.chatFrag.chatWrapper.style.position = "absolute";
@@ -332,6 +343,13 @@ export class SetupFragment{
         this.boardSidePanelView.element.style.position = "absolute";
         this.boardSidePanelView.element.style.left = Math.floor(page_size_x * 0.68) + "px";
         this.boardSidePanelView.element.style.top = "8px";
+
+        this.setupClock.element.style.position = "absolute";
+        this.setupClock.element.style.left = Math.floor(page_size_x * 0.66 * 0.815) + "px";
+        this.setupClock.element.style.top = Math.floor(page_size_y * 0) + "px";
+        this.setupClock.element.style.width = Math.floor(page_size_x * 0.066 * 2) + "px";
+
+      
     }
 
     set_player_color(color){
@@ -349,8 +367,13 @@ export class GameplayPhaseFragment{
         this.boardModel = appGlobalContext.table.boardModel;
     
         this.boardView = new BoardView();
-        this.boardView.set_model(this.boardModel);
         this.chatFrag = new ChatFragment(appGlobalContext.chatModel);
+        this.upperClock = new SimpleClock();
+        this.lowerClock = new SimpleClock();
+        
+
+        this.boardView.set_model(this.boardModel);
+
         this.chatFrag.onSend = (msg) => serverConnection.commandMannager.send_message(msg);
         this.boardModel.submitMove = (move) => serverConnection.commandMannager.send_move(move);
         this.boardModel.boardstate.observers.push(this.boardView);
@@ -359,13 +382,23 @@ export class GameplayPhaseFragment{
         this.boardController = new OnlineGameplayBoardController(serverConnection, this.boardModel, userColor);
         this.boardView.set_controller(this.boardController);
 
+        if (userColor=="blue"){
+            appGlobalContext.red_clock.observers.push(this.upperClock);
+            appGlobalContext.blue_clock.observers.push(this.lowerClock);
+        } else {
+            appGlobalContext.red_clock.observers.push(this.lowerClock);
+            appGlobalContext.blue_clock.observers.push(this.upperClock);
+        }
+
         this.fragmentElement = document.createElement("div");
 
         this.onCreate();
     }
 
     onCreate(){
+        this.fragmentElement.append(this.upperClock.element);
         this.fragmentElement.append(this.boardView.boardElement);
+        this.fragmentElement.append(this.lowerClock.element);
         this.fragmentElement.append(this.chatFrag.chatWrapper);
 
 
@@ -384,12 +417,26 @@ export class GameplayPhaseFragment{
     }
     
     resize_fragment(page_size_x, page_size_y){
+
         let board_size = Math.floor(page_size_x * 0.66);
         this.boardView.set_size(board_size);
         this.chatFrag.setSize(Math.floor(0.33 * page_size_x), board_size);
         this.chatFrag.chatWrapper.style.position = "absolute";
-        this.chatFrag.chatWrapper.style.left = Math.floor(page_size_x * 0.75) + "px";
-        this.chatFrag.chatWrapper.style.top = "8px";
+        this.chatFrag.chatWrapper.style.left = Math.floor(page_size_x * 0.95) + "px";
+        this.chatFrag.chatWrapper.style.top = Math.floor(page_size_y * 0.05) + "px";
+
+        this.boardView.boardElement.style.position = "absolute";
+        this.boardView.boardElement.style.top = Math.floor(page_size_y * 0.1) + "px";
+
+        this.upperClock.element.style.position = "absolute";
+        this.upperClock.element.style.left = Math.floor(page_size_x * 0.66 * 0.815) + "px";
+        this.upperClock.element.style.top = Math.floor(page_size_y * 0) + "px";
+        this.upperClock.element.style.width = Math.floor(page_size_x * 0.066 * 2) + "px";
+
+        this.lowerClock.element.style.position = "absolute";
+        this.lowerClock.element.style.left = Math.floor(page_size_x * 0.66 * 0.815) + "px";
+        this.lowerClock.element.style.top =   Math.floor(page_size_y * 0.74) + "px";
+        this.lowerClock.element.style.width = Math.floor(page_size_x * 0.066 * 2) + "px";
 
         // this.boardSidePanelView.setSize(Math.floor(page_size_x * 0.03), board_size);
         // this.boardSidePanelView.element.style.position = "absolute";
