@@ -9,21 +9,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Added clocks to show players remaining time">
-      <change afterPath="$PROJECT_DIR$/src/Core/PlayerInfo.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/static/PieceEncoder.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/static/clock.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/static/gameplay_board_controller.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PerfTests/test_stratego_core.py" beforeDir="false" afterPath="$PROJECT_DIR$/PerfTests/test_stratego_core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_room.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_room.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dll/StrategoMoveGenerator.dll" beforeDir="false" afterPath="$PROJECT_DIR$/dll/StrategoMoveGenerator.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/board_view.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/game_fragments.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/game_fragments.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/global_context.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/global_context.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/room_live_image.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/room_live_image.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/room_ui_manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/room_ui_manager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BackendSystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/BackendSystem.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/Room.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Room.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/Frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/Frontend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FrontendBackendBridge/GameNodeAPICallsBuilder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/FrontendBackendBridge/GameNodeAPICallsBuilder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/game_state.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/StrategoMoveGenerator/game_state.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -583,7 +574,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729088442051</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="- Added clocks to show players remaining time">
+      <option name="closed" value="true" />
+      <created>1729283855047</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1729283855047</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

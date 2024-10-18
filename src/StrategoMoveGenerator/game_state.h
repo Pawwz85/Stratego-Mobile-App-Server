@@ -68,7 +68,7 @@ extern int spawn(GameState* state, const piece* p,  const unsigned char& sq_id);
 extern "C" STRATEGO_MOVE_GEN_API int game_state_set_state(const void * gamestate_handle, piece* pieces, Side side);
 extern "C" STRATEGO_MOVE_GEN_API int game_state_make_move(const void * gamestate_handle, const move* m);
 extern "C" STRATEGO_MOVE_GEN_API const void* game_state_alloc();
-extern "C" STRATEGO_MOVE_GEN_API int game_state_is_move_legal(const void* gamestate_handle, const move* m); // TODO: implement this function
+extern "C" STRATEGO_MOVE_GEN_API int game_state_is_move_legal(const void* gamestate_handle, const move* m);
 extern "C" STRATEGO_MOVE_GEN_API void game_state_dealloc(const void* gamestate_handle);
 extern "C" STRATEGO_MOVE_GEN_API const piece* game_state_get_piece(const void* gamestate_handle, unsigned int square_id); // returns NULL if square_id is not in range
 extern "C" STRATEGO_MOVE_GEN_API const move* game_state_get_move_buffer(const void* gamestate_handle, unsigned int * size); // returns handle to move buffer

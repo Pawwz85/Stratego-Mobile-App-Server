@@ -104,6 +104,7 @@ class Room:
             result: Room = Room(self.job_manager, self.event_manager, self.table_builder, self.mark_for_deletion)
             result._chat = Chat(result.event_broadcast, self.chat_cap)
             result._password = self.password
+
             return result
 
     def __init__(self, job_manager: JobManager, event_manager: Eventmanager,

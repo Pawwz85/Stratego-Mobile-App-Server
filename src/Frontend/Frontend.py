@@ -185,7 +185,8 @@ def process_join_room(room_id: str, response_id: str):
     possible_responses = {
         "processing": flask.render_template("loading_screen.html"),
         "timed out": flask.redirect("/room_search"),
-        "failure": flask.redirect("/room_search"),
+        "failure": flask.redirect("/room_search") if res.get("cause") != "You are already in this room"
+        else flask.redirect("/play/room/" + room_id),
         "success": flask.redirect("/play/room/" + room_id),
         "error": None
     }

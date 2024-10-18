@@ -105,6 +105,12 @@ class BackendApi:
     def __init__(self, backend_system: BackendSystem):
         self.system = backend_system
 
+    def room_query(self, user: User, request: dict):
+        response = {
+            "rooms": [RoomApi(room).get_room_metadata() for room in self.system.rooms.values()]
+        }
+        return response
+
     def create_room(self, user: User, request: dict):
         time_control: int | float | None = request.get("time_control", None)
         increment: int | float | None = request.get("time_added", None)
@@ -122,7 +128,7 @@ class BackendApi:
                          .set_setup_time(math.ceil(60 * 1000 * time_setup))
                          .set_time_control(math.ceil(60 * 1000 * time_control), math.ceil(1000 * increment))
                          )
-
+        print(request)
         password = request.get("password", None)
         password = None if password is None else str(password)
 
@@ -166,7 +172,7 @@ class BackendApi:
 
         return True, None
 
-    def resolve_command(self, user: User, request: dict):
+    def resolve_command(self, user: User, request: dict) -> tuple[bool, str | None] | dict[str, any] | None:
         request_type: str | None = request.get("type", None)
         if type(request_type) is not str:
             return False, f'Field "type" should have type str, found {type(request_type)}'
