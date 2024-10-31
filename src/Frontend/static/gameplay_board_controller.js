@@ -22,7 +22,8 @@ export class OnlineGameplayBoardController{
         if (square.draw_dot) {
         
           const move = new Move(this.to_server_cords(this.boardModel.selected_sq_id), this.to_server_cords(sq))
-          this.boardModel.submitMove(move)
+          this.boardModel.submitMove(move);
+          console.log(this.boardModel, "submitted move");
           this.boardModel.selected_sq_id = -1
           this.boardModel.refresh_board_visuals()
           return

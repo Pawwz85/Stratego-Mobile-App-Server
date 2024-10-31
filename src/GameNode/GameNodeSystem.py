@@ -18,16 +18,15 @@ from src.Core.table import Table
 from collections import deque
 
 
-class BackendSystem:
+class GameNodeSystem:
 
-    def __init__(self):
+    def __init__(self, config: dict):
         self.api = BackendApi(self)
         self.job_manager = JobManager()
         self.event_manager = Eventmanager(self.job_manager)
         self.rooms: dict[str, Room] = dict()
         self.users_connected: dict[int, User] = dict()
-        with open("../Config/secret_config.properties") as file:
-            self.config = json.load(file)
+        self.config = config
         self.redis = redis.from_url(self.config["redis_url"])
         self.pub_sub = self.redis.pubsub()
         self.pub_sub.subscribe(self.config["backend_api_channel_name"])
@@ -84,7 +83,7 @@ class BackendSystem:
     def iterate_requests(self):
         reqs = self.__check_requests()
         for req in reqs:
-            user_dto, request_body = BackendSystem.parse_request(req)
+            user_dto, request_body = GameNodeSystem.parse_request(req)
             self.register_user(user_dto)
             user = self.users_connected[user_dto.user_id]
             response = self.api(user, request_body)
@@ -102,7 +101,7 @@ class BackendSystem:
 
 class BackendApi:
 
-    def __init__(self, backend_system: BackendSystem):
+    def __init__(self, backend_system: GameNodeSystem):
         self.system = backend_system
 
     def room_query(self, user: User, request: dict):
@@ -157,7 +156,7 @@ class BackendApi:
     @staticmethod
     def __verify_time_control(time_control: float | int, increment_time: float,
                               setup_time: float | int) -> tuple[bool, str | None]:
-        with open("../Config/TimeControlsAllowed.properties") as file:
+        with open("../../Config/TimeControlsAllowed.properties") as file:
             config = json.load(file)
 
         proposed_time_control = {"setup_time_minutes": setup_time,
@@ -202,8 +201,3 @@ class BackendApi:
         return BackendApi.__produce_api_response(
             self.resolve_command(user, request)
         )
-
-
-if __name__ == "__main__":
-    sys = BackendSystem()
-    sys.run()

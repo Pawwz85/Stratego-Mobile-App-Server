@@ -1,5 +1,5 @@
 import { appGlobalContext } from "./global_context.js";
-import {ensure_await_window_stroke, SimpleButtonWithText, SimpleTogglerBuilder} from "./ui_primitives.js";
+import {ensure_window_stroke, SimpleButtonWithText, SimpleTogglerBuilder} from "./ui_primitives.js";
 export class SideSelectorSeatModel{
   constructor(color){
     this.color = color;
@@ -317,8 +317,8 @@ export class SeatSelectorWindowView{
   __init_window(){
     this.window.setAttributeNS("http://www.w3.org/2000/svg", "viewBox", "0 0 100 100");
     let background = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    const stroke = "url(#await-window-stroke)";
-    ensure_await_window_stroke();
+    const stroke = "url(#default-window-stroke)"; 
+    ensure_window_stroke();
 
     background.setAttribute("height", "100%");
     background.setAttribute("width", "100%");

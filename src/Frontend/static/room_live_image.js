@@ -2,9 +2,11 @@ import { GeneralChatModel } from "./chat.js";
 import {PieceType, Color, Piece} from "./board_model.js"
 import { PieceEncoder } from "./PieceEncoder.js";
 import {Clock} from "./clock.js"
+import { appGlobalContext } from "./global_context.js";
+
 export class LiveChatImage{
     constructor(serverConnection, room_id){
-        this.chatModel = new GeneralChatModel();
+        this.chatModel = appGlobalContext.chatModel;
         this.orderedMessagesList = [];
         this.serverConnection = serverConnection;
         this.roomId = room_id;
@@ -16,7 +18,6 @@ export class LiveChatImage{
 
         const result = [];
         let i = 0;
-
         for(i = 0; i<this.orderedMessagesList.length && this.orderedMessagesList[i].orderNumber < orderedMessage.orderNumber; ++i)
             result.push(this.orderedMessagesList[i]);
         
@@ -40,12 +41,13 @@ export class LiveChatImage{
     __from_untagged_messages(untaggedMessages){
         this.orderedMessagesList = untaggedMessages.filter(msg => msg ?? null != null);
         const orderedMessages = []
-        console.log(this.orderedMessagesList)
+
         for(let i = 0; i<this.orderedMessagesList.length; ++i){
             this.orderedMessagesList[i].nr = i;
             orderedMessages.push(this.__protocol_message_to_component_message(this.orderedMessagesList[i]));
         }
         this.orderedMessagesList = orderedMessages;
+
         this.chatModel.set_messages(this.orderedMessagesList);
     }
 
@@ -106,6 +108,7 @@ class BoardLiveImage{
         this.serverConnection = serverConnection;
         this.roomId = room_id;
         this.position = null;
+        this.winner = null;
         this.phase = "awaiting";
         this.red_clock = {mode: "paused", value: 0}
         this.blue_clock = {mode: "paused", value: 0}
@@ -135,6 +138,7 @@ class BoardLiveImage{
             this.position = event.board;
             this.red_clock = event.red_clock;
             this.blue_clock = event.blue_clock;
+            this.winner = event.winner;
             this.notify_observers();
         }
     }
@@ -257,12 +261,40 @@ class TimersLiveImage {
         this.timers_observers = [];
         this.red_clock = new Clock(clock_tick_rate);
         this.blue_clock = new Clock(clock_tick_rate);
+
         boardLiveImage.add_observer(this);
     }
 
     update(boardLiveImage){
         this.red_clock.update_clock_target(boardLiveImage.red_clock);
         this.blue_clock.update_clock_target(boardLiveImage.blue_clock);
+    }
+
+}
+
+class WinnerLiveImage {
+    constructor(boardLiveImage){
+        this.winner = boardLiveImage.winner;
+        this.winnerObservers = [];
+        boardLiveImage.add_observer(this);
+    }
+
+    update(boardLiveImage){
+        if(boardLiveImage.winner !== this.winner){
+            this.winner = boardLiveImage.winner;
+            this.notify_observers();
+        }
+    }
+
+    notify_observers(){
+        for (let o of this.winnerObservers){
+            o.update_winner(this.winner);
+        }
+    }
+
+    add_observer(observer){
+        this.winnerObservers.push(observer);
+        observer.update_winner(this.winner);
     }
 
 }
@@ -464,22 +496,82 @@ class PlayerReadyStatusLiveImage{
     }
 }
 
+class RematchWillingnessLiveImage{
+
+    constructor(serverConnection, roomId){
+        this.serverConnection = serverConnection;
+        this.roomId = roomId;
+        this.rematch_willingness = [];
+        this.observers = []
+    }
+
+    add_observer(observer){
+        this.observers.push(observer);
+        observer.update_rematch_status(this.rematch_willingness);
+    }
+
+    notify_observers(){
+   
+        for(let ob of this.observers){
+           ob.update_rematch_status(this.rematch_willingness)
+        }
+            
+    }
+
+    handleRemacthEvent(event){
+       /* if( Object.prototype.toString(event.rematch_willingness) !== "[object Array]" ) {
+            console.log("API produced unrecognizable response. Outdated client?");
+            console.log(event);
+            return;
+        }*/
+
+        for(let entry of event.rematch_willingness) {
+            if (typeof entry != "string" || (entry != "red" && entry != "blue")) {
+                console.log("API produced unrecognizable response. Outdated client?");
+                console.log(event);
+                return;
+            }
+        }
+
+        this.rematch_willingness = event.rematch_willingness;
+        this.notify_observers();
+    }
+
+    sync(){
+        const request = {
+            type: "get_rematch_willingness",
+            room_id: this.roomId
+        }
+        const tmp = this;
+        this.serverConnection.send_request(request, 10000).then(
+            value => {
+                tmp.handleRemacthEvent(value);
+            }
+        )
+    }
+}
+
 export class RoomLiveImage{
     constructor(serverConnection, roomId){
+
         this.connection = serverConnection;
         this.chatImage = new LiveChatImage(serverConnection, roomId);
         this.userListImage = new UserListLiveImage(serverConnection, roomId);
         this.playerReadyStatusLiveImage = new PlayerReadyStatusLiveImage(serverConnection, roomId);
         this.boardLiveImage = new BoardLiveImage(serverConnection, roomId); 
+        this.rematchWillingnessLiveImage = new RematchWillingnessLiveImage(serverConnection, roomId);
+
         this.positionLiveImage = new BoardPositionLiveImage(this.boardLiveImage);
         this.gamePhaseLiveImage = new GamePhaseLiveImage(this.boardLiveImage); 
         this.timersLiveImage = new TimersLiveImage(this.boardLiveImage);   
+        this.winnerLiveImage = new WinnerLiveImage(this.boardLiveImage); 
     }
 
     sync(){
         this.userListImage.sync();
         this.playerReadyStatusLiveImage.sync();
         this.chatImage.sync();
+        this.rematchWillingnessLiveImage.sync();
         this.boardLiveImage.sync(); // explicitly sync position and gamephase
     }
 
@@ -491,6 +583,7 @@ export class RoomLiveImage{
             handleChatEvent: (json) => this.chatImage.handle_chat_event(json),
             handleChatReset: (json) => {},
             handleReadyEvent: (json) => this.playerReadyStatusLiveImage.handleReadyEvent(json),
+            handleRemacthEvent: (json) => this.rematchWillingnessLiveImage.handleRemacthEvent(json),
             handleRoomClosed: (json) => {alert("Room was closed by server")}
         }
     }

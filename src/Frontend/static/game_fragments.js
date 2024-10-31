@@ -210,7 +210,6 @@ class __SetupPhaseComponentsFactory{
         return view;
     }
 
-
 }
 
 export class AwaitPhaseFragment{
@@ -337,12 +336,12 @@ export class SetupFragment{
         this.chatFrag.setSize(Math.floor(0.33 * page_size_x), board_size);
         this.chatFrag.chatWrapper.style.position = "absolute";
         this.chatFrag.chatWrapper.style.left = Math.floor(page_size_x * 0.75) + "px";
-        this.chatFrag.chatWrapper.style.top = "8px";
+        this.chatFrag.chatWrapper.style.top = Math.floor(page_size_y * 0.1) + "px";
 
         this.boardSidePanelView.setSize(Math.floor(page_size_x * 0.03), board_size);
         this.boardSidePanelView.element.style.position = "absolute";
         this.boardSidePanelView.element.style.left = Math.floor(page_size_x * 0.68) + "px";
-        this.boardSidePanelView.element.style.top = "8px";
+        this.boardSidePanelView.element.style.top = Math.floor(page_size_y * 0.1) + "px";
 
         this.setupClock.element.style.position = "absolute";
         this.setupClock.element.style.left = Math.floor(page_size_x * 0.66 * 0.815) + "px";
@@ -423,7 +422,7 @@ export class GameplayPhaseFragment{
         this.chatFrag.setSize(Math.floor(0.33 * page_size_x), board_size);
         this.chatFrag.chatWrapper.style.position = "absolute";
         this.chatFrag.chatWrapper.style.left = Math.floor(page_size_x * 0.95) + "px";
-        this.chatFrag.chatWrapper.style.top = Math.floor(page_size_y * 0.05) + "px";
+        this.chatFrag.chatWrapper.style.top = Math.floor(page_size_y * 0.1) + "px";
 
         this.boardView.boardElement.style.position = "absolute";
         this.boardView.boardElement.style.top = Math.floor(page_size_y * 0.1) + "px";

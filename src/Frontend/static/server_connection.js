@@ -107,10 +107,10 @@ class GameNodeCommandManager{
         return this.serverConnection.send_request(request, this.timeout_time);
     }
 
-    request_rematch(){
+    request_rematch(value){
         const request ={
-            "type" : "set_rematch_willingess",
-            "setup" : move,
+            "type" : "set_rematch_willingness",
+            "value" : value,
             "room_id": appGlobalContext.roomId
         } 
         return this.serverConnection.send_request(request, this.timeout_time);

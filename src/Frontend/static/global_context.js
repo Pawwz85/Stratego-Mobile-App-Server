@@ -2,6 +2,7 @@ import {BoardModel, BoardState, MoveGenerator, PieceType} from  "./board_model.j
 import { SeatSelectorWindowModel } from "./side_selector.js";
 import { GeneralChatModel } from "./chat.js";
 import {Clock} from "./clock.js"
+import {RematchWindowModel} from "./rematch_window.js"
 export class User{
     constructor(){
         this.profilePicture = null;
@@ -45,28 +46,57 @@ export class TableModel{
             }
             
 
-            if(user.username == appGlobalContext.currentUser.username)
+            if(user.username == appGlobalContext.currentUser.username){
                 appGlobalContext.currentUser.boardrole = user.role;
+                console.log(user.role)
+                appGlobalContext.notify_current_user_observer();
+            }
+                
         }
        // if(change)
         this.notify_observers();
+    }
+
+    update_position(position){
+        let user_oriented_position = [];
+
+        if(appGlobalContext.currentUser.boardrole == "blue_player")
+            for(let i = 0; i < position.length; ++i)
+                user_oriented_position.push([99 - position[i][0], position[i][1]]);
+        else user_oriented_position = position;
+
+        this.boardModel.boardstate.set_position(user_oriented_position);
+        this.boardModel.set_selected_square_id(-1); // reset any marks
     }
 
 }
 
 class AppGlobalContext{
     constructor(){
-        this.currentUser = new User(); // TODO: find a way to initialise this by a server
+        this.currentUser = new User(); // Username is loaded by boot()
         this.roomId = "123",
         this.table = new TableModel();
         this.chatModel = new GeneralChatModel();
         this.seatWindowModel = new SeatSelectorWindowModel();
+       
+        this.rematchWindowModel = new RematchWindowModel();
         this.red_clock = new Clock(100);
         this.blue_clock = new Clock(100);
         this.userList = [];
+        this.currentUserObserver = [];
+        this.add_current_user_observer(this.rematchWindowModel);
     }
     update_ready_status(statuses){
         this.seatWindowModel.update_ready_status(statuses);
+    }
+    notify_current_user_observer(){
+        for(let o of this.currentUserObserver)
+            o.update_current_user(this.currentUser);
+    }
+
+    add_current_user_observer(observer){
+        this.currentUserObserver.push(observer);
+        observer.update_current_user(this.currentUser);
     }
 }
 

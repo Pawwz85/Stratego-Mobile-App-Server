@@ -35,6 +35,10 @@ export class Clock{
             This.notify_observers();
         }
     }
+
+    remove_observer(observer){
+        this.observers = this.observers.filter(o => o !== observer);
+    }
 }
 
 export class SimpleClock{
@@ -47,15 +51,14 @@ export class SimpleClock{
 
     __init_element(){
         let result = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        result.setAttributeNS(null, "viewBox", "0 0 100 100");
+        result.setAttributeNS(null, "viewBox", "0 0 100 50");
 
        this.__rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
        this.__text = document.createElementNS("http://www.w3.org/2000/svg", "text");
        
        this.__rect.setAttributeNS(null, "x", "0");
        this.__rect.setAttributeNS(null, "width", "100")
-       this.__rect.setAttributeNS(null, "y", "33");
-       this.__rect.setAttributeNS(null, "height", "33");
+       this.__rect.setAttributeNS(null, "height", "50");
        this.__rect.setAttributeNS(null, "fill", "gray");
 
 

@@ -22,13 +22,11 @@ export class RoomUIManager{
 
     update_position(position){
         let user_oriented_position = [];
-        console.log(position)
         if(appGlobalContext.currentUser.boardrole == "blue_player")
             for(let i = 0; i < position.length; ++i)
                 user_oriented_position.push([99 - position[i][0], position[i][1]]);
         else user_oriented_position = position;
 
-        console.log(user_oriented_position)
         appGlobalContext.table.boardModel.boardstate.set_position(user_oriented_position);
         appGlobalContext.table.boardModel.set_selected_square_id(-1); // reset any marks
         this.refresh_fragment();

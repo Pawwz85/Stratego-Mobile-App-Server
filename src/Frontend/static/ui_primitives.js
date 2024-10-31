@@ -227,8 +227,8 @@ class UIToggle{
     }
 }
 
-export function ensure_await_window_stroke(){
-    const grad_id = "await-window-stroke";
+export function ensure_window_stroke(){
+    const grad_id = "default-window-stroke";
     const c1 = "red";
     const c2 = "white";
     const c3 =  "blue";
@@ -262,3 +262,117 @@ export function ensure_await_window_stroke(){
     }
   }
 
+  export class GradientBuilder{
+    constructor(){
+        this.__grad_id = null;
+        this.__x1 = null;
+        this.__y1 = null;
+        this.__x2 = null;
+        this.__y2 = null;
+
+        this.critical_points = []; // object with fields offset, and color
+    }
+
+    reset(){
+        this.__grad_id = null;
+        this.__x1 = null;
+        this.__y1 = null;
+        this.__x2 = null;
+        this.__y2 = null;
+        this.critical_points = [];
+    }
+
+    set_start(x, y){
+        if (this.__x1 != null || this.__y1 != null)
+            throw new Error("Step already taken");
+        this.__x1 = x;
+        this.__y1 = y;
+        return this;
+    }
+
+    set_end(x, y){
+        if (this.__x2 != null || this.__y2 != null)
+            throw new Error("Step already taken");
+        this.__x2 = x;
+        this.__y2 = y;
+        return this;
+    }
+
+    add_critical_point(offset, color){
+        this.critical_points.push({
+            color: color,
+            offset: offset
+        });
+        return this;
+    }
+
+    __create_id(){
+        let id = "grad_" + this.__x1 + "_" + this.__y1 + this.__x2 + "_" + this.__y2;
+
+        for (let p of this.critical_points){
+            id = id + "_" + p.color + "_" + p.offset;
+        }
+
+        this.grad_id = id;
+
+    }
+    
+    __ensure_gradient(){
+        if(!document.getElementById(this.__grad_id)){
+            const gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+            gradient.setAttribute("id", this.__grad_id);
+            gradient.setAttributeNS(null, "x1", this.__x1);
+            gradient.setAttributeNS(null, "y1", this.__y1);
+            gradient.setAttributeNS(null, "y2", this.__y2);
+            gradient.setAttributeNS(null, "x2", this.__x2);
+
+            for (let p of this.critical_points) {
+                let stop = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+                stop.setAttribute("offset", p.offset);
+                stop.setAttributeNS(null, "stop-color", p.color);
+                stop.style.stopOpacity = "1"; 
+                gradient.appendChild(stop);
+            }
+            
+            const dev = document.createElementNS("http://www.w3.org/2000/svg", "defs")
+            dev.appendChild(gradient)
+            const defs = document.getElementById("svg-defs");
+            defs.append(dev)
+        }
+    }
+
+    build(){
+        
+        if (this.__grad_id == null)
+            this.__create_id();
+
+        this.__ensure_gradient();
+        return "url(#" + this.__grad_id + ")";
+
+    }
+
+  }
+
+  /*
+    Expectes a list of valid "stop_color" arguments for an SVG stop.
+    Returns a url to gradient.
+  */
+export function SVGHorizontalGradient(color_list){
+    const builder = new GradientBuilder();
+    builder.set_start("0%", "0%").set_end("100%", "0%");
+    const n = color_list.length;
+    for (let i =0 ; i<n; ++i){
+        builder.add_critical_point(Math.floor(i/(n-1)*100) +"%", color_list[i]);
+    }
+    return builder.build();
+}
+
+export function SVGVerticalGradient(color_list){
+    const builder = new GradientBuilder();
+    builder.set_start("0%", "0%").set_end("0%", "100%");
+    const n = color_list.length;
+    for (let i =0 ; i<n; ++i){
+        builder.add_critical_point(Math.floor(i/(n-1)*100) +"%", color_list[i]);
+    }
+    return builder.build();
+}

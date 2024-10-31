@@ -52,8 +52,9 @@ export class Square {
 
 export class BoardState {
   constructor() {
-    this.squares = new Array(100)
-    this.observers = []
+    this.squares = new Array(100);
+    this.observers = [];
+    this.temporal_observer = null;
     this.reset()
   }
 
@@ -66,9 +67,9 @@ export class BoardState {
 
   notify_observers() {
     for (let i = 0; i < this.observers.length; ++i) {
-      console.log(this.observers[i])
       this.observers[i].set_state(this)
     }
+    this.temporal_observer?.set_state(this);
   }
 
   set_position(index_piece_pairs) {

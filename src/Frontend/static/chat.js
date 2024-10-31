@@ -3,7 +3,7 @@
 */
 import { appGlobalContext } from "./global_context.js";
 import { ServerConnection } from "./server_connection.js";
-import {ensure_await_window_stroke} from "./ui_primitives.js"
+import {ensure_window_stroke} from "./ui_primitives.js"
 export class GeneralChatModel{
     constructor(){
         this.messages = [];
@@ -256,7 +256,7 @@ export class ChatView{
         let square = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 
         square.setAttribute("fill", "black");
-        square.setAttribute("stroke", "url(#await-window-stroke)")
+        square.setAttribute("stroke", "url(#default-window-stroke)")
         square.setAttribute("stroke-width", "1.5%")
 
         result.append(square);
@@ -381,7 +381,6 @@ export class ChatFragment{
 
         this.chat_button.onclick = ev => {
             let text_value = this.chat_text_area.value;
-            console.log("click", text_value);
             if(text_value != ""){
                 this.onSend(text_value);
             }
@@ -413,5 +412,6 @@ export class ChatFragment{
         this.chat_button.style.left = parseInt(this.chat_text_area.style.width) + Math.floor(width/20) + "px";
         this.chat_button.style.top = this.chat_text_area.style.top;
     }
+    
 
 }
