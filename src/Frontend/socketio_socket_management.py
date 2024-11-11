@@ -2,7 +2,6 @@ import threading
 import time
 
 from flask_socketio import SocketIO
-from flask import Flask
 
 
 class _SocketManagerEntry:

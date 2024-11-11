@@ -1,9 +1,8 @@
-from pathlib import Path
 import unittest
+from pathlib import Path
 
 from UnitTests.TestUtil.PositionParser import BinaryTestPositionParser
 from src.Core.GameInstanceFactory import GameInstanceFactory, DynamicLibraryNotFound
-from src.Core.stratego import PurePythonGameInstance
 from src.Core.stratego_gamestate import GameState, Side
 
 

@@ -6,10 +6,9 @@
 import enum
 import json
 import time
-from threading import Lock, Thread
-
-from src import GracefulThreads
 from collections import deque
+from threading import Lock
+
 
 class UserMessageType(enum.Enum):
     """
@@ -97,10 +96,33 @@ class UserResponseBufferer:
                 self.user_buffers[username] = user_buffer
             user_buffer.add_response(response_id, response)
 
+    def create_placeholder_response(self, username: str, response_id: str):
+        placeholder = {
+            "status": "processing",
+            "response_id": response_id,
+            "timestamp": time.time()    # time stamp of creation of this placeholder
+        }
+        self.add_response(username, response_id, json.dumps(placeholder))
+
     def get_response(self, username: str, response_id: str):
         with self.lock:
             user_buffer = self.user_buffers.get(username)
             return None if user_buffer is None else user_buffer.get_response(response_id)
+
+    @staticmethod
+    def _check_for_timeout(response: dict, threshold: float) -> dict:
+        if (timestamp := response.get("timestamp")) is not None:
+            if timestamp + threshold < time.time():
+                response["status"] = "timed out"
+
+        return response
+
+    def get_parsed_response(self, username: str, response_id: str):
+        response = self.get_response(username, response_id)
+        if response is not None:
+            result: dict = json.loads(response)
+            return self._check_for_timeout(result, 10)
+        return None
 
     def discard_old_entries(self):
         with self.lock:

@@ -1,7 +1,7 @@
 import random
 import unittest
+
 import src.Core.stratego as stratego
-from src.Core.GameInstanceFactory import GameInstanceFactory
 import src.Core.stratego_gamestate
 from TestUtil.GameplayScenarioGenerator import GameplayScenarioGenerator
 

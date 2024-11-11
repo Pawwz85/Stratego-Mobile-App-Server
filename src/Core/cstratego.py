@@ -1,13 +1,12 @@
 from __future__ import annotations
 
+import ctypes
 import os.path
 import platform
-import ctypes
-from pathlib import Path
 
 from src.Core.singleton import singleton
 from src.Core.stratego import GameInstance
-from src.Core.stratego_gamestate import Side, Piece, PieceType, GameState, GameStateView
+from src.Core.stratego_gamestate import Side, Piece, PieceType, GameState
 
 
 class OSNotSupported(BaseException):

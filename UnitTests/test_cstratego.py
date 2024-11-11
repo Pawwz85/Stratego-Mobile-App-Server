@@ -1,8 +1,8 @@
 """
     Those tests test behaviour of the ported c
 """
-import ctypes
 import unittest
+
 import src.Core.cstratego as cstratego
 from src.Core.stratego_gamestate import PieceType, Side, Piece
 

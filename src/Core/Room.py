@@ -12,6 +12,15 @@ from src.Core.chat import Chat, ChatApi
 from src.Events.Events import EventLogicalEndpointWithSignature, Eventmanager
 
 
+class IRoomHandle:
+
+    def claim(self, room_id: str):
+        pass
+
+    def release(self):
+        pass
+
+
 class Room:
     """
      Represents a room where users can join, interact, and participate in events.
@@ -50,6 +59,7 @@ class Room:
             self.chat_cap = 1024
             self.password: str | None = None
             self.mark_for_deletion: Callable = mark_for_deletion
+            self._handle: IRoomHandle | None = None
 
         def set_table_builder(self, table_builder: Table.Builder):
             """
@@ -94,6 +104,10 @@ class Room:
             self.event_manager = event_manager
             return self
 
+        def set_room_handle(self, handle: IRoomHandle):
+            self._handle = handle
+            return self
+
         def build(self) -> Room:
             """
             Creates a new Room instance using the attributes and callback functions set on the Builder object. This
@@ -101,14 +115,15 @@ class Room:
 
             :return: The newly created Room object
             """
-            result: Room = Room(self.job_manager, self.event_manager, self.table_builder, self.mark_for_deletion)
+            result: Room = Room(self.job_manager, self.event_manager, self.table_builder, self.mark_for_deletion, self._handle)
             result._chat = Chat(result.event_broadcast, self.chat_cap)
             result._password = self.password
 
             return result
 
     def __init__(self, job_manager: JobManager, event_manager: Eventmanager,
-                 table_builder: Table.Builder, mark_for_deletion: Callable[[str], any]):
+                 table_builder: Table.Builder, mark_for_deletion: Callable[[str], any],
+                 handle: IRoomHandle | None = None):
         """
               Initializes the Room instance with the provided job manager, event manager, and table builder.
 
@@ -136,6 +151,11 @@ class Room:
         self._id = uuid.uuid4().hex  # TODO: replace uuid with something more memorable
         self.event_manager = event_manager
         self.delay_room_termination()
+        self.__handle = handle if handle is not None else IRoomHandle()
+        self.__handle.claim(self._id)
+
+    def __del__(self):
+        self.__handle.release()
 
     def player_set(self):
         """
@@ -407,7 +427,8 @@ class RoomApi:
             "send_setup": lambda user, req: self.send_setup(user, req),
             "send_move": lambda user, req: self.make_move(user, req),
             "leave_room": lambda user, req: self.exit_room(user),
-            "set_rematch_willingness": lambda user, req: self.set_rematch_willingness(user, req)
+            "set_rematch_willingness": lambda user, req: self.set_rematch_willingness(user, req),
+            "get_rematch_willingness": lambda user, req: self.get_rematch_willingness(user)
         }
 
     def join(self, user: User, request: dict) -> tuple[bool, str | None]:
@@ -502,6 +523,11 @@ class RoomApi:
         if user.id not in self.room.users.keys():
             return False, "You must join room to access this command"
         return self.room.get_table_api().set_rematch_willingness(user, request)
+
+    def get_rematch_willingness(self, user: User) -> tuple[bool, str | None] | dict:
+        if user.id not in self.room.users.keys():
+            return False, "You must join room to access this command"
+        return self.room.get_table_api().get_rematch_willingness()
 
     def get_room_metadata(self) -> dict:
         phases_to_string = {

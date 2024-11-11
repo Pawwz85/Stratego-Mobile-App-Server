@@ -4,34 +4,31 @@
 
 """
 from __future__ import annotations
+
 import json
 import math
+from collections import deque
+from collections.abc import Callable
 
-import redis as redis
-
-from src.Core.JobManager import JobManager, DelayedTask, Job
-from src.Events.Events import Eventmanager
-from src.Events.RedisEventReceiver import RedisPubSubEventReceiver
-from src.Core.Room import Room, RoomApi
+from src.Core.JobManager import JobManager, DelayedTask
+from src.Core.Room import Room, RoomApi, IRoomHandle
 from src.Core.User import User, UserDto
 from src.Core.table import Table
-from collections import deque
+from src.Events.Events import Eventmanager, IEventReceiver
 
 
-class GameNodeSystem:
+class GameManager:
 
-    def __init__(self, config: dict):
-        self.api = BackendApi(self)
-        self.job_manager = JobManager()
+    def __init__(self, job_manager: JobManager,
+                 event_receiver_factory: Callable[[Eventmanager], IEventReceiver],
+                 room_handle_factory: Callable[[], IRoomHandle] = lambda: IRoomHandle()):
+        self.api = GameManagerApi(self)
+        self.job_manager = job_manager
         self.event_manager = Eventmanager(self.job_manager)
         self.rooms: dict[str, Room] = dict()
         self.users_connected: dict[int, User] = dict()
-        self.config = config
-        self.redis = redis.from_url(self.config["redis_url"])
-        self.pub_sub = self.redis.pubsub()
-        self.pub_sub.subscribe(self.config["backend_api_channel_name"])
-        self.eventReceiver = RedisPubSubEventReceiver(lambda: None, self.event_manager, self.redis,
-                                                      self.config["frontend_api_channel_name"])
+        self.eventReceiver = event_receiver_factory(self.event_manager)
+        self.handle_factory_method = room_handle_factory
 
     def register_user(self, user: UserDto):
         if user.user_id not in self.users_connected.keys():
@@ -52,61 +49,22 @@ class GameNodeSystem:
         next_check = DelayedTask(self.__user_garbage_collector, 60 * 1000)
         self.job_manager.add_delayed_task(next_check)
 
-    def __scans_for_pubs(self):
-        new_messages: deque[str] = deque()
-        while True:
-            message = self.pub_sub.get_message(ignore_subscribe_messages=True)
-            if message is None:
-                break
-            elif message["type"] == "message":
-                new_messages.append(message["data"])
-        return new_messages
-
-    def __check_queue(self):
-        return self.redis.rpop(self.config["request_queue_name"])
-
-    def __check_requests(self):
-        requests = self.__scans_for_pubs()
-        queued = self.__check_queue()
-        if queued is not None:
-            requests.append(queued)
-        return requests
-
-    @staticmethod
-    def parse_request(message: str) -> tuple[UserDto, dict]:
-        js = json.loads(message)
-        user_json: dict = js["user"]
-        user_dto = UserDto(user_json["username"], user_json["password"], user_json["user_id"])
-        request: dict = js["request"]
-        return user_dto, request
-
-    def iterate_requests(self):
-        reqs = self.__check_requests()
-        for req in reqs:
-            user_dto, request_body = GameNodeSystem.parse_request(req)
-            self.register_user(user_dto)
-            user = self.users_connected[user_dto.user_id]
-            response = self.api(user, request_body)
-            if response is not None:
-                response["response_id"] = request_body["message_id"]
-                self.redis.publish(self.config["frontend_api_channel_name"], json.dumps(response))
-
-    def run(self):
+    def schedule_periodic_user_garbage_collection(self):
         self.job_manager.add_delayed_task(DelayedTask(self.__user_garbage_collector, 60 * 1000))
-        self.job_manager.add_job(Job(self.iterate_requests))
 
-        while True:
-            self.job_manager.iteration_of_job_execution()
+    def close_all_rooms(self):
+        for room in self.rooms.values():
+            room.close_room()
 
 
-class BackendApi:
+class GameManagerApi:
 
-    def __init__(self, backend_system: GameNodeSystem):
-        self.system = backend_system
+    def __init__(self, game_manager: GameManager):
+        self.game_manager = game_manager
 
     def room_query(self, user: User, request: dict):
         response = {
-            "rooms": [RoomApi(room).get_room_metadata() for room in self.system.rooms.values()]
+            "rooms": [RoomApi(room).get_room_metadata() for room in self.game_manager.rooms.values()]
         }
         return response
 
@@ -119,11 +77,11 @@ class BackendApi:
             if type(field) not in [int, float]:
                 return False, f"Expected time to be type of float or int, found {type(field)}"
 
-        ver_result = BackendApi.__verify_time_control(time_control, increment, time_setup)
+        ver_result = GameManagerApi.__verify_time_control(time_control, increment, time_setup)
         if not ver_result[0]:
             return ver_result
 
-        table_factory = (Table.Builder(self.system.job_manager)
+        table_factory = (Table.Builder(self.game_manager.job_manager)
                          .set_setup_time(math.ceil(60 * 1000 * time_setup))
                          .set_time_control(math.ceil(60 * 1000 * time_control), math.ceil(1000 * increment))
                          )
@@ -131,13 +89,14 @@ class BackendApi:
         password = request.get("password", None)
         password = None if password is None else str(password)
 
-        room = (self.system.get_room_builder()
+        room = (self.game_manager.get_room_builder()
                 .set_table_builder(table_factory)
                 .set_password(password)
-                .set_event_manager(self.system.event_manager)
+                .set_event_manager(self.game_manager.event_manager)
+                .set_room_handle(self.game_manager.handle_factory_method())
                 ).build()
         room.add_user(user)
-        self.system.rooms[room.get_id()] = room
+        self.game_manager.rooms[room.get_id()] = room
         return {
             "status": "success",
             "room_id": room.get_id()
@@ -148,7 +107,7 @@ class BackendApi:
         if room_id is None:
             return False, 'Request missed the necessary field "room_id"'
         try:
-            room = self.system.rooms[room_id]
+            room = self.game_manager.rooms[room_id]
         except KeyError:
             room = None
         return RoomApi(room)(user, request) if room is not None else None
@@ -156,7 +115,7 @@ class BackendApi:
     @staticmethod
     def __verify_time_control(time_control: float | int, increment_time: float,
                               setup_time: float | int) -> tuple[bool, str | None]:
-        with open("../../Config/TimeControlsAllowed.properties") as file:
+        with open("Config/TimeControlsAllowed.properties") as file:
             config = json.load(file)
 
         proposed_time_control = {"setup_time_minutes": setup_time,
@@ -198,6 +157,6 @@ class BackendApi:
         return response
 
     def __call__(self, user: User, request: dict):
-        return BackendApi.__produce_api_response(
+        return GameManagerApi.__produce_api_response(
             self.resolve_command(user, request)
         )

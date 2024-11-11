@@ -358,7 +358,3 @@ class BlackRedTree:
         fun(node)
         if node.right_son is not None:
             BlackRedTree.__in_order(node.right_son, fun)
-
-    def print_in_order(self):
-        if self._root is not None:
-            BlackRedTree.__in_order(self._root, lambda n: print(n.key, n.data))

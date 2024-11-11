@@ -3,7 +3,7 @@
 """
 import threading
 import warnings
-from typing import Callable, Iterable
+from typing import Callable
 
 
 class _GracefulCallable:

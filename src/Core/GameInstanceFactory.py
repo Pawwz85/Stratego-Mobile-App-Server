@@ -1,8 +1,5 @@
-import pathlib
-from pathlib import Path
-
+from src.Core.cstratego import CStrategoGameState, CStrategoMoveGenLibrary
 from src.Core.stratego import GameInstance, PurePythonGameInstance
-from src.Core.cstratego import CStrategoGameState, load_cstratego_dll, OSNotSupported, CStrategoMoveGenLibrary
 
 
 class DynamicLibraryNotFound(BaseException):

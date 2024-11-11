@@ -1,7 +1,9 @@
 redis
+fakeredis
 flask
 flask-socketio
 flask-security-too
 psycopg2
 websockets
+promise
 # coverage # for unit testing

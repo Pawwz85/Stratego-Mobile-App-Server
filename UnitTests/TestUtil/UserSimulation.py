@@ -43,7 +43,7 @@ class ConsoleEventReceiver(IEventReceiver):
         print(f"{self.username} received event: {message}")
         event_body = json.loads(message)
         event_id = event_body["event_id"]
-        self.event_manager.confirm_delivery(event_id)
+        self.event_manager.event_delivered(event_id)
 
 
 class _UserSimulationLanguageToken(Enum):

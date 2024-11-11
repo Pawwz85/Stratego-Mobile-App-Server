@@ -1,4 +1,3 @@
-import json
 from typing import Callable
 
 from src.Core.User import User

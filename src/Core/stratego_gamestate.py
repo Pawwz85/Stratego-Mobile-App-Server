@@ -1,4 +1,3 @@
-from ctypes import c_uint64
 from enum import Enum
 
 """

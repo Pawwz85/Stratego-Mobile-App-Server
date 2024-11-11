@@ -5,49 +5,45 @@ import time
 
 import flask
 import flask_login
-
-import login
 from flask import Flask, request, session
 from flask_login import login_user
 from flask_socketio import SocketIO, join_room, leave_room
+from redis.asyncio import Redis
 
+import login
+from src.AsyncioWorkerThread import AsyncioWorkerThread
 from src.Authenticathion.Authenticator import Authenticator
 from src.Authenticathion.UserDao import UserDao
-from src.Core.IStrategy import print_strategy, IStrategy
 from src.Core.User import HttpUser
+from src.Frontend.IntermediateRequestIDMapper import IntermediateRequestIDMapper
 from src.Frontend.TemporalStorageService import TemporalStorageService
-from src.Frontend.socketio_socket_management import SocketManager, send_event_to_socketio_clients
-from src.Frontend.websocket_service import WebsocketService
-from src.FrontendBackendBridge.GameNodeAPICallsBuilder import GameNodeApiRequestFactory
-from src.FrontendBackendBridge.GameNodeQuery import SynchronousGameNodeQuery
-from src.FrontendBackendBridge.FrontendChannelListener import BackendResponseStrategyRepository, \
-    MessageStrategyPicker, BackendMessageListenerService
-from redis import Redis
 from src.Frontend.message_processing import UserResponseBufferer
-from src.FrontendBackendBridge.SocketioBackendCaller import SocketioBackendCaller
-from src.FrontendBackendBridge.WebsocketBackendCaller import WebsocketBackendCaller
+from src.Frontend.socketio_socket_management import SocketManager
+from src.InterClusterCommunication.GameNodeAPICallsBuilder import GameNodeApiRequestFactory
+from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
+from src.InterClusterCommunication.RedisChannelManager import RedisChannelManager
 
 app = Flask(__name__)
 socketio = SocketIO(app, always_connect=True)
 response_bufferer = UserResponseBufferer()
 socket_manager = SocketManager()
-backend_response_repository = BackendResponseStrategyRepository()
 with open('../../Config/secret_config.properties') as file:
     config = json.load(file)
 app.config["SECRET_KEY"] = config["secret_key"]
 
+
 app_login = login.AppLogin(app, config)
+asyncio_worker = AsyncioWorkerThread()
 user_service = UserDao(config)
 redis = Redis.from_url(config["redis_url"])
-web_socket_service = WebsocketService("/websocket", response_bufferer, redis, config, backend_response_repository)
-socketio_backend_caller = SocketioBackendCaller(backend_response_repository, redis, config, socketio)
-backend_message_strategy_picker = MessageStrategyPicker(
-    backend_response_repository,
-    IStrategy(lambda x: True, lambda d: (web_socket_service.send_event_to_users(d),
-                                         send_event_to_socketio_clients(socketio, d))),
-    print_strategy("unexpected_response: "),
-    print_strategy("can not resolve strategy for this: ")
-)
+channel_manager = RedisChannelManager(redis)
+
+stream_manager = GameNodeAPIHandler(socketio,
+                                    IntermediateRequestIDMapper(),
+                                    response_bufferer,
+                                    channel_manager,
+                                    asyncio_worker)
+
 authenticator = Authenticator(config)
 
 
@@ -104,15 +100,18 @@ def search_for_room():
 @app.route("/get_room_info/<room_id>")
 @login_required
 def get_room_info(room_id: str):
-    game_node_query = SynchronousGameNodeQuery(response_bufferer, backend_response_repository, redis, config)
     req = GameNodeApiRequestFactory().create_get_room_info_request(room_id)
-
     user = flask_login.current_user
     user = user.get_dto()
 
-    res = game_node_query.call(req, user, 10.0)
+    res = response_bufferer.get_parsed_response(user.username, req.get("message_id"))
+
+    if res is None:
+        stream_manager.on_user_request(user, req)
+        res = {"status": "processing"}
+
     status = res.get("status", "timed_out")
-    print(req, res)
+
     metadata: dict | None = res.get("metadata", None)
     if metadata:
         metadata["room_id"] = room_id
@@ -133,21 +132,20 @@ def create_room():
     if request.method == "GET":
         return flask.render_template("create_room.html")
     if request.method == "POST":
-        game_node_query = SynchronousGameNodeQuery(response_bufferer, backend_response_repository, redis, config)
         control_params = request.form.deepcopy()
         req = GameNodeApiRequestFactory().create_create_room_request(control_params)
         response_id = req.get("message_id")
-        user = flask_login.current_user
-        game_node_query.call(req, user.get_dto(), 10.0)
+        user = flask_login.current_user.get_dto()
+        stream_manager.on_user_request_dict(user, req)
         return flask.redirect("/create_room/processing/" + response_id)
 
 
 @app.route("/create_room/processing/<response_id>")
 @login_required
 def process_create_room(response_id: str):
-    user = flask_login.current_user
-    res = json.loads(response_bufferer.get_response(session["username"], response_id))
-    status = res.get("status", "timed_out")
+    res = response_bufferer.get_parsed_response(session["username"], response_id)
+    status = res.get("status", "timed out")
+    #print(res)
     possible_responses = {
         "processing": flask.render_template("loading_screen.html"),
         "timed out": flask.redirect("/create_room"),
@@ -164,12 +162,12 @@ def join_room_route(room_id: str):
     if request.method == "GET":
         return flask.redirect("/room_search")
     elif request.method == "POST":
-        game_node_query = SynchronousGameNodeQuery(response_bufferer, backend_response_repository, redis, config)
         control_params = request.form.deepcopy()
         req = GameNodeApiRequestFactory().create_join_room_request(control_params, room_id)
         response_id = req.get("message_id")
-        user = flask_login.current_user
-        game_node_query.call(req, user.get_dto(), 10.0)
+        user = flask_login.current_user.get_dto()
+        stream_manager.on_user_request_dict(user, req)
+
         return flask.redirect("/join_room/processing/" + room_id + "/" + response_id)
     else:
         return flask.redirect("/error")
@@ -178,10 +176,9 @@ def join_room_route(room_id: str):
 @app.route("/join_room/processing/<room_id>/<response_id>")
 @login_required
 def process_join_room(room_id: str, response_id: str):
-    user = flask_login.current_user
-    res = json.loads(response_bufferer.get_response(session["username"], response_id))
+    res = response_bufferer.get_parsed_response(session["username"], response_id)
     status = res.get("status", "timed_out")
-    print(res, status)
+
     possible_responses = {
         "processing": flask.render_template("loading_screen.html"),
         "timed out": flask.redirect("/room_search"),
@@ -211,12 +208,12 @@ def register():
 @socketio.on("request")
 def handle_request_event(ev):
     user = flask_login.current_user.get_dto()
-    socketio_backend_caller.call(ev, user, 10, lambda: None)
+    stream_manager.on_user_request(user, ev)
 
 
 @socketio.on("connect")
 def handle_connect():
-    d = join_room(session["username"])
+    join_room(session["username"])
     print(session["username"] + " has been connected")
 
 
@@ -226,30 +223,33 @@ def handle_connect():
     print(session["username"] + " has been disconnected")
 
 
+async def init_stream():
+    pub_sub = channel_manager.get_pub_sub()
+    await pub_sub.subscribe(config["frontend_api_channel_name"], stream_manager.HandleGameNodeMessage)
+    await  pub_sub.listen()
+
+
+
 def start_server():
-    backend_listener_service = BackendMessageListenerService(redis, config, backend_message_strategy_picker)
-    backend_listener_service.start()
+
     temporal_storage_service = TemporalStorageService(response_bufferer, socket_manager)
     temporal_storage_service.start()
-    web_socket_service.start()
+    asyncio_worker.add_task(init_stream())
+    asyncio_worker.start()
 
     def stop_services(signum, frame):
         print("stopping...")
         temporal_storage_service.stop()
-        backend_listener_service.stop()
-        web_socket_service.stop_flag.set()
+        asyncio_worker.stop()
         print("Killing main process in 3s")
         time.sleep(3)
         os.kill(os.getpid(), signal.SIGINT)
 
     signal.signal(signal.SIGINT, stop_services)
     signal.signal(signal.SIGTERM, stop_services)
-    # app.run(host='127.0.0.1', port=5000)
     socketio.run(app, host='0.0.0.0', port=5000, allow_unsafe_werkzeug=True)
 
-    web_socket_service.join()
     temporal_storage_service.join()
-    backend_listener_service.join()
 
 
 if __name__ == "__main__":

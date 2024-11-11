@@ -1,8 +1,5 @@
 from enum import Enum
 
-from src.Core.User import UserDto
-from src.FrontendBackendBridge.GameNodeQuery import AsynchronousGameNodeQuery
-
 
 class GameNodeAPICallCommands(Enum):
     GET_ROOM_METADATA = 0

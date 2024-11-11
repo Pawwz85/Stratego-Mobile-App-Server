@@ -59,16 +59,16 @@ class Eventmanager:
         self.events.add(event.id)
         self._attempt_delivery(event, endpoint)
 
-    def confirm_delivery(self, event_id: str):
+    def event_delivered(self, event_id: str):
         self.events.discard(event_id)
 
 
 class EventLogicalEndpoint:
     """
        Think about this class like an organization.
-       Organization can receive the level in any of its departments. Though, in this case
+       Organization can receive the letter in any of its departments. Though, in this case
        it will receive it in all of its mailboxes.
-       """
+    """
 
     def __init__(self, event_man: Eventmanager):
         self.endpoints: set[IEventReceiver] = set()
@@ -83,7 +83,7 @@ class EventLogicalEndpoint:
 class EventLogicalEndpointWithSignature(EventLogicalEndpoint):
     """
         This subclass is used by backend to cumulate events in order to provide
-        bulks send to frontend
+        bulk delivery to frontend nodes
     """
 
     def __init__(self, event_man: Eventmanager, signature: str | list[str]):
@@ -98,7 +98,8 @@ class EventLogicalEndpointWithSignature(EventLogicalEndpoint):
             self._event_manager.start_delivery(e, mailbox)
 
     @staticmethod
-    def merge(logical_endpoints: list[EventLogicalEndpointWithSignature], event_manager: Eventmanager) -> EventLogicalEndpointWithSignature:
+    def merge(logical_endpoints: list[EventLogicalEndpointWithSignature],
+              event_manager: Eventmanager) -> EventLogicalEndpointWithSignature:
         result_endpoint = set()
         result_signature = []
         for endpoint in logical_endpoints:

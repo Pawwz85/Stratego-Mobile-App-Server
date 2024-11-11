@@ -19,18 +19,6 @@ from src.Core.User import User
 from src.Core.stratego import *
 
 
-class UserTableRole(Enum):
-    """
-    Represents the possible roles that a user can have in a multiplayer game, based on whether they are currently
-    spectating or actively playing as either the red or blue player.
-
-    :custom: This is a custom enum defined for this specific use case.
-    """
-    spectator = 0
-    red_player = 1
-    blue_player = 2
-
-
 class TableGamePhase(Enum):
     """
     Represents the different phases that a multiplayer game can be in, from waiting for players to join and set up
@@ -421,8 +409,10 @@ class GameplayManager:
 
 
 class FinishedStateManager:
-    def __init__(self, execute_rematch: Callable):
+    def __init__(self, execute_rematch: Callable, on_rematch_willingness_change: Callable):
         self.players_wanting_rematch: list[int] = []  # we are treating this list as a set
+        self.winner: None | Side = None
+        self.__on_change = on_rematch_willingness_change
         self.__exec_rematch = execute_rematch
 
     def set_rematch_willingness(self, user: User, value: bool):
@@ -431,9 +421,11 @@ class FinishedStateManager:
             self.players_wanting_rematch += [user.id]
         else:
             self.players_wanting_rematch = [user_id for user_id in self.players_wanting_rematch if user_id != user.id]
+        self.__on_change(self.players_wanting_rematch)
 
     def __phase_init(self):
         self.players_wanting_rematch = []
+        self.__on_change(self.players_wanting_rematch)  # for second rematch
 
     def __phase_logic(self):
         if len(self.players_wanting_rematch) == 2:
@@ -477,7 +469,7 @@ class Table:
 
         def build(self) -> Table:
             return Table(self.__job_manager, self.__time_control, self.get_sm_constructor(),
-                         self.__player_info_manager, self.__event_channels)
+                         self.__player_info_manager, self.__event_channels, self.__event_broadcast)
 
         def set_use_readiness(self, val: bool) -> Table.Builder:
             self.__use_readiness = val
@@ -521,7 +513,8 @@ class Table:
     def __init__(self, job_manager: JobManager, time_control: TableTimeControl,
                  seat_manager_constructor: Callable[[Callable], SeatManager],
                  player_info_manager: PlayerInfoManager,
-                 event_channels: dict[Side | None, Callable[[dict], any]]):
+                 event_channels: dict[Side | None, Callable[[dict], any]],
+                 event_broadcast:  Callable[[dict], any]):
         self.job_manager = job_manager
         self.phase_type: TableGamePhase = TableGamePhase.awaiting
 
@@ -532,12 +525,13 @@ class Table:
                                            self._player_info_manager)
         self._gameplay_manager = GameplayManager(job_manager, time_control, self.__change_phase_to_finished,
                                                  self.__send_state_change_event, self._player_info_manager)
-        self._finished_state_manager = FinishedStateManager(self.__execute_rematch)
+        self._finished_state_manager = FinishedStateManager(self.__execute_rematch, self.__rematch_listener)
         self.__phase: TablePhase = self._seat_manager.get_phase()
         self.__phase.init()
         self.__job = Job(self.__phase.logic)
         self.__generated_events_counter = 0
         self.__event_channels = event_channels
+        self.__event_broadcast = event_broadcast
         job_manager.add_job(self.__job)
 
     def __del__(self):
@@ -553,11 +547,13 @@ class Table:
         self.job_manager.add_job(self.__job)
 
     def __change_phase_to_setup(self):
+        self._finished_state_manager.winner = None
         self.__change_phase(self._setup_manager.get_phase())
         self.phase_type = TableGamePhase.setup
         self.__generate_event()
 
     def __change_phase_to_gameplay(self, state: GameState):
+        self._finished_state_manager.winner = None
         self.__change_phase(self._gameplay_manager.get_phase(state))
         self.phase_type = TableGamePhase.gameplay
         self.__generate_event()
@@ -565,14 +561,24 @@ class Table:
     def __send_state_change_event(self):
         self.__generate_event()
 
+    def __rematch_listener(self, rematch_list: list[int]):
+        sides = [self._seat_manager.get_side(id_) for id_ in rematch_list]
+        sides_str = [("red" if s is Side.red else "blue") for s in sides]
+        event = {
+            "type": "rematch_event",
+            "rematch_willingness": sides_str
+        }
+        self.__event_broadcast(event)
+
     def __change_phase_to_finished(self, winner: Side | None):
-        # TODO: Communicate winner to spectators
         # TODO: In future, we should save this data to database
+        self._finished_state_manager.winner = winner
         self.__change_phase(self._finished_state_manager.get_phase())
         self.phase_type = TableGamePhase.finished
         self.__generate_event()
 
     def __change_state_to_awaiting(self):
+        self._finished_state_manager.winner = None
         self.__change_phase(self._seat_manager.get_phase(False))
         self.phase_type = TableGamePhase.awaiting
         self.__generate_event()
@@ -621,11 +627,16 @@ class Table:
                   TableGamePhase.setup: "setup",
                   TableGamePhase.finished: "finished"}
 
+        winner = {Side.red: "red",
+                  Side.blue: "blue",
+                  None: None}[self._finished_state_manager.winner]
+
         event_body = {"type": "board_event", "nr": self.__generated_events_counter,
                       "game_status": status[self.phase_type],
                       "moving_side": self._gameplay_manager.get_moving_side(),
                       "red_clock": self._player_info_manager.player_info[Side.red].timer.to_dict(),
-                      "blue_clock": self._player_info_manager.player_info[Side.blue].timer.to_dict()
+                      "blue_clock": self._player_info_manager.player_info[Side.blue].timer.to_dict(),
+                      "winner": winner
                       }
 
         for perspective in {Side.red, Side.blue, None}:
@@ -744,6 +755,11 @@ class TableApi:
                   TableGamePhase.finished: "finished"}[status]
         perspective = self.table.get_seat_manager().get_side(user.id)
         move_list = self.table.get_gameplay_manager().get_move_list(perspective)
+
+        winner = {Side.red: "red",
+                  Side.blue: "blue",
+                  None: None}[self.table.get_finished_state_manager().winner]
+
         response = {"status": "success",
                     "nr": nr,
                     "game_status": status,
@@ -751,7 +767,8 @@ class TableApi:
                     "board": self.table.get_gameplay_manager().get_view(perspective).get_view(),
                     "red_clock": self.table.get_player_info_manager().player_info[Side.red].timer.to_dict(),
                     "blue_clock": self.table.get_player_info_manager().player_info[Side.blue].timer.to_dict(),
-                    "move_list": move_list
+                    "move_list": move_list,
+                    "winner": winner
                     }
         return response
 
@@ -770,3 +787,15 @@ class TableApi:
         self.table.get_finished_state_manager().set_rematch_willingness(user, value)
 
         return True, None
+
+    def get_rematch_willingness(self) -> tuple[bool, str | None] | dict[str, any]:
+        if self.table.phase_type is not TableGamePhase.finished:
+            return False, "Game is not finished yet"
+
+        ids = self.table.get_finished_state_manager().players_wanting_rematch
+        seat_man = self.table.get_seat_manager()
+        sides = [seat_man.get_side(id_) for id_ in ids]
+        return {
+            "status": "success",
+            "rematch_willingness": [("red" if s is Side.red else "blue") for s in sides]
+        }
