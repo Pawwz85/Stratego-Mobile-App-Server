@@ -89,8 +89,6 @@ LUT_opt_result<T> LUT_opt(const fixed_arr<__LUT<T>> LUTs) {
 	}
 
 	// step 3. Calculate last useful index, for extra space, and final result size
-	
-	// TODO: this function leaves Garbage values at the end, fix that
 	size_t last_useful_index = result.offsets[0] + LUTs[0].data.get_size();
 	for (size_t i = 1; i < LUTs.get_size(); ++i)
 		if (last_useful_index < result.offsets[i] + LUTs[i].data.get_size())

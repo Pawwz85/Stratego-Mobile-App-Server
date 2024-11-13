@@ -16,21 +16,24 @@ from src.Authenticathion.Authenticator import Authenticator
 from src.Authenticathion.UserDao import UserDao
 from src.Core.User import HttpUser
 from src.Frontend.IntermediateRequestIDMapper import IntermediateRequestIDMapper
+from src.Frontend.RoomBrowser import RoomBrowser, GlobalRoomListCache
 from src.Frontend.TemporalStorageService import TemporalStorageService
 from src.Frontend.message_processing import UserResponseBufferer
-from src.Frontend.socketio_socket_management import SocketManager
+from src.Frontend.socketio_socket_management import SocketManager, send_event_to_socketio_clients, send_event_to_user
 from src.InterClusterCommunication.GameNodeAPICallsBuilder import GameNodeApiRequestFactory
 from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
 from src.InterClusterCommunication.RedisChannelManager import RedisChannelManager
 
 app = Flask(__name__)
 socketio = SocketIO(app, always_connect=True)
+
+send_event = lambda username, e: send_event_to_user(socketio, username=username, e=e)
+
 response_bufferer = UserResponseBufferer()
 socket_manager = SocketManager()
 with open('../../Config/secret_config.properties') as file:
     config = json.load(file)
 app.config["SECRET_KEY"] = config["secret_key"]
-
 
 app_login = login.AppLogin(app, config)
 asyncio_worker = AsyncioWorkerThread()
@@ -38,11 +41,14 @@ user_service = UserDao(config)
 redis = Redis.from_url(config["redis_url"])
 channel_manager = RedisChannelManager(redis)
 
-stream_manager = GameNodeAPIHandler(socketio,
-                                    IntermediateRequestIDMapper(),
-                                    response_bufferer,
-                                    channel_manager,
-                                    asyncio_worker)
+game_node_api_handler = GameNodeAPIHandler(
+    IntermediateRequestIDMapper(),
+    response_bufferer,
+    channel_manager,
+    asyncio_worker,
+    lambda e: send_event_to_socketio_clients(socketio, e))
+global_room_list_cache = GlobalRoomListCache(game_node_api_handler, channel_manager)
+room_browser = RoomBrowser(global_room_list_cache)
 
 authenticator = Authenticator(config)
 
@@ -107,7 +113,7 @@ def get_room_info(room_id: str):
     res = response_bufferer.get_parsed_response(user.username, req.get("message_id"))
 
     if res is None:
-        stream_manager.on_user_request(user, req)
+        game_node_api_handler.send_request(send_event, user, req)
         res = {"status": "processing"}
 
     status = res.get("status", "timed_out")
@@ -136,7 +142,7 @@ def create_room():
         req = GameNodeApiRequestFactory().create_create_room_request(control_params)
         response_id = req.get("message_id")
         user = flask_login.current_user.get_dto()
-        stream_manager.on_user_request_dict(user, req)
+        game_node_api_handler.send_request(send_event, user, req)
         return flask.redirect("/create_room/processing/" + response_id)
 
 
@@ -145,7 +151,7 @@ def create_room():
 def process_create_room(response_id: str):
     res = response_bufferer.get_parsed_response(session["username"], response_id)
     status = res.get("status", "timed out")
-    #print(res)
+    # print(res)
     possible_responses = {
         "processing": flask.render_template("loading_screen.html"),
         "timed out": flask.redirect("/create_room"),
@@ -166,7 +172,7 @@ def join_room_route(room_id: str):
         req = GameNodeApiRequestFactory().create_join_room_request(control_params, room_id)
         response_id = req.get("message_id")
         user = flask_login.current_user.get_dto()
-        stream_manager.on_user_request_dict(user, req)
+        game_node_api_handler.send_request(send_event, user, req)
 
         return flask.redirect("/join_room/processing/" + room_id + "/" + response_id)
     else:
@@ -200,6 +206,14 @@ def server_game_client(room_id: str | int):
     return flask.render_template("board.html", boot_info=boot_info)
 
 
+# TODO: implement sorting and filtering of the items
+@app.route("/browse_rooms")
+@login_required
+def browse_room():
+    rooms = room_browser.browse()
+    return flask.render_template("room_browser.html", rooms=rooms)
+
+
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     return flask.render_template('register.html')
@@ -208,7 +222,7 @@ def register():
 @socketio.on("request")
 def handle_request_event(ev):
     user = flask_login.current_user.get_dto()
-    stream_manager.on_user_request(user, ev)
+    game_node_api_handler.on_user_request(user, ev, send_event)
 
 
 @socketio.on("connect")
@@ -225,16 +239,15 @@ def handle_connect():
 
 async def init_stream():
     pub_sub = channel_manager.get_pub_sub()
-    await pub_sub.subscribe(config["frontend_api_channel_name"], stream_manager.HandleGameNodeMessage)
-    await  pub_sub.listen()
-
+    await pub_sub.subscribe(config["frontend_api_channel_name"], game_node_api_handler.handle_game_node_message)
+    await pub_sub.listen()
 
 
 def start_server():
-
     temporal_storage_service = TemporalStorageService(response_bufferer, socket_manager)
     temporal_storage_service.start()
     asyncio_worker.add_task(init_stream())
+    asyncio_worker.add_task(global_room_list_cache.sync())
     asyncio_worker.start()
 
     def stop_services(signum, frame):

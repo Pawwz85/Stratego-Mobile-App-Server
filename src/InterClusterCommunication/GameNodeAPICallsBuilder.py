@@ -62,7 +62,6 @@ class GameNodeApiRequestFactory:
             "time_added": float(control_params.get("time_added")),
             "setup_time": float(control_params.get("setup_time"))
         }
-        print(control_params)
         if control_params.get("password") is not None:
             req["password"] = control_params["password"]
         return req

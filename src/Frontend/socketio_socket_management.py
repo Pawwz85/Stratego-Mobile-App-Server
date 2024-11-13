@@ -48,5 +48,5 @@ def send_event_to_socketio_clients(app: SocketIO, event: dict):
         app.emit(e.get("type", "response"), e, namespace='/', to=sign)
 
 
-def send_event_to_user(app: SocketIO, e: dict, username: str):
+def send_event_to_user(app: SocketIO, username: str, e: dict):
     app.emit(e.get("type", "response"), e, namespace='/', to=username)

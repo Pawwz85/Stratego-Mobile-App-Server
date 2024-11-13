@@ -38,7 +38,6 @@ class _GracefulThread(threading.Thread):
         self.run._inside_graceful_thread = True
 
     def stop(self):
-        print(self.run)
         self.run._set_kill.set()
 
 

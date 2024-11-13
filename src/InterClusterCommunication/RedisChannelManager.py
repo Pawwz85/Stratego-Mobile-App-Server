@@ -50,7 +50,7 @@ class RedisRoutingManager(IChannelRouting):
     async def set_routing(self, key: str, channel: str):
         await self._redis.set(self.encode(key), channel)
         test = await self.get_routing(key)
-        print(test)
+        print(f"Setting routing for {test} to {channel}" )
 
     async def get_routing(self, key: str) -> str | None:
         result = await self._redis.get(self.encode(key))
@@ -106,14 +106,17 @@ class RedisRequestQueue(IRequestQueueClient, IRequestQueueWorker):
     async def enqueue_request(self, request: str):
         print("enqueued " + request)
         while True:
+            print(self._redis_queue_lock, self._id)
             await self._redis.setnx(self._redis_queue_lock, self._id)
             lock_value = await self._redis.get(self._redis_queue_lock)
             lock_value = str(lock_value, "utf-8")
-
+            print(lock_value, self._id)
             if lock_value == self._id:
+                print(f"Pushed {request}")
                 await self._redis.lpush(self._queue_name, request)
                 await self._redis.delete(self._redis_queue_lock)
                 break
+            await self._redis.delete(self._redis_queue_lock)
 
     async def _try_consume(self):
         print("try consume")
@@ -125,7 +128,7 @@ class RedisRequestQueue(IRequestQueueClient, IRequestQueueWorker):
             req = await self._redis.rpop(self._queue_name, 1)
             await self._redis.delete(self._redis_queue_lock)
             if req is not None:
-
+                print(req)
                 [self._consume(x) for x in req] if type(req) is list else self._consume(req)
 
     async def consume_requests(self, callback: Callable[[str], any]):

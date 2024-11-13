@@ -43,7 +43,6 @@ class PubSubSyncHandle(IRoomHandle):
     async def _await_key(self):
         while True:
             if self._key_claim_request.is_set():
-                print(f"setting route from {self._key} to {self._channel}")
                 await self._channel_man.get_routing_manager().set_routing(self._key, self._channel)
                 break
             else:
@@ -61,9 +60,10 @@ class PubSubSyncHandle(IRoomHandle):
 
 class GameNode:
 
-    def __init__(self, config: dict, channel_manager: IChannelManager):
+    def __init__(self, config: dict, channel_manager: IChannelManager,
+                 loop: asyncio.AbstractEventLoop | None = None):
         self._config = config
-        self._loop = asyncio.new_event_loop()
+        self._loop = loop if loop else asyncio.new_event_loop()
         self._channel_manager = channel_manager
         self._channel_manager_lock = Lock()
         self._private_channel_name = self._config["unique_game_node_channel"]
@@ -75,13 +75,11 @@ class GameNode:
         signal.signal(signal.SIGTERM, lambda _, __: self.shutdown())
 
     def create_room_handle(self):
-        print("Creating handle")
         result = PubSubSyncHandle(self._channel_manager, self._private_channel_name)
         asyncio.run_coroutine_threadsafe(result.health_check(), self._loop)
         return result
 
     def __resolve_call(self, request: str):
-        print(request)
         self._game_thread.write_request(request)
 
     async def _register_game_node(self):

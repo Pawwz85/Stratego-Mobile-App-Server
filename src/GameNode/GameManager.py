@@ -62,10 +62,15 @@ class GameManagerApi:
     def __init__(self, game_manager: GameManager):
         self.game_manager = game_manager
 
-    def room_query(self, user: User, request: dict):
+    def browse_rooms(self, user: User, request: dict) -> dict:
         response = {
+            "status": "success",
             "rooms": [RoomApi(room).get_room_metadata() for room in self.game_manager.rooms.values()]
         }
+
+        for r in response["rooms"]:
+            r.pop("status")
+
         return response
 
     def create_room(self, user: User, request: dict):
@@ -137,6 +142,9 @@ class GameManagerApi:
 
         if request_type == "create_room":
             return self.create_room(user, request)
+
+        if request_type == "browse_rooms":
+            return self.browse_rooms(user, request)
 
         if request.get("room_id", None) is not None:
             return self.forward_request_to_room_api(user, request)

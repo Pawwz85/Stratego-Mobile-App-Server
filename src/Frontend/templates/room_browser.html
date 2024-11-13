@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Room Browser</title>
+</head>
+<body>
+    {% block content %}
+  <h1>Browse Rooms</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Game Phase</th>
+        <th scope="col">User Count</th>
+        <th scope="col">Password Required</th>
+        <th scope="col"></th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for room in rooms %}
+      <tr>
+        <td>{{ room.id }}</td>
+        <td>{{ room.game_phase }}</td>
+        <td>{{ room.user_count }}</td>
+        <td>{{ room.password_required }}</td>
+        <td><a href="{{ url_for('get_room_info', room_id=room.id) }}">Join</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+    {% endblock %}
+
+</body>
+</html>
