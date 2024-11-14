@@ -5,6 +5,24 @@
     <title>Room Browser</title>
 </head>
 <body>
+
+  <form id="room_filter" action="/browse_rooms" method="POST">
+
+    <label for="game_phase_filter">Filter by game phase:</label>
+    <select id="game_phase_filter" name="game_phase_filter">
+      <option value="all"       {{selected_game_phase["all"]}}>all</option>
+      <option value="awaiting"  {{selected_game_phase["awaiting"]}}>awaiting</option>
+      <option value="setup"     {{selected_game_phase["setup"]}}>setup</option>
+      <option value="gameplay"  {{selected_game_phase["gameplay"]}}>gameplay</option>
+      <option value="finished"  {{selected_game_phase["finished"]}}>finished</option>
+    </select>
+
+    <label for="hide_password_protected_rooms">Hide password protected rooms</label>
+    <input type="checkbox" id="hide_password_protected_rooms" name="hide_password_protected_rooms" {{hide_password_protected_rooms_value}}>
+
+    <input type="submit" value="Filter">
+  </form>
+
     {% block content %}
   <h1>Browse Rooms</h1>
   <table class="table">

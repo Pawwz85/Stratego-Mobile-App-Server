@@ -2,6 +2,7 @@ import json
 import os
 import signal
 import time
+from collections.abc import Callable
 
 import flask
 import flask_login
@@ -16,7 +17,7 @@ from src.Authenticathion.Authenticator import Authenticator
 from src.Authenticathion.UserDao import UserDao
 from src.Core.User import HttpUser
 from src.Frontend.IntermediateRequestIDMapper import IntermediateRequestIDMapper
-from src.Frontend.RoomBrowser import RoomBrowser, GlobalRoomListCache
+from src.Frontend.RoomBrowser import RoomBrowser, GlobalRoomListCache, RoomInfo
 from src.Frontend.TemporalStorageService import TemporalStorageService
 from src.Frontend.message_processing import UserResponseBufferer
 from src.Frontend.socketio_socket_management import SocketManager, send_event_to_socketio_clients, send_event_to_user
@@ -113,7 +114,7 @@ def get_room_info(room_id: str):
     res = response_bufferer.get_parsed_response(user.username, req.get("message_id"))
 
     if res is None:
-        game_node_api_handler.send_request(send_event, user, req)
+        game_node_api_handler.send_request(send_event, req, user)
         res = {"status": "processing"}
 
     status = res.get("status", "timed_out")
@@ -142,7 +143,7 @@ def create_room():
         req = GameNodeApiRequestFactory().create_create_room_request(control_params)
         response_id = req.get("message_id")
         user = flask_login.current_user.get_dto()
-        game_node_api_handler.send_request(send_event, user, req)
+        game_node_api_handler.send_request(send_event, req, user)
         return flask.redirect("/create_room/processing/" + response_id)
 
 
@@ -172,7 +173,7 @@ def join_room_route(room_id: str):
         req = GameNodeApiRequestFactory().create_join_room_request(control_params, room_id)
         response_id = req.get("message_id")
         user = flask_login.current_user.get_dto()
-        game_node_api_handler.send_request(send_event, user, req)
+        game_node_api_handler.send_request(send_event, req, user)
 
         return flask.redirect("/join_room/processing/" + room_id + "/" + response_id)
     else:
@@ -207,11 +208,37 @@ def server_game_client(room_id: str | int):
 
 
 # TODO: implement sorting and filtering of the items
-@app.route("/browse_rooms")
+@app.route("/browse_rooms", methods=['GET', 'POST'])
 @login_required
 def browse_room():
-    rooms = room_browser.browse()
-    return flask.render_template("room_browser.html", rooms=rooms)
+    _filter = lambda x: True
+    hide_password_protected_rooms_value = ""
+    selected_game_phase = {
+        "all": "selected",
+        "awaiting": "",
+        "setup": "",
+        "gameplay": "",
+        "finished": ""
+    }
+    if request.method == "POST":
+        print(request.form.deepcopy())
+        selected_game_phase["all"] = ""
+        phase = request.form.get("game_phase_filter", "all")
+        selected_game_phase[phase] = "selected"
+        if request.form.get("hide_password_protected_rooms") == "on":
+            print(request.form.get("hide_password_protected_rooms"))
+            _filter: Callable[[RoomInfo], bool] = lambda info: not info.password_required
+            hide_password_protected_rooms_value = "checked"
+
+        if phase != "all":
+            old_filter = _filter
+            _filter = lambda info: old_filter(info) and info.game_phase == phase
+
+    rooms = room_browser.browse(filter_by=_filter)
+    print(rooms)
+    return flask.render_template("room_browser.html", rooms=rooms,
+                                 hide_password_protected_rooms_value=hide_password_protected_rooms_value,
+                                 selected_game_phase=selected_game_phase)
 
 
 @app.route("/register", methods=['GET', 'POST'])

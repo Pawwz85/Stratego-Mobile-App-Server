@@ -63,7 +63,7 @@ class GameNodeApiRequestFactory:
             "setup_time": float(control_params.get("setup_time"))
         }
         if control_params.get("password") is not None:
-            req["password"] = control_params["password"]
+            req["password"] = control_params.get("password")
         return req
 
     def create_join_room_request(self, control_params: dict, room_id: str):
@@ -73,5 +73,5 @@ class GameNodeApiRequestFactory:
             "room_id": room_id,
         }
         if control_params.get("password"):
-            req["password"] = control_params["password"]
+            req["password"] = control_params.get("password")
         return req
