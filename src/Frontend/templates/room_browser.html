@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+  	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='menu.css')}}">
     <title>Room Browser</title>
 </head>
 <body>
@@ -20,34 +21,26 @@
     <label for="hide_password_protected_rooms">Hide password protected rooms</label>
     <input type="checkbox" id="hide_password_protected_rooms" name="hide_password_protected_rooms" {{hide_password_protected_rooms_value}}>
 
-    <input type="submit" value="Filter">
+    <input type="submit" value="Filter" class="border bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
   </form>
 
     {% block content %}
   <h1>Browse Rooms</h1>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Game Phase</th>
-        <th scope="col">User Count</th>
-        <th scope="col">Password Required</th>
-        <th scope="col"></th>
 
-      </tr>
-    </thead>
-    <tbody>
       {% for room in rooms %}
-      <tr>
-        <td>{{ room.id }}</td>
-        <td>{{ room.game_phase }}</td>
-        <td>{{ room.user_count }}</td>
-        <td>{{ room.password_required }}</td>
-        <td><a href="{{ url_for('get_room_info', room_id=room.id) }}">Join</a></td>
-      </tr>
+     <div class="bg-white p-4 rounded-lg shadow-md">
+        <h2 class="text-lg font-bold">{{room.id}}</h2>
+        <p class="text-gray-600">{{ room.game_phase }}</p>
+        {% if room.password_required %}
+          <span class="text-red-500">🔒 Password Protected</span>
+        {% endif %}
+        <div class="flex items-center justify-between">
+          <span>{{ room.user_count }} users</span>
+          <a href="{{ url_for('get_room_info', room_id=room.id) }}" class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Join</a>
+        </div>
+     </div>
       {% endfor %}
-    </tbody>
-  </table>
+
     {% endblock %}
 
 </body>

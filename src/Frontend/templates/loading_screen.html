@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Loading ...</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='menu.css')}}">
     <script>
         function reloadPage(){
             console.log("reload...")
@@ -14,8 +16,11 @@
 
     </script>
 </head>
-<body onload="scheduleReload()">
-    <h1>Loading...</h1>
-    <p>Please wait while the page loads.</p>
+<body class="bg-gray-100" onload="scheduleReload()">
+      <div class="w-screen h-screen flex flex-col justify-center items-center text-center">
+          <h1 class="text-4xl font-bold text-blue-600">Loading...</h1>
+          <p>Please wait while the page loads.</p>
+        </div>
+
 </body>
 </html>

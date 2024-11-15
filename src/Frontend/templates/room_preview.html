@@ -2,23 +2,26 @@
 <html>
 <head>
 	<title>Room Preview</title>
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='menu.css')}}">
 </head>
 <body>
-	<h1>{{ room_metadata.room_id }}</h1>
-	<p>{{ room_metadata.user_count }} users currently in the room.</p>
-	<p>{{ room_metadata.game_phase }} game phase.</p>
+	<div class="w-screen h-screen flex flex-col justify-center items-center">
+		<h1 class="text-3xl font-bold mb-4 text-center text-blue-600">Room {{ room_metadata.room_id }}</h1>
+		<p>{{ room_metadata.user_count }} users currently in the room.</p>
+		<p>{{ room_metadata.game_phase }} game phase.</p>
 
-	{% if room_metadata.password_required %}
-	<form method="POST" action="/join_room/{{room_metadata.room_id}}">
-		<label for="password">Enter Password:</label>
-		<input type="password" name="password" id="password">
-		<button type="submit">Join Room</button>
-	</form>
-    {% else %}
-    <form method="POST" action="/join_room/{{room_metadata.room_id}}">
-		<input type="hidden" name="room_id" value="{{ room_metadata.room_id }}">
-		<button type="submit">Join Room</button>
-	</form>
-	{% endif %}
+		{% if room_metadata.password_required %}
+		<form method="POST" action="/join_room/{{room_metadata.room_id}}">
+			<label for="password">Enter Password:</label>
+			<input type="password" name="password" id="password">
+			<button type="submit" class="border bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Join Room</button>
+		</form>
+		{% else %}
+		<form method="POST" action="/join_room/{{room_metadata.room_id}}">
+			<input type="hidden" name="room_id" value="{{ room_metadata.room_id }}">
+			<button type="submit" class="border bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Join Room</button>
+		</form>
+		{% endif %}
+	</div>
 </body>
 </html>

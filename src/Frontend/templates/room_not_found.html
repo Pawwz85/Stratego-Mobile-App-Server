@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='menu.css')}}">
     <title>Room {{room_id}}</title>
 </head>
-<body>
-    <h1>Room {{room_id}} not found</h1>
-    <p>Please, make sure you have got valid room id</p>
+<body class="bg-gray-100" onload="scheduleReload()">
+      <div class="w-screen h-screen flex flex-col justify-center items-center text-center">
+          <h1 class="text-4xl font-bold text-blue-600">Room {{room_id}} not found</h1>
+              <p>Please, make sure you have got valid room id</p>
+        </div>
+
 </body>
 </html>

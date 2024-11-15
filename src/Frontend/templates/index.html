@@ -4,29 +4,29 @@
     <meta charset="UTF-8">
     <title>Stratego - Play Online</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='background.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='menu.css')}}">
 </head>
-<body>
-
-<header>
-  <h1><a href="/">Stratego</a></h1>
-  <nav>
-      <ul>
-          <li><a href="/create_room">Create Room</a></li>
-          <li><a href="/room_search">Room Search</a></li>
-          <li><a href="/browse_rooms">Room Browser</a></li>
-      </ul>
-  </nav>
-</header>
-
-<main>
-  <!-- Main content here -->
-</main>
-
-<footer>
-  Absolute lack of Copyright © 2024 Stratego
-</footer>
+<body class="bg-gray-100">
 
 
+  <div class="w-screen h-screen flex flex-col justify-center items-center">
+      <header class="text-center">
+       <h1 class="text-4xl font-bold text-blue-600">Stratego</h1>
+      </header>
+
+      <nav class="flex justify-center space-x-6">
+          <a href="/create_room" class="btn">Create Room</a>
+          <a href="/room_search" class="btn">Room Search</a>
+          <a href="/browse_rooms" class="btn">Room Browser</a>
+      </nav>
+
+
+  <main>
+    <!-- Main content here -->
+  </main>
+
+  </div>
 
 </body>
 </html>

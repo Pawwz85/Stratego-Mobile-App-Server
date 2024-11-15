@@ -2,17 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='menu.css')}}">
     <title>Play</title>
+
 </head>
 <body>
-    <comment>Join to room via ID</comment>
-    <form id="join_via_id_form" action="/get_room_info" method="post">
-        <input type="text" name="room_id" id="join_via_id_input" placeholder="Room ID">
-        <input type="submit" id="join_via_id_btn" value="join_via_id">
-    </form>
-    <comment>Create your own room</comment>
-    <form id="room_id" action="/create_room" method="get">
-        <input type="submit" id="create_room_btn" value="Create Room">
-    </form>
+    <div class="w-screen h-screen flex flex-col justify-center items-center">
+        <h1 class="text-3xl font-bold mb-4 text-center text-blue-600">Join to room by ID</h1>
+        <form id="join_via_id_form" action="/get_room_info" method="post">
+            <input type="text" name="room_id" id="join_via_id_input" placeholder="Room ID">
+            <input type="submit" id="join_via_id_btn" value="join" class="border bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+        </form>
+
+
+        <div>
+            <comment>Or maybe</comment>
+            <a id="create_room_link" href="/create_room" class="font-bold">create</a>
+            <comment> your own room instead?</comment>
+        </div>
+    </div>
+
 </body>
 </html>

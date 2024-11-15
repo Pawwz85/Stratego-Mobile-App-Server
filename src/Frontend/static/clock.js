@@ -59,8 +59,7 @@ export class SimpleClock{
        this.__rect.setAttributeNS(null, "x", "0");
        this.__rect.setAttributeNS(null, "width", "100")
        this.__rect.setAttributeNS(null, "height", "50");
-       this.__rect.setAttributeNS(null, "fill", "gray");
-
+       this.__rect.setAttributeNS(null, "fill", "black");
 
        this.__text.setAttributeNS(null, "x", "50%");
        this.__text.setAttributeNS(null, "y", "50%");

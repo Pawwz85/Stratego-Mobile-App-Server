@@ -1,32 +1,51 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <title>Create Room</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='menu.css')}}">
   </head>
-  <body>
-    <h1>Create Room</h1>
-    <form id="create-room" action="/create_room" method="post">
-      <label for="time_control">Time Control:</label>
-      <input type="number" id="time_control" name="time_control" min="1" max="60"><br><br>
 
-      <label for="time_added">Time Added:</label>
-      <input type="number" id="time_added" name="time_added" min="0"><br><br>
+  <body class="bg-gray-100">
 
-      <label for="setup_time">Setup Time:</label>
-      <input type="number" id="setup_time" name="setup_time" min="1" max="60"><br><br>
+  <div class="w-screen h-screen flex flex-col justify-center items-center">
+      <h1 class="text-3xl font-bold mb-4 text-center text-blue-600">Create Room</h1>
+      <div class="flex items-center justify-center">
 
-      <!-- Checkbox for including a password -->
-      <label for="include_password">Include Password:</label>
-      <input type="checkbox" id="include_password">
+        <form id="create-room" class="flex flex-col gap-y-2" action="/create_room" method="post">
 
-      <label for="password">Password:</label>
-      <input type="text" id="password" name="password" disabled><br><br>
+          <div class="flex justify-center items-center gap-x-6">
+            <div class="col w-full text-center">
+               <label for="time_control" class="block text-gray-700 font-bold mb-2">Time Control:</label>
+               <input type="number" id="time_control" name="time_control" min="3" max="30" class="border border-gray-300 rounded px-3 py-2 w-full">
+            </div>
 
-      <input type="submit" value="Create Room">
-    </form>
+             <div class="col w-full text-center">
+                <label for="time_added" class="block text-gray-700 font-bold mb-2">Time Added:</label>
+                <input type="number" id="time_added" name="time_added" min="0" class="border border-gray-300 rounded px-3 py-2 w-full">
+             </div>
 
+            <div class="col w-full text-center">
+              <label for="setup_time" class="block text-gray-700 font-bold mb-2">Setup Time:</label>
+              <input type="number" id="setup_time" name="setup_time" min="3" max="10" class="border border-gray-300 rounded px-3 py-2 w-full">
+            </div>
+
+            <div class="col w-full">
+              <div class="row text-center items-center justify-center h-8">
+                <label for="include_password" class="text-gray-700 font-bold mb-2">Password:</label>
+                <input type="checkbox" id="include_password">
+              </div>
+              <input type="text" id="password" name="password" disabled class="border border-gray-300 rounded px-3 py-2 w-full">
+            </div>
+          </div>
+
+
+          <input type="submit" value="Create Room" class="border bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+        </form>
+      </div>
+    </div>
   <script>
-      document.getElementById('include_password').addEventListener('change', function(event) {
+    document.getElementById('include_password').addEventListener('change', function(event) {
       var includePassword = event.target.checked;
 
       if (includePassword) {
