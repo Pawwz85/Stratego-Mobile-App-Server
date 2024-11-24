@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Board</title>
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='background.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='menu.css')}}">
+
     <script>
         import ("{{url_for('static', filename='boot.js')}}").then(
             module => {
@@ -13,16 +14,26 @@
     </script>
 
 </head>
-<body>
+<body class="bg-gray-100">
 
 <div style="display:none" id="boot_info">
     <p id="boot_info_username">{{boot_info.username}}</p>
     <p id="boot_info_room_id">{{boot_info.room_id}}</p>
 </div>
 
- <div id="fragment_wrapper">
-     <!--This section is filled programmatically-->
+<div class="w-1/2 h-screen flex flex-col justify-center items-center" style="
+       position: relative;
+       left: 10%;
+       top: 50px;
+   ">
+    <div id="fragment_wrapper" >
+    </div>
  </div>
+
+<div class="" style="display: None">
+        <!--This section is filled with elements decorated with tailwind classes, so these classes may be reused by our components-->
+    <textarea class="flex border border-gray-400 p-2 rounded w-full resize-none focus:outline-none text-white justify-center bg-gray-800"></textarea>
+</div>
 
 <svg id="svg-defs">
     <!--This section is filled programmatically with svg defs. Like gradients-->

@@ -2,7 +2,7 @@ import {io} from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js"
 import { appGlobalContext } from "./global_context.js";
 
 /*
-    This class is essentially deprecated as room_live_image creates cusum event handlers to sync room image, nevertheless 
+    This class is essentially deprecated as room_live_image creates custom event handlers to sync room image, nevertheless 
     it is used EventHandler interface
 */
 class EventHandler{
@@ -197,6 +197,7 @@ export class ServerConnection{
         this.socket.on("chat_event", jsonPayload => {con.eventHandler.handleChatEvent(jsonPayload); console.log("chat ev");});
         this.socket.on("chat_reset", jsonPayload => {con.eventHandler.handleChatReset(jsonPayload);});
         this.socket.on("room_closed", jsonPayload => {con.eventHandler.handleRoomClosed(jsonPayload);});
+        this.socket.on("rematch_event", jsonPayload => {con.eventHandler.handleRematchEvent(jsonPayload);});
 
         this.socket.on("response", jsonPayload => {con.requestManager.set_response(jsonPayload);
                 console.log(jsonPayload)

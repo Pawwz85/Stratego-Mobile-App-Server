@@ -338,11 +338,14 @@ export class ChatFactory{
 
     create_chat_text_area(){
         let result = document.createElement("textarea");
+        /* <textarea class="border border-gray-400 p-2 rounded w-full resize-none focus:outline-none bg-gray-600"> </textarea> */
+        result.setAttribute("class", "border border-gray-400 p-2 rounded w-full resize-none focus:outline-none text-white justify-center bg-gray-800");
         return result;
     }
 
     create_send_button(chat_text_area , onSubmit = null){
         let result = document.createElement("button");
+        result.setAttribute("class", "border bg-blue-500 hover:bg-blue-600 text-white font-bold rounded")
         result.textContent = "Send";
         
         if (onSubmit == null)
@@ -405,10 +408,11 @@ export class ChatFragment{
         this.chat_text_area.style.left = "0px";
         this.chat_text_area.style.top = this.chatView.height + Math.floor(height/20) + "px";
         this.chat_text_area.style.width = Math.floor(0.8 * width) + "px";
-        this.chat_text_area.style.height = Math.floor(0.07 * height) + "px";
+        this.chat_text_area.style.height = Math.floor(0.1 * height) + "px";
 
         this.chat_button.style.position = "absolute";
-        this.chat_button.style.height = this.chat_text_area.style.height ;
+        this.chat_button.style.height = this.chat_text_area.style.height;
+        this.chat_button.style.width = Math.floor(0.15 * width) + "px";
         this.chat_button.style.left = parseInt(this.chat_text_area.style.width) + Math.floor(width/20) + "px";
         this.chat_button.style.top = this.chat_text_area.style.top;
     }

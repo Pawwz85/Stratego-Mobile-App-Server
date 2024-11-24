@@ -306,6 +306,7 @@ class UserListOrderedOperationsList{
         this.referenceOrderNumber = -1;
         this.serverConnection = serverConnection;
         this.roomId = roomId;
+        this.onRefresh = self => {};
     }
 
     __refresh_list_image(){
@@ -332,6 +333,8 @@ class UserListOrderedOperationsList{
             }
         };
 
+        console.log(this.userList)
+
         if(!sync)
             this.userList.set(result);
          else
@@ -344,8 +347,6 @@ class UserListOrderedOperationsList{
         this.operations.sort((a,b) => {
             return a.orderNumber - b.orderNumber;
         })
-   
-        this.__refresh_list_image()
     }
 
     handle_user_event(event){
@@ -380,11 +381,11 @@ class UserListOrderedOperationsList{
                 console.log(value);
                 return;
             }
-            this.userList.set(value.user_list);
             this.reference = value.user_list;
 
             this.referenceOrderNumber = value.nr;
             this.operations = [];
+            this.__refresh_list_image();
         })
     }
 }
@@ -415,6 +416,7 @@ class UserListLiveImage{
 
     set(user_list){
         this.user_list = user_list;
+        console.log(user_list)
         this.notify_observers();
     }
 
@@ -518,7 +520,7 @@ class RematchWillingnessLiveImage{
             
     }
 
-    handleRemacthEvent(event){
+    handleRematchEvent(event){
        /* if( Object.prototype.toString(event.rematch_willingness) !== "[object Array]" ) {
             console.log("API produced unrecognizable response. Outdated client?");
             console.log(event);
@@ -545,7 +547,7 @@ class RematchWillingnessLiveImage{
         const tmp = this;
         this.serverConnection.send_request(request, 10000).then(
             value => {
-                tmp.handleRemacthEvent(value);
+                tmp.handleRematchEvent(value);
             }
         )
     }
@@ -583,7 +585,7 @@ export class RoomLiveImage{
             handleChatEvent: (json) => this.chatImage.handle_chat_event(json),
             handleChatReset: (json) => {},
             handleReadyEvent: (json) => this.playerReadyStatusLiveImage.handleReadyEvent(json),
-            handleRemacthEvent: (json) => this.rematchWillingnessLiveImage.handleRemacthEvent(json),
+            handleRematchEvent: (json) => this.rematchWillingnessLiveImage.handleRematchEvent(json),
             handleRoomClosed: (json) => {alert("Room was closed by server")}
         }
     }

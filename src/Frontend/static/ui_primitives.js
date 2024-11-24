@@ -1,17 +1,40 @@
+
+export const defaultSimpleButtonConfig = {
+    id: undefined,
+    text: "Click Me!", // Text
+    width: 100, // Width as percentage, use it to modify width/height ratio
+    height: 20, // Height as as percentage, use it to modify width/height ratio
+    passiveColor: "#AA0000",
+    onHoverColor: "#BB3333",
+    text_fill: "white",
+    textHeight: 0.1 // text height as fraction button height and canvas maximum height (100)
+  };
+
+
 export class SimpleButtonWithText{
-    constructor(text, passiveColor, onHoverColor){
-        this.textContent = text;
-        this.passiveColor = passiveColor ?? "#AA0000";
-        this.onHoverColor = onHoverColor ?? "#BB3333";
-        this.width = 100;
-        this.height = 20;
-        this.textHeight = 0.1;
+    constructor(config){
         this.clickable = true;
         this.onClick = () => {};
         this.element = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  
-        this.__init_button();
+        this.configure(config);
+    }
 
+    configure(config) {
+        this.config = {...defaultSimpleButtonConfig, ...config};
+        this.textContent = this.config.text;
+        this.passiveColor = this.config.passiveColor;
+        this.onHoverColor = this.config.onHoverColor;
+        this.width = this.config.width;
+        this.height = this.config.height;
+        this.textHeight = this.config.textHeight;
+        this.textFill = this.config.text_fill;
+        
+        if (typeof (this.config.id) != "undefined")
+            this.element.setAttribute("id", this.config.id);
+        else 
+            this.element.removeAttribute("id");
+        
+        this.refresh();
     }
 
     __clear(){
@@ -20,26 +43,27 @@ export class SimpleButtonWithText{
       }
     
     __init_button(){
+        console.log(this.config)
         const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         const textNode = document.createElementNS("http://www.w3.org/2000/svg", "text");
         group.setAttributeNS("http://www.w3.org/2000/svg", "viewBox", "0 0 100 100");
-        rect.setAttribute("fill", this.passiveColor);
-        rect.setAttribute("width", this.width );
-        rect.setAttribute("height", this.height);
+        rect.setAttribute("fill", this.config.passiveColor);
+        rect.setAttribute("width", this.config.width );
+        rect.setAttribute("height", this.config.height);
         
         if(this.clickable){
-        rect.onmouseover = ev => {rect.setAttribute("fill", this.onHoverColor);};
-        rect.onmouseout = ev => {rect.setAttribute("fill", this.passiveColor);}
+        rect.onmouseover = ev => {rect.setAttribute("fill", this.config.onHoverColor);};
+        rect.onmouseout = ev => {rect.setAttribute("fill", this.config.passiveColor);}
         rect.onclick = ev => {this.onClick()};
         }
 
 
 
-        textNode.textContent = this.textContent;
-        textNode.setAttribute( "x", this.width/2 +"px");
-        textNode.setAttribute( "y", (this.height - this.textHeight)/2 + "px");
-        textNode.setAttribute("fill", "white");
+        textNode.textContent = this.config.text;
+        textNode.setAttribute( "x", this.config.width/2 +"px");
+        textNode.setAttribute( "y", (this.config.height - this.config.textHeight)/2 + "px");
+        textNode.setAttribute("fill", this.config.text_fill);
         textNode.setAttributeNS(null, "dy", ".4em");
         textNode.setAttributeNS(null, "text-anchor", "middle");
         textNode.setAttribute("unselectable", "on");
@@ -58,62 +82,7 @@ export class SimpleButtonWithText{
     }
 
     setSize(width, height){
-        this.width = width;
-        this.height = height;
-        this.refresh();
-    }
-}
-
-class SimpleIconButton{
-    constructor(passiveIcon, onHoverIcon){
-        this.passiveIcon = passiveIcon;
-        this.onHoverIcon = onHoverIcon;
-        this.width = 20;
-        this.height = 20;
-        this.clickable = true;
-        this.onClick = () => {};
-        this.element = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  
-        this.__init_button();
-    }
-    
-    __clear(){
-        while(this.element.firstChild)
-          this.element.firstChild.remove();
-      }
-    
-    __init_button(){
-
-        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        const icon1  = this.passiveIcon.cloneNode();
-        const icon2  = this.onHoverIcon.cloneNode();
-
-        g.setAttributeNS("http://www.w3.org/2000/svg", "viewBox", "0 0 100 100");
-        if(this.clickable){
-            g.onmouseover = ev =>{
-                icon1.style.display = "none";
-                icon2.style.display = "block";
-            };
-            g.onmousedown = ev => {
-                icon1.style.display = "block";
-                icon2.style.display = "none";
-            }
-            this.clickable();
-        }
-
-        g.append(icon1);
-        g.append(icon2);
-
-        this.element.append(g)
-    }
-
-    refresh(){
-        this.__clear();
-        this.__init_button();
-    }
-
-    setSize(width, height){
-        this.width = width;
+        this.element.style.width = width;
         this.height = height;
         this.refresh();
     }
@@ -313,7 +282,9 @@ export function ensure_window_stroke(){
             id = id + "_" + p.color + "_" + p.offset;
         }
 
-        this.grad_id = id;
+        id = id.replaceAll(/[^0-9a-zA-Z]/g, ''); // remove %s and other special chars
+
+        this.__grad_id = id;
 
     }
     
@@ -343,8 +314,7 @@ export function ensure_window_stroke(){
 
     build(){
         
-        if (this.__grad_id == null)
-            this.__create_id();
+        this.__create_id();
 
         this.__ensure_gradient();
         return "url(#" + this.__grad_id + ")";

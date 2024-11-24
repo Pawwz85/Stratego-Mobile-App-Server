@@ -37,7 +37,14 @@ class GameManager:
             self.users_connected[user.user_id] = user_obj
 
     def get_room_builder(self):
-        return Room.Builder(self.job_manager, lambda _id: self.rooms.pop(_id))
+
+        def discard(_id: str):
+            try:
+                self.rooms.pop(_id)
+            except KeyError as e:
+                print(f"Ker error occurred {e}")
+
+        return Room.Builder(self.job_manager, discard)
 
     def __user_garbage_collector(self):
         users_to_remove = deque()

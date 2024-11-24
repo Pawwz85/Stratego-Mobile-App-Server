@@ -41,7 +41,7 @@ export function append_game_to_element(element_id){
     roomLiveImage.chatImage.chatModel.observers = appGlobalContext.chatModel.observers;
 
     const UI = new UserInterfaceModel(roomLiveImage);
-    const UIView = new UserInterfaceView(UI, 700, 700);
+    const UIView = new UserInterfaceView(UI, 1000, 1000);
  
     //const roomUIManager = new RoomUIManager(roomLiveImage);
 

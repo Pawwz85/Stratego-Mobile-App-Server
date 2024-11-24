@@ -8,21 +8,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="Added a filtering for room browser">
-      <change afterPath="$PROJECT_DIR$/src/Frontend/static/background.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/static/input.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/static/menu.css" afterDir="false" />
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="Styled html pages using tailwindcss">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/clock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/clock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/boot.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/boot.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/chat.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/menu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/menu.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/room_live_image.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/room_live_image.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/server_connection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/server_connection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/side_selector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/side_selector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/ui_primitives.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/ui_primitives.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/templates/board.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/board.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/create_room.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/create_room.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/loading_screen.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/loading_screen.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/room_browser.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/room_browser.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/room_not_found.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/room_not_found.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/room_preview.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/room_preview.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/room_search.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/room_search.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameNode/GameManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameNode/GameManager.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -689,7 +685,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731592237612</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Styled html pages using tailwindcss">
+      <option name="closed" value="true" />
+      <created>1731632671834</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1731632671834</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -704,7 +708,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- Created a primitive interface between websockets clients and our Backend Nodes Api.&#10;- Added a few unit test" />
     <MESSAGE value="- small bugfixes" />
     <MESSAGE value="- Now rooms will close themselves after 10 minutes of inactivity." />
     <MESSAGE value="Starting the room termination countdown" />
@@ -729,7 +732,8 @@
     <MESSAGE value="- Refactored the code responsible for communication of game nodes with server nodes&#10;- Game node can now be run by script RunGameNode.py, which support multiple way of configuring game node" />
     <MESSAGE value="1. Added a room browser feature&#10;2. Wrote unit tests for HandleGameNodeMessage.py&#10;3. Created a simple Environment system for creating multiple an isolated environment that runs multiple game nodes" />
     <MESSAGE value="Added a filtering for room browser" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a filtering for room browser" />
+    <MESSAGE value="Styled html pages using tailwindcss" />
+    <option name="LAST_COMMIT_MESSAGE" value="Styled html pages using tailwindcss" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
