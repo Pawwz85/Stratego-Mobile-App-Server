@@ -4,6 +4,7 @@ from src.GameNode.GameNode import GameNode
 from src.GameNode.ConfigLoader import ConfigLoaderStrategy, JsonConfigLoaderFactory
 import argparse
 from src.InterClusterCommunication.RedisChannelManager import RedisChannelManager
+from Environment.PredefinedEnvironments import staging_environment
 
 
 def main(args):
@@ -25,10 +26,10 @@ def main(args):
         factory = JsonConfigLoaderFactory()
 
     config = factory.build_config(conf_load_strategy, *args_, **kwargs)
-    redis = Redis.from_url(config["redis_url"])
-    channel_manager = RedisChannelManager(redis)
-    system = GameNode(config, channel_manager)
-    system.run()
+    with staging_environment:
+        staging_environment.create_game_node(config)
+        while True:
+            pass
 
 
 if __name__ == '__main__':

@@ -4,6 +4,8 @@ export const defaultSimpleButtonConfig = {
     text: "Click Me!", // Text
     width: 100, // Width as percentage, use it to modify width/height ratio
     height: 20, // Height as as percentage, use it to modify width/height ratio
+    rx: 0,
+    ry: 0,
     passiveColor: "#AA0000",
     onHoverColor: "#BB3333",
     text_fill: "white",
@@ -51,7 +53,9 @@ export class SimpleButtonWithText{
         rect.setAttribute("fill", this.config.passiveColor);
         rect.setAttribute("width", this.config.width );
         rect.setAttribute("height", this.config.height);
-        
+        rect.setAttribute("rx", this.config.rx);
+        rect.setAttribute("ry", this.config.ry);
+
         if(this.clickable){
         rect.onmouseover = ev => {rect.setAttribute("fill", this.config.onHoverColor);};
         rect.onmouseout = ev => {rect.setAttribute("fill", this.config.passiveColor);}

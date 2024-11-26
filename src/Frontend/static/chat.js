@@ -131,7 +131,6 @@ const spectator_colours = [
     `Plum`,
     `PowderBlue`,
     `Purple`,
-    `Red`,
     `RosyBrown`,
     `SaddleBrown`,
     `Salmon`,

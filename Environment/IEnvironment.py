@@ -1,7 +1,15 @@
 from abc import ABC, abstractmethod
 
+from Environment.LocalMessageBrokerServiceBoot import ILocalMessageBrokerBoot, boot_local_message_broker
+
 
 class IEnvironment(ABC):
+
+    def __init__(self, msg_broker_boot: ILocalMessageBrokerBoot | None):
+        self._msg_broker_boot = msg_broker_boot
+
+        if self._msg_broker_boot is not None:
+            boot_local_message_broker(self._msg_broker_boot)
 
     @abstractmethod
     def setUp(self):

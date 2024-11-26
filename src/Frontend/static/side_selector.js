@@ -75,7 +75,7 @@ export class SideSelectorSeatModel{
 
 const defaultSideSelectorViewConfig = {
   btn_width: 100,
-  btn_height: 35,
+  btn_height: 25,
   btn_x: "15%",
   btn_y: "50%",
   btn_text_if_user_owner: "Release",
@@ -83,16 +83,17 @@ const defaultSideSelectorViewConfig = {
   btn_text_loading: "Loading..",
   btn_passive_color: "#777777",
   btn_hover_color: "#AAAAAA",
-  btn_config: {},
+  btn_blocked_color: "gray",
+  btn_config: {rx: "8", ry:"8", height:"40"},
 
   toggle_x: "55%",
   toggle_y: "82.5%",
   toggle_width: "25%",
   toggle_height: "10%",
-  toggle_passive_bar_fill: "gray",
-  toggle_active_bar_fill: SVGHorizontalGradient(["#ffffff", "gray"]),
-  toggle_passive_dot_fill:  "white",
-  toggle_active_dot_fill: "gray",
+  toggle_passive_bar: {fill: "gray"},
+  toggle_active_bar:  {fill: SVGHorizontalGradient(["#ffffff", "gray"])},
+  toggle_passive_dot: {fill: "white"},
+  toggle_active_dot:  {fill: "gray"},
 
   toggle_label_x: "25%",
   toggle_label_y: "90%",
@@ -114,10 +115,11 @@ const defaultSideSelectorViewConfigForRed = {
   btn_passive_color: "#FF0000",
   btn_hover_color: "#FF3F3F",
 
-  toggle_passive_bar_fill: "gray",
-  toggle_active_bar_fill: SVGHorizontalGradient(["#ffffff", "red"]),
-  toggle_passive_dot_fill: "white",
-  toggle_active_dot_fill: "red",
+
+  toggle_passive_bar: {fill: "gray"},
+  toggle_active_bar:  {fill: SVGHorizontalGradient(["#ffffff", "red"])},
+  toggle_passive_dot: {fill: "white"},
+  toggle_active_dot:  {fill: "red"},
   
   toggle_label_fill: SVGHorizontalGradient(["red", "purple"]),
   label_fill: SVGHorizontalGradient(["red", "purple"]),
@@ -129,10 +131,10 @@ const defaultSideSelectorViewConfigForBlue = {
   btn_passive_color: "#0000FF",
   btn_hover_color: "#3F3FFF",
 
-  toggle_passive_bar_fill: "gray",
-  toggle_active_bar_fill: SVGHorizontalGradient(["#ffffff", "blue"]),
-  toggle_passive_dot_fill: "white",
-  toggle_active_dot_fill: "blue",
+  toggle_passive_bar: {fill: "gray"},
+  toggle_active_bar:  {fill: SVGHorizontalGradient(["#ffffff", "blue"])},
+  toggle_passive_dot: {fill: "white"},
+  toggle_active_dot:  {fill: "blue"},
   
   toggle_label_fill: SVGHorizontalGradient(["purple", "blue"]),
   label_fill: SVGHorizontalGradient(["purple", "blue"]),
@@ -166,10 +168,11 @@ export class SideSelectorView{
     
     const btn_config_from_config = this.config.btn_config;
     const btn_cnfg = {
+      ...defaultSideSelectorViewConfig.btn_config,
       ...btn_config_from_config,
       text: btn_text,
-      passiveColor: this.config.btn_passive_color,
-      onHoverColor: this.config.btn_hover_color,
+      passiveColor: (is_free || model.isUserOwner)? this.config.btn_passive_color : this.config.btn_blocked_color,
+      onHoverColor: (is_free || model.isUserOwner)? this.config.btn_hover_color: this.config.btn_blocked_color,
     }
 
     const btn = new SimpleButtonWithText(btn_cnfg);
@@ -194,23 +197,27 @@ export class SideSelectorView{
     const config = this.config;
 
     const passive_bar = {
-      fill : config.toggle_passive_bar_fill,
+      ...defaultSideSelectorViewConfig.passive_bar,
+      ...config.toggle_passive_bar,
       rx: "5",
       ry: "5"
     }
 
     const active_bar = {
-      fill : config.toggle_active_bar_fill,
+      ...defaultSideSelectorViewConfig.actiive_bar,
+      ...config.toggle_active_bar,
       rx: "5",
       ry: "5"
     }
 
     const passive_dot = {
-      fill : config.toggle_passive_dot_fill
+      ...defaultSideSelectorViewConfig.toggle_passive_dot,
+      ...config.toggle_passive_dot
     }
 
     const active_dot = {
-      fill : config.toggle_active_dot_fill
+      ...defaultSideSelectorViewConfig.toggle_active_dot,
+      ...config.toggle_active_dot
     }
 
     const toggle = builder.set_active_state(active_bar, active_dot).set_passive_state(passive_bar, passive_dot).build();
@@ -237,7 +244,7 @@ export class SideSelectorView{
     
   
     const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    label.textContent = model.color + " player" + ((model.ownerUsername)?": "+ model.ownerUsername: "");
+    label.textContent = model.ownerUsername?model.ownerUsername: "";
 
     // Step 3. Set placement of those elements on the element
 
@@ -271,9 +278,9 @@ export class SideSelectorView{
     toggle.element.setAttribute("height", this.config.toggle_height);
 
     // Step 4. Insert relevant elements into element
-    this.element.append(btn.element);
+    
     this.element.append(label);
-
+    this.element.append(btn.element);
 
     if(model.isUserOwner){
       this.element.append(toggle.element);
@@ -282,6 +289,8 @@ export class SideSelectorView{
 
     if(model.ready)
       this.element.append(ready_title)
+
+
   }
   
 }
@@ -317,8 +326,11 @@ export class SeatSelectorWindowModel{
 }
 
 const defaultSideSelectorWindowConfig = {
-  stroke: SVGHorizontalGradient(["red", "white", "blue"]),
-  stroke_width: "1%",
+  win_rx: 10,
+  win_ry: 10,
+
+  stroke: null,
+  stroke_width: "0%",
   background_fill: "black",
   red_seat_x: "5%",
   blue_seat_x: "65%",
@@ -326,9 +338,9 @@ const defaultSideSelectorWindowConfig = {
   seat_width:  "30%",
   seat_height: "80%",
   label: "Player Info",
-  label_fill: SVGHorizontalGradient(["red", "white", "blue"]),
+  label_fill: "#C084FC",
   label_x: "50%",
-  label_y: "20%",
+  label_y: "10%",
   red_seat_view_config: {},
   blue_seat_view_config: {},
 }
@@ -351,7 +363,9 @@ export class SeatSelectorWindowView{
     background.setAttribute("fill", this.config.background_fill);
     background.setAttribute("stroke", this.config.stroke);
     background.setAttribute("stroke-width", this.config.stroke_width);
-    
+    background.setAttribute("rx", this.config.win_rx);
+    background.setAttribute("ry", this.config.win_ry);
+
     this.redSeatView.element.setAttribute("x", this.config.red_seat_x);
     this.redSeatView.element.setAttribute("y", this.config.seat_y);
     this.redSeatView.element.setAttribute("width", this.config.seat_width);
