@@ -10,6 +10,45 @@ export class User{
         this.boardrole = "spectator";
     }
 }
+
+// adapts protocol user to User object
+function  user_adapter(user){
+    return { 
+             profilePicture: null,
+             username: user.username,
+             boardrole: user.role
+            }
+};
+
+// adapter to user_list_live_image that delivers username to User map.
+class UserService{
+    constructor(){
+        this.users = new Map();
+        this.observers = [];
+    }
+
+    update_user_list(user_list){
+        this.users.clear();
+
+        for(let user of user_list){
+            const new_entry = user_adapter(user);
+            this.users.set(new_entry.username, new_entry);
+        }
+        this.notify_observers();
+    }
+
+    add_observer(o){
+        this.observers.push(o);
+        o.onUserServiceUpdate(this.users);
+    }
+
+    notify_observers(){
+        for (let o of this.observers)
+            o.onUserServiceUpdate(this.users);
+    }
+
+}
+
 export class TableModel{
     constructor(){
         this.red_player = null;
@@ -30,7 +69,7 @@ export class TableModel{
         appGlobalContext.currentUser.boardrole = "spectator";
         this.red_player = this.blue_player = null;
 
-        const user_adapter = user => {return {profilePicture: null, username: user.username, boardrole: user.role}};
+        
 
         for(let user of user_list){
             
@@ -78,7 +117,8 @@ class AppGlobalContext{
         this.table = new TableModel();
         this.chatModel = new GeneralChatModel();
         this.seatWindowModel = new SeatSelectorWindowModel();
-       
+        this.userService = new UserService();
+
         this.rematchWindowModel = new RematchWindowModel();
         this.red_clock = new Clock(100);
         this.blue_clock = new Clock(100);

@@ -21,6 +21,11 @@
     <p id="boot_info_room_id">{{boot_info.room_id}}</p>
 </div>
 
+<svg id="svg-defs">
+    <!--This section is filled programmatically with svg defs. Like gradients-->
+</svg>
+
+
 <div class="w-1/2 h-screen flex flex-col justify-center items-center" style="
        position: relative;
        left: 10%;
@@ -28,15 +33,13 @@
    ">
     <div id="fragment_wrapper" >
     </div>
- </div>
 
-<div class="" style="display: None">
-        <!--This section is filled with elements decorated with tailwind classes, so these classes may be reused by our components-->
-    <textarea class="flex border border-gray-400 p-2 rounded w-full resize-none focus:outline-none text-white justify-center bg-gray-800"></textarea>
+
+
 </div>
+    {% extends "chat_template.tmpl" %}
+    {% block body %}{{ super() }}{% endblock body %}
 
-<svg id="svg-defs">
-    <!--This section is filled programmatically with svg defs. Like gradients-->
-</svg>
+
 </body>
 </html>

@@ -1,0 +1,51 @@
+{% block chat %}
+<div id="chat_window" class="w-full max-w-md mx-auto h-full bg-gray-900 text-white rounded-lg shadow-lg p-4">
+  <!-- Chat Header -->
+  <div class="text-lg font-bold text-purple-400 border-b border-gray-700 pb-2 mb-4">
+    Chat
+  </div>
+
+  <!-- Chat Messages (Scrollable Area) -->
+  <div id="chat_messages" class="h-4/5 overflow-y-auto overflow-x-hidden flex flex-col gap-4 scrollbar-track-gray-100">
+    <!-- Message 1 -->
+    <div class="flex flex-col text-balance">
+      <span class="text-red-500 font-bold">User1</span>
+      <p class="text-sm text-gray-300">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut massa ac magna viverra dapibus.
+      </p>
+    </div>
+
+    <!-- Message 2 -->
+    <div class="flex flex-col text-balance">
+      <span class="text-blue-500 font-bold">User2</span>
+      <p class="text-sm text-gray-300 ">
+        Aenean non nulla in erat porttitor efficitur ut at ligula. Phasellus eget dui nec justo volutpat aliquet.
+      </p>
+    </div>
+
+    <!-- Spectator Message -->
+    <div class="flex flex-col text-balance">
+      <span class="text-green-400 italic">Spectator</span>
+      <p class="text-sm text-gray-300">
+        Watching the game closely! Excited to see who wins.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Chat Input -->
+  <div class="mt-4">
+    <div class="flex items-center">
+      <input
+        id="chat_text_input"
+        type="text"
+        placeholder="Type your message..."
+        class="flex-grow bg-gray-800 text-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+      />
+      <button id="chat_submit_btn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r-lg">
+        Send
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %}

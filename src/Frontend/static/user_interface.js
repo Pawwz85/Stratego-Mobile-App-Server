@@ -74,7 +74,7 @@ export class UserInterfaceView {
 
     constructor(model, page_x, page_y){
         this.board_segment_view = new BoardSegmentView(model.board_segment_model, 500, 500);
-        this.chat_fragment = new ChatFragment(appGlobalContext.chatModel);
+        this.chat_fragment = new ChatFragment(appGlobalContext.chatModel, appGlobalContext.userService);
         this.side_selector_window = new SeatSelectorWindowView(appGlobalContext.seatWindowModel);
         this.rematch_window = new RematchWindowView(appGlobalContext.rematchWindowModel);
         this.element = document.createElement("div");

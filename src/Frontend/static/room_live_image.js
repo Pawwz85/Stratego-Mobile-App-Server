@@ -350,6 +350,7 @@ class UserListOrderedOperationsList{
     }
 
     handle_user_event(event){
+        console.log(event);
         if(typeof event?.nr != "number" || typeof event?.op != "string"){
                 console.log("API produced unrecognizable response. Outdated client?");
                 console.log(event);
@@ -366,7 +367,7 @@ class UserListOrderedOperationsList{
             orderNumber: event.nr
         }
         this.add_operation(operation);
-
+        this.__refresh_list_image();
     }
 
     sync(){
@@ -400,6 +401,7 @@ class UserListLiveImage{
     }
 
     notify_observers(){
+        console.log(this.user_list)
         for(let observer of this.user_list_observers){
             observer.update_user_list(this.user_list);
         }
