@@ -1,10 +1,8 @@
-from redis.asyncio import Redis
+import time
 
-from src.GameNode.GameNode import GameNode
 from src.GameNode.ConfigLoader import ConfigLoaderStrategy, JsonConfigLoaderFactory
 import argparse
-from src.InterClusterCommunication.RedisChannelManager import RedisChannelManager
-from Environment.PredefinedEnvironments import staging_environment
+from Environment.EnvironmentFactory import EnvironmentFactory
 
 
 def main(args):
@@ -26,10 +24,12 @@ def main(args):
         factory = JsonConfigLoaderFactory()
 
     config = factory.build_config(conf_load_strategy, *args_, **kwargs)
-    with staging_environment:
-        staging_environment.create_game_node(config)
+    env = EnvironmentFactory.get_instance().get_testing_env()
+    with env:
+        print("Creating game node...")
+        env.create_game_node(config)
         while True:
-            pass
+            time.sleep(1)
 
 
 if __name__ == '__main__':

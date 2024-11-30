@@ -4,6 +4,7 @@ import os
 
 
 class ILocalMessageBrokerBoot(ABC):
+
     @abstractmethod
     def boot(self):
         pass
@@ -23,12 +24,12 @@ def boot_local_message_broker(boot: ILocalMessageBrokerBoot, threshold=10, wait=
 
     if not is_running:
         boot.boot()
+        time.sleep(wait)
         while check_counter < threshold:
             if boot.is_available():
-                break
-            else:
-                check_counter = check_counter + 1
-                time.sleep(wait)
+                return
+            check_counter = check_counter + 1
+            time.sleep(wait)
 
         if check_counter >= threshold:
             raise ConnectionError()

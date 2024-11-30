@@ -68,7 +68,9 @@ class GameNode:
         self._channel_manager_lock = Lock()
         self._private_channel_name = self._config["unique_game_node_channel"]
 
-        self._game_thread = GameManagerThread(self.create_room_handle)
+        use_privileged_testing_mode: bool = self._config.get("enable_privileged_testing_mode", False)
+
+        self._game_thread = GameManagerThread(self.create_room_handle, use_privileged_testing_mode)
         self._shutdown_flag = multiprocessing.Event()
         self._msg_broker_handle: str | None = None
         signal.signal(signal.SIGINT, lambda _, __: self.shutdown())

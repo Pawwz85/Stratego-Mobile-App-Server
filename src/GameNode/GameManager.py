@@ -21,7 +21,8 @@ class GameManager:
 
     def __init__(self, job_manager: JobManager,
                  event_receiver_factory: Callable[[Eventmanager], IEventReceiver],
-                 room_handle_factory: Callable[[], IRoomHandle] = lambda: IRoomHandle()):
+                 room_handle_factory: Callable[[], IRoomHandle] = lambda: IRoomHandle(),
+                 enable_privileged_testing_mode: bool = False):
         self.api = GameManagerApi(self)
         self.job_manager = job_manager
         self.event_manager = Eventmanager(self.job_manager)
@@ -29,6 +30,7 @@ class GameManager:
         self.users_connected: dict[int, User] = dict()
         self.eventReceiver = event_receiver_factory(self.event_manager)
         self.handle_factory_method = room_handle_factory
+        self.enable_privileged_testing_mode = enable_privileged_testing_mode
 
     def register_user(self, user: UserDto):
         if user.user_id not in self.users_connected.keys():

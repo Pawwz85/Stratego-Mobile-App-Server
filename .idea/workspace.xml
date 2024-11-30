@@ -8,20 +8,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="- Remastered Chat component">
-      <change afterPath="$PROJECT_DIR$/Environment/LocalMessageBrokerServiceBoot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Environment/scripts/win_start_redis_server_on_wsl.bat" afterDir="false" />
+    <list default="true" id="62a81774-3137-4e00-b269-bd4cc2c6cb07" name="Changes" comment="Now testing_environment would automatically start local redis-server on windows, using a WSL">
+      <change afterPath="$PROJECT_DIR$/UnitTests/Environment.lnk" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/GameNode/PrivilegedModeTableBuilder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/game_node_config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Config/game_node_config.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Environment/IEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/IEnvironment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Environment/PredefinedEnvironments.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/PredefinedEnvironments.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Environment/LocalMessageBrokerServiceBoot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/LocalMessageBrokerServiceBoot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Environment/PredefinedEnvironments.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/EnvironmentFactory.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Environment/RedisEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/RedisEnvironment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RunGameNode.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunGameNode.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/chat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/menu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/menu.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/side_selector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/side_selector.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/ui_primitives.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/ui_primitives.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/chat_template.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/chat_template.tmpl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/test_gamenodeApiHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_gamenodeApiHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/singleton.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/singleton.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameNode/GameManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameNode/GameManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameNode/GameManagerThread.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameNode/GameManagerThread.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameNode/GameNode.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameNode/GameNode.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -219,6 +221,7 @@
     "Python tests.Python tests in test_gamenodeApiHandler.py.executor": "Run",
     "Python tests.Python tests in test_ichannel_manager.py.executor": "Run",
     "Python tests.Python tests in test_make_dynamic_proxy.py.executor": "Run",
+    "Python tests.Python tests in test_move_generator.py.executor": "Run",
     "Python tests.Python tests in test_room.py.executor": "Run",
     "Python tests.Python tests in test_stratego.py.executor": "Run",
     "Python tests.Python tests in test_stratego_core.py.executor": "Run",
@@ -233,6 +236,7 @@
     "Python.GameplayScenarioGenerator.executor": "Run",
     "Python.GracefulThreads.executor": "Run",
     "Python.MakeAsynchronousInterface.executor": "Run",
+    "Python.PredefinedEnvironments.executor": "Run",
     "Python.PublicMethodsDecoratedMetaClass.executor": "Run",
     "Python.PyDoc.executor": "Run",
     "Python.Room.executor": "Run",
@@ -258,7 +262,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Pawwz/OneDrive/Desktop/Stratego - server/Python_Implementation/pythonProject/TestResources/TestPositions",
+    "last_opened_file_path": "C:/Users/Pawwz/OneDrive/Desktop/Stratego - server/Python_Implementation/pythonProject/UnitTests",
     "run.code.analysis.last.selected.profile": "aDefault",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "settings.editor.splitter.proportion": "0.26180258"
@@ -286,16 +290,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python.RunGameNode">
-    <configuration name="win_start_redis_server_on_wsl" type="BatchConfigurationType" factoryName="Batch" temporary="true">
-      <module name="pythonProject" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\Environment\scripts" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SCRIPT_NAME" value="win_start_redis_server_on_wsl.bat" />
-      <option name="PARAMETERS" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python tests.Python tests in UnitTests">
     <configuration name="RunGameNode" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
@@ -310,29 +305,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RunGameNode.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="game node" type="PythonConfigurationType" factoryName="Python">
-      <module name="pythonProject" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.12 (pythonProject)" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\src\GameNode\GameNode.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -362,6 +334,21 @@
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_cstratego.CStrategoPieceTest" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="pythonProject" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_cstratego.CStrategoPieceTest&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <configuration name="Python tests in UnitTests" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
@@ -394,37 +381,36 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_on_user_request_responds_with_cached_response" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests in test_move_generator.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="C:\Users\Pawwz\OneDrive\Desktop\Stratego - server\Python_Implementation\pythonProject\.venv\Scripts\python.exe" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_gamenodeApiHandler.TestGameNodeApiHandler.test_on_user_request_responds_with_cached_response&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/UnitTests/test_move_generator.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Batch.win_start_redis_server_on_wsl" />
-      <item itemvalue="Python.game node" />
       <item itemvalue="Python.server" />
       <item itemvalue="Python.RunGameNode" />
+      <item itemvalue="Python tests.Python tests for test_cstratego.CStrategoPieceTest" />
+      <item itemvalue="Python tests.Python tests in test_move_generator.py" />
       <item itemvalue="Python tests.Python tests in test_gamenodeApiHandler.py" />
-      <item itemvalue="Python tests.Unittests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_on_user_request_responds_with_cached_response" />
       <item itemvalue="Python tests.Python tests in UnitTests" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.RunGameNode" />
-        <item itemvalue="Python tests.Python tests in test_gamenodeApiHandler.py" />
-        <item itemvalue="Batch.win_start_redis_server_on_wsl" />
         <item itemvalue="Python tests.Python tests in UnitTests" />
-        <item itemvalue="Python tests.Unittests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_on_user_request_responds_with_cached_response" />
+        <item itemvalue="Python.RunGameNode" />
+        <item itemvalue="Python tests.Python tests in test_move_generator.py" />
+        <item itemvalue="Python tests.Python tests for test_cstratego.CStrategoPieceTest" />
+        <item itemvalue="Python tests.Python tests in test_gamenodeApiHandler.py" />
       </list>
     </recent_temporary>
   </component>
@@ -716,7 +702,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732639840989</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Now testing_environment would automatically start local redis-server on windows, using a WSL">
+      <option name="closed" value="true" />
+      <created>1732654102361</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1732654102361</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -731,7 +725,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- Now threads support signals such as sigint and sigterm" />
     <MESSAGE value="- Started work on UI, now on /board server would generate a board, that is for now, empty" />
     <MESSAGE value="- Allowed browser user to create and join rooms. Thought, there is no button to set_ready value yet, so users would be stuck in awaiting phase.&#10;- Seat placement and chat features are integrated into browser client" />
     <MESSAGE value="Reworked window visible in awaiting phase" />
@@ -756,7 +749,8 @@
     <MESSAGE value="- Added missing files" />
     <MESSAGE value="- Remastered Chat component" />
     <MESSAGE value="Introduce new file 'tailwind.config.js' with the following content:&#10;&#10;```javascript&#10;/** @type {import('tailwindcss').Config} */&#10;module.exports = {&#10;  content: [&quot;./src/**/*.{html, js, tmpl}&quot;, &quot;src/Frontend/templates/chat_template.tmpl&quot;],&#10;  theme: {&#10;    extend: {},&#10;  },&#10;  plugins: [],&#10;}&#10;```&#10;&#10;This commit adds a new configuration file for Tailwind CSS called 'tailwind.config.js'. The content of this file specifies the locations where Tailwind CSS should look for HTML, JavaScript, and Template files to apply its styles. Additionally, it defines an empty extend object and an empty plugins array for further customization options." />
-    <option name="LAST_COMMIT_MESSAGE" value="Introduce new file 'tailwind.config.js' with the following content:&#10;&#10;```javascript&#10;/** @type {import('tailwindcss').Config} */&#10;module.exports = {&#10;  content: [&quot;./src/**/*.{html, js, tmpl}&quot;, &quot;src/Frontend/templates/chat_template.tmpl&quot;],&#10;  theme: {&#10;    extend: {},&#10;  },&#10;  plugins: [],&#10;}&#10;```&#10;&#10;This commit adds a new configuration file for Tailwind CSS called 'tailwind.config.js'. The content of this file specifies the locations where Tailwind CSS should look for HTML, JavaScript, and Template files to apply its styles. Additionally, it defines an empty extend object and an empty plugins array for further customization options." />
+    <MESSAGE value="Now testing_environment would automatically start local redis-server on windows, using a WSL" />
+    <option name="LAST_COMMIT_MESSAGE" value="Now testing_environment would automatically start local redis-server on windows, using a WSL" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

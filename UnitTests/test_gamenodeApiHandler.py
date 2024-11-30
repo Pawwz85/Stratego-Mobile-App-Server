@@ -6,7 +6,7 @@ from unittest.mock import Mock
 
 import redis.asyncio
 
-from Environment.PredefinedEnvironments import (testing_environment)
+from Environment.EnvironmentFactory import EnvironmentFactory
 from src.AsyncioWorkerThread import AsyncioWorkerThread
 from src.Core.User import UserDto
 from src.Frontend.IntermediateRequestIDMapper import IntermediateRequestIDMapper
@@ -17,11 +17,15 @@ from src.InterClusterCommunication.IEventChannelManager import IPubSub
 from src.InterClusterCommunication.RedisChannelManager import RedisChannelManager
 
 
+testing_environment = EnvironmentFactory.get_instance().get_testing_env()
+
+
 # noinspection PyMethodParameters
 class TestGameNodeApiHandler(unittest.IsolatedAsyncioTestCase):
 
     @abstractmethod
     def setUpClass(**kwargs):
+
         testing_environment.setUp()
         game_node_config = (GameNodeConfigBuilder()
                             .unique_game_node_channel("node")

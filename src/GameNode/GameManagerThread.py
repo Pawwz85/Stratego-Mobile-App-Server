@@ -44,7 +44,8 @@ class QueueEventReceiver(IEventReceiver):
 @GracefulThread
 class GameManagerThread(Thread):
 
-    def __init__(self, room_handle_factory: Callable[[], IRoomHandle]):
+    def __init__(self, room_handle_factory: Callable[[], IRoomHandle],
+                 enable_privileged_testing_mode: bool = False):
         super().__init__()
         self._job_manager: JobManager = JobManager()
         self._event_receiver_factory = lambda event_man: QueueEventReceiver(lambda: None, event_man)
@@ -53,7 +54,8 @@ class GameManagerThread(Thread):
         self._in_deque: Deque[str] = deque()
         self._in_lock = Lock()
 
-        self._game_manager = GameManager(self._job_manager, self._event_receiver_factory, room_handle_factory)
+        self._game_manager = GameManager(self._job_manager, self._event_receiver_factory, room_handle_factory,
+                                         enable_privileged_testing_mode=enable_privileged_testing_mode)
         self._game_manager.schedule_periodic_user_garbage_collection()
         self._event_receiver = self._game_manager.eventReceiver
 
