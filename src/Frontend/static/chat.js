@@ -31,7 +31,6 @@ const spectator_colours = [
     `Azure`,
     `Beige`,
     `Bisque`,
-    `Black`,
     `BlanchedAlmond`,
     `BlueViolet`,
     `Brown`,

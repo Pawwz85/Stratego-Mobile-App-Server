@@ -1,7 +1,6 @@
 import os
 import time
 from pathlib import Path
-
 from redis import Redis
 from redis.asyncio import Redis as Asyncio_redis
 
@@ -20,7 +19,7 @@ from src.InterClusterCommunication.RedisChannelManager import RedisChannelManage
 class RedisServerBootManager(ILocalMessageBrokerBoot):
     def boot(self):
         if not self.is_booting:
-            subprocess.run([f'"{self.boot_script.__str__()}"'])
+            subprocess.run([self.boot_script])
             print("Redis booted")
             self.is_booting = True
 

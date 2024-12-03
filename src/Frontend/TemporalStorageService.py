@@ -3,7 +3,7 @@ from threading import Thread
 
 from src import GracefulThreads
 from src.Frontend.message_processing import UserResponseBufferer
-from src.Frontend.socketio_socket_management import SocketManager
+from src.Frontend.socket_manager import SocketManager
 
 
 @GracefulThreads.GracefulThread

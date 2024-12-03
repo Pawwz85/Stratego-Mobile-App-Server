@@ -13,8 +13,8 @@ class EnvironmentFactory:
     def __init__(self):
         self._testing_env = RedisEnvironment("redis://127.0.0.1:6379",
                                              RedisServerBootManager.get_instance(
-                                                 Path("Environment/scripts/win_start_redis_server_on_wsl"
-                                                      ".bat").absolute(), "redis://127.0.0.1:6379"))
+                                                 Path("Environment/scripts/win_start_redis_server_on_wsl.bat")
+                                                 .absolute(), "redis://127.0.0.1:6379"))
         self._staging_env = RedisEnvironment("redis://127.0.0.1:6379")
 
     def get_testing_env(self):

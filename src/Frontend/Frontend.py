@@ -20,7 +20,9 @@ from src.Frontend.IntermediateRequestIDMapper import IntermediateRequestIDMapper
 from src.Frontend.RoomBrowser import RoomBrowser, GlobalRoomListCache, RoomInfo
 from src.Frontend.TemporalStorageService import TemporalStorageService
 from src.Frontend.message_processing import UserResponseBufferer
-from src.Frontend.socketio_socket_management import SocketManager, send_event_to_socketio_clients, send_event_to_user
+from src.Frontend.socket_manager import SocketManager, SocketioUserSocket
+from src.Frontend.socketio_socket_management import send_event_to_socketio_clients, send_event_to_user
+from src.Frontend.websocket_service import WebsocketService
 from src.InterClusterCommunication.GameNodeAPICallsBuilder import GameNodeApiRequestFactory
 from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
 from src.InterClusterCommunication.RedisChannelManager import RedisChannelManager
@@ -42,12 +44,16 @@ user_service = UserDao(config)
 redis = Redis.from_url(config["redis_url"])
 channel_manager = RedisChannelManager(redis)
 
+
 game_node_api_handler = GameNodeAPIHandler(
     IntermediateRequestIDMapper(),
     response_bufferer,
     channel_manager,
     asyncio_worker,
-    lambda e: send_event_to_socketio_clients(socketio, e))
+    socket_manager.emit_event_by_signature)
+
+websocket_service = WebsocketService(config, game_node_api_handler, socket_manager, asyncio_worker)
+
 global_room_list_cache = GlobalRoomListCache(game_node_api_handler, channel_manager)
 room_browser = RoomBrowser(global_room_list_cache)
 
@@ -255,12 +261,16 @@ def handle_request_event(ev):
 @socketio.on("connect")
 def handle_connect():
     join_room(session["username"])
+    socket = SocketioUserSocket(session["username"], socketio)
+    session["socket"] = socket
+    socket_manager.register_entry(socket)
     print(session["username"] + " has been connected")
 
 
 @socketio.on("disconnect")
 def handle_connect():
     leave_room(session["username"])
+    session.get("socket").close()
     print(session["username"] + " has been disconnected")
 
 
@@ -273,6 +283,7 @@ async def init_stream():
 def start_server():
     temporal_storage_service = TemporalStorageService(response_bufferer, socket_manager)
     temporal_storage_service.start()
+    websocket_service.run()
     asyncio_worker.add_task(init_stream())
     asyncio_worker.add_task(global_room_list_cache.sync())
     asyncio_worker.start()
@@ -281,6 +292,7 @@ def start_server():
         print("stopping...")
         temporal_storage_service.stop()
         asyncio_worker.stop()
+        websocket_service.stop_flag.set()
         print("Killing main process in 3s")
         time.sleep(3)
         os.kill(os.getpid(), signal.SIGINT)
