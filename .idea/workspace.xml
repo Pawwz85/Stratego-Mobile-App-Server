@@ -4,23 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/UnitTests/test_SocketManager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/websocket_api.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/websocket_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/GameNode/PrivilegedModeScripts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/pythonProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pythonProject.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="Added back support for websocket protocol.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Environment/EnvironmentFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/EnvironmentFactory.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Environment/RedisEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/RedisEnvironment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/Frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/Frontend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/TemporalStorageService.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/TemporalStorageService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/chat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameNode/PrivilegedModeTableBuilder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/socket_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Environment/scripts/win_start_redis_server_on_wsl.bat" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/scripts/win_start_redis_server_on_wsl.bat" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,11 +66,11 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python.RunGameNode">
+  <component name="RunManager" selected="Batch.win_start_redis_server_on_wsl">
     <configuration name="win_start_redis_server_on_wsl" type="BatchConfigurationType" factoryName="Batch" temporary="true">
       <module name="pythonProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\Pawwz\Desktop\Stratego - server\Python_Implementation\pythonProject\Environment\scripts" />
+      <option name="WORKING_DIRECTORY" value="./Environment/scripts" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SCRIPT_NAME" value="win_start_redis_server_on_wsl.bat" />
       <option name="PARAMETERS" value="" />
@@ -165,8 +152,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Frontend" />
         <item itemvalue="Python.RunGameNode" />
+        <item itemvalue="Python.Frontend" />
         <item itemvalue="Batch.win_start_redis_server_on_wsl" />
         <item itemvalue="Python tests.Python tests for test_SocketManager.SocketManagerTestCase" />
         <item itemvalue="Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user" />
@@ -189,6 +176,15 @@
       <option name="presentableId" value="Default" />
       <updated>1733009919720</updated>
     </task>
+    <task id="LOCAL-00001" summary="Added back support for websocket protocol.">
+      <option name="closed" value="true" />
+      <created>1733258409261</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1733258409261</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -201,6 +197,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added back support for websocket protocol." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added back support for websocket protocol." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

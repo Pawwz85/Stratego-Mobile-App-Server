@@ -19,8 +19,8 @@ from src.InterClusterCommunication.RedisChannelManager import RedisChannelManage
 class RedisServerBootManager(ILocalMessageBrokerBoot):
     def boot(self):
         if not self.is_booting:
-            subprocess.run([self.boot_script])
-            print("Redis booted")
+            proc = subprocess.Popen([self.boot_script], stdout=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
+            print(f"Redis booted wth pid {proc.pid}")
             self.is_booting = True
 
     def shutdown(self):
@@ -38,6 +38,7 @@ class RedisServerBootManager(ILocalMessageBrokerBoot):
         try:
             redis_ = Redis.from_url(self.url)
             redis_.ping()
+            print(f"{self.url} pinged successfully")
         except BaseException:
             ping_failed = True
         return not ping_failed
@@ -82,10 +83,9 @@ class RedisEnvironment(IEnvironment):
         identifier = self._generate_id()
         process_name = f"stratego_game_node_{identifier}"
         node_process = Process(name=process_name, target=run_game_node, args=(config_copy, process_name))
-
         node_process.start()
         self._game_nodes[identifier] = node_process
-        print(f"Node started with identifier {identifier}")
+        print(f"Node started with identifier {identifier}, {node_process}")
         return identifier
 
     def destroy_game_node(self, node_handle: int):
