@@ -4,10 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="Added back support for websocket protocol.">
+    <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="Fixed booting redis server to work as expected">
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/unit_selector.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/unit_selector.tmpl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Environment/RedisEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/RedisEnvironment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Environment/scripts/win_start_redis_server_on_wsl.bat" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/scripts/win_start_redis_server_on_wsl.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/protocole.odt" beforeDir="false" afterPath="$PROJECT_DIR$/protocole.odt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/BoardSegment.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/BoardSegment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/board_model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/board_view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/boot.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/boot.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/chat.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/global_context.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/global_context.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/menu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/menu.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/rematch_window.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/rematch_window.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/room_live_image.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/room_live_image.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/server_connection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/server_connection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/setup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/setup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/side_selector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/side_selector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/ui_primitives.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/ui_primitives.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/unit_selector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/unit_selector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/board.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/board.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +36,7 @@
       <list>
         <option value="Python Unit Test" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -43,6 +61,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Batch.win_start_redis_server_on_wsl.executor&quot;: &quot;Run&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_by_signature.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user.executor&quot;: &quot;Run&quot;,
@@ -152,8 +171,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.RunGameNode" />
         <item itemvalue="Python.Frontend" />
+        <item itemvalue="Python.RunGameNode" />
         <item itemvalue="Batch.win_start_redis_server_on_wsl" />
         <item itemvalue="Python tests.Python tests for test_SocketManager.SocketManagerTestCase" />
         <item itemvalue="Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user" />
@@ -184,7 +203,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733258409261</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Fixed booting redis server to work as expected">
+      <option name="closed" value="true" />
+      <created>1733783091806</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1733783091806</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -200,7 +227,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added back support for websocket protocol." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added back support for websocket protocol." />
+    <MESSAGE value="Fixed booting redis server to work as expected" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed booting redis server to work as expected" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -45,7 +45,6 @@ export class SimpleButtonWithText{
       }
     
     __init_button(){
-        console.log(this.config)
         const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
         const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         const textNode = document.createElementNS("http://www.w3.org/2000/svg", "text");

@@ -175,13 +175,11 @@ class ChatUserColorService{
             const index = Math.floor(Math.random()* spectator_colours.length);
             result = spectator_colours[index];
         }
-        console.log(role, result);
         return result;
     }
 
     onUserServiceUpdate(users){
         const next_colouring = []
-        console.log(users)
 
         for (let username of users.keys()){
             const role = users.get(username).boardrole ?? "spectator"; 
@@ -209,7 +207,6 @@ class ChatUserColorService{
     }
 
     notify_observers(){
-        console.log(this.observers)
         for (let o of this.observers)
             o.onNewColourSchema(this.coloring);
     }
@@ -249,7 +246,6 @@ export class ChatView{
 
             username.setAttribute("class", "text-bold italic");
             username.style.webkitTextFillColor = this.colouring.get(msg.username) ?? "gray";
-            console.log(this.colouring.get(msg.username) ?? "gray")
             username.textContent = msg.username;
 
             msg_body.setAttribute("class", "text-sm text-gray-300 ");

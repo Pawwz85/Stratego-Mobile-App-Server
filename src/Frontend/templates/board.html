@@ -33,13 +33,10 @@
    ">
     <div id="fragment_wrapper" >
     </div>
-
-
-
 </div>
-    {% extends "chat_template.tmpl" %}
-    {% block body %}{{ super() }}{% endblock body %}
 
+    {% include "chat_template.tmpl" %}
+    {% include "unit_selector.tmpl" %}
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-import {SelectorWithQuantityModel, SelectorWithQuantityView} from "./unit_selector.js"
+import {SelectorWithQuantityModel, SelectorWithQuantityTemplateBasedView} from "./unit_selector.js"
 import {SidePanelModel, SidePanelView} from "./board_side_panel.js"
 import {PieceType, Piece} from "./board_model.js"
 
@@ -89,7 +89,7 @@ export class SetupPhaseComponentsFactory{
     }
 
     create_unit_selector_view(boardView, unitSelectorModel){
-        let result = new SelectorWithQuantityView(unitSelectorModel);
+        let result = new SelectorWithQuantityTemplateBasedView(unitSelectorModel);
 
         for (let i = 0; i<unitSelectorModel.items.length; ++i)
             result.set_item_renderer(i, this.__create_renderer_for_selector_index(i, boardView));
@@ -195,10 +195,17 @@ export class SetupPhaseComponentsFactory{
                     let current_item = unitSelectorModel.selected_item;
                     let piece = frag.__create_piece_from_selector_index(unitSelectorModel.drop_selected_item());
                     boardModel.boardstate.squares[sq].piece = piece;
+
                     unitSelectorModel.try_select_item(current_item); // for smother usage
 
-                    if(unitSelectorModel.selected_item == null && piece_index != null)
+                    // If repick failed, try selecting picked up piece
+                    if(unitSelectorModel.selected_item == null && piece_index != null){
                         unitSelectorModel.try_select_item(piece_index);
+                    }
+                    
+                    // If both of above failed, select next item
+                    if(unitSelectorModel.selected_item == null)
+                        unitSelectorModel.select_first_available();
 
                     refresh = true;
                 }

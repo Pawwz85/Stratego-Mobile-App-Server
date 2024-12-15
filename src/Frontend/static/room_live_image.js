@@ -2,11 +2,10 @@ import { GeneralChatModel } from "./chat.js";
 import {PieceType, Color, Piece} from "./board_model.js"
 import { PieceEncoder } from "./PieceEncoder.js";
 import {Clock} from "./clock.js"
-import { appGlobalContext } from "./global_context.js";
 
 export class LiveChatImage{
     constructor(serverConnection, room_id){
-        this.chatModel = appGlobalContext.chatModel;
+        this.chatModel = new GeneralChatModel();
         this.orderedMessagesList = [];
         this.serverConnection = serverConnection;
         this.roomId = room_id;
@@ -112,6 +111,7 @@ class BoardLiveImage{
         this.phase = "awaiting";
         this.red_clock = {mode: "paused", value: 0}
         this.blue_clock = {mode: "paused", value: 0}
+        this.last_move = null;
         this.observers = [];
     }
 
@@ -126,7 +126,6 @@ class BoardLiveImage{
     }
 
     handle_board_event(event){
-        console.log(event)
         if( typeof event?.game_status != "string" || typeof event?.board != "object" || typeof event?.nr != "number"){
             console.log("API produced unrecognizable response. Outdated client?");
             console.log(event);
@@ -139,6 +138,7 @@ class BoardLiveImage{
             this.red_clock = event.red_clock;
             this.blue_clock = event.blue_clock;
             this.winner = event.winner;
+            this.last_move = event.last_move;
             this.notify_observers();
         }
     }
@@ -211,7 +211,6 @@ class BoardPositionLiveImage{
 
     __parse_position(boardArray){
         let result = [];
-        console.log(boardArray)
         if (!boardArray) return result;
 
         for(let i = 0; i < boardArray.length; ++i) if(boardArray[i] != null){
@@ -221,13 +220,11 @@ class BoardPositionLiveImage{
 
             result.push([i, new Piece(color, type)]);
         }
-        console.log(result);
         return result;
     }
 
     update(boardLiveImage){
         const new_pos = this.__parse_position(boardLiveImage.position);
-        console.log(new_pos)
         const are_pos_different = (pos1, pos2) => {
             if(pos1.length != pos2.length)
                 return true;
@@ -298,6 +295,32 @@ class WinnerLiveImage {
     }
 
 }
+
+class LastMoveLiveImage {
+    constructor(boardLiveImage){
+        this.last_move = boardLiveImage.last_move;
+        this.observers = [];
+        boardLiveImage.add_observer(this);
+    }
+
+    update(boardLiveImage){
+        if(boardLiveImage.last_move != this.last_move){
+            this.last_move = boardLiveImage.last_move;
+            this.notify_observers();
+        }
+    }
+
+    notify_observers(){
+        for (let o of this.observers){
+            o.set_last_move(this.last_move);
+        }
+    }
+
+    add_observer(observer){
+        this.observers.push(observer);
+        observer.set_last_move(this.last_move);
+    }
+}
 class UserListOrderedOperationsList{
     constructor(userList, serverConnection, roomId){
         this.userList = userList;
@@ -333,7 +356,6 @@ class UserListOrderedOperationsList{
             }
         };
 
-        console.log(this.userList)
 
         if(!sync)
             this.userList.set(result);
@@ -350,7 +372,6 @@ class UserListOrderedOperationsList{
     }
 
     handle_user_event(event){
-        console.log(event);
         if(typeof event?.nr != "number" || typeof event?.op != "string"){
                 console.log("API produced unrecognizable response. Outdated client?");
                 console.log(event);
@@ -401,7 +422,6 @@ class UserListLiveImage{
     }
 
     notify_observers(){
-        console.log(this.user_list)
         for(let observer of this.user_list_observers){
             observer.update_user_list(this.user_list);
         }
@@ -418,7 +438,6 @@ class UserListLiveImage{
 
     set(user_list){
         this.user_list = user_list;
-        console.log(user_list)
         this.notify_observers();
     }
 
@@ -569,6 +588,7 @@ export class RoomLiveImage{
         this.gamePhaseLiveImage = new GamePhaseLiveImage(this.boardLiveImage); 
         this.timersLiveImage = new TimersLiveImage(this.boardLiveImage);   
         this.winnerLiveImage = new WinnerLiveImage(this.boardLiveImage); 
+        this.lastMoveLiveImage = new LastMoveLiveImage(this.boardLiveImage);
     }
 
     sync(){

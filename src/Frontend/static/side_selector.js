@@ -32,7 +32,6 @@ export class SideSelectorSeatModel{
     
       this.isUserOwner = newUsername == appGlobalContext.currentUser.username;
       this.ownerUsername = newUsername;
-      console.log(this, appGlobalContext)
       if(anyChange)
         this.notify_observers();
   }

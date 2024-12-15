@@ -50,11 +50,38 @@ export class Square {
   }
 }
 
+export class BoardStateHiglightMask{
+  constructor(state){
+    this.__state = state;
+    this.last_move = null;
+  }
+
+  __apply(){
+    for (let i = 0; i < 100; ++i) 
+      this.__state.squares[i].highlight = false;
+
+    if (this.last_move) {
+
+      this.__state.squares[this.last_move.from].highlight = true;
+      this.__state.squares[this.last_move.to].highlight = true;
+    }
+
+    this.__state.notify_observers();
+  }
+
+  set_last_move(move){
+    this.last_move = move
+    this.__apply();
+  }
+
+}
+
 export class BoardState {
   constructor() {
     this.squares = new Array(100);
     this.observers = [];
     this.temporal_observer = null;
+    this.highlight_mask_manager = new  BoardStateHiglightMask(this);
     this.reset()
   }
 
@@ -63,6 +90,7 @@ export class BoardState {
       this.squares[i] = new Square()
       this.squares[i].index = i
     }
+    this.highlight_mask_manager.__apply();
   }
 
   notify_observers() {
@@ -74,7 +102,6 @@ export class BoardState {
 
   set_position(index_piece_pairs) {
     this.reset()
-    console.log(index_piece_pairs)
     for (let i = 0; i < index_piece_pairs.length; ++i) {
       let index = index_piece_pairs[i][0]
       let piece = index_piece_pairs[i][1]
@@ -84,6 +111,7 @@ export class BoardState {
     this.notify_observers()
   }
 
+  // This class allows to sidestep higlight mask manager api
   set_square(sq) {
     this.squares[sq.index] = sq
     this.notify_observers()
@@ -131,14 +159,16 @@ export class MoveGenerator {
         if (this.is_move_valid(move))
            result.push(move)
       }
-      console.log(piece)
       return result
     } else {
       const offsets = [-10, -1, 1, 10]
       let result = []
       for (let off of offsets)
         for (let i = 1; sq_id + i * off >= 0 && sq_id + i * off < 100; ++i) {
+          
           let sq = sq_id + i * off
+          if (this.lake_fields.indexOf(sq) != -1) break
+      
           let enemy = this.state?.squares[sq].piece ?? null
 
           if (enemy == null) {
@@ -148,7 +178,7 @@ export class MoveGenerator {
 
           if (enemy.color == piece.color) break
 
-          if (this.lake_fields.includes(sq)) break
+     
 
           result.push(new Move(sq_id, sq))
           break // enemy piece
@@ -202,7 +232,13 @@ export class MoveGenerator {
       if (deltaX == 0 && deltaY == 0) return false
 
       let sq = move.from + 10 * deltaY + deltaX
-      while (sq >= 0 && sq < 100 && !this.lake_fields.includes(sq)) {
+      
+      while (sq >= 0 && sq < 100){
+
+        console.log(sq)
+        if (this.lake_fields.indexOf(sq) != -1)
+          return false;
+
         let enemy = this.state?.squares[sq].piece ?? null
         if (!enemy) {
           if (sq == move.to) {
@@ -256,10 +292,8 @@ export class BoardModel {
         this.selected_sq_id
       )
 
-      console.log(legal_moves)
       for (let move of legal_moves)
         this.boardstate.squares[move.to].draw_dot = true
-      console.log(this.boardstate.squares)
     }
 
     this.boardstate.notify_observers()

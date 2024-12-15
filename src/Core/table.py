@@ -328,6 +328,7 @@ class GameplayManager:
                  set_table_to_finished_mode: Callable[[Side | None], None],
                  on_state_change: Callable[[], None],
                  player_info_manager: PlayerInfoManager):
+        self._last_move: Move | None = None
         self._game_instance = GameInstanceFactory().create_default()
         self.__job_manager = job_manager
         self.__set_table_to_finished_mode = set_table_to_finished_mode
@@ -340,6 +341,7 @@ class GameplayManager:
         self.on_state_change = on_state_change
 
     def set_game_state(self, state: GameState):
+        self._last_move = None
         self._game_instance.set_game_state(state)
 
     def make_move(self, move: tuple[int, int], side: Side) -> tuple[bool, str | None]:
@@ -354,6 +356,7 @@ class GameplayManager:
             self.__player_timeout_task.cancel()
             self.__player_timeout_task = None
 
+        self._last_move = Move(*move)
         tm_inc = self.time_control.red_time_control_ms if side is Side.red else self.time_control.blue_time_control_ms
         self.__time_budget[side] -= time_ms() - self.__turn_start
         self.__time_budget[side] += tm_inc[1]
@@ -361,6 +364,9 @@ class GameplayManager:
         self._game_instance.execute_move(move)
 
         return True, None
+
+    def get_last_move(self) -> Move | None:
+        return self._last_move
 
     def get_moving_side(self):
         return "blue" if self._game_instance.get_side().value else "red"
@@ -630,12 +636,14 @@ class Table:
         winner = {Side.red: "red",
                   Side.blue: "blue",
                   None: None}[self._finished_state_manager.winner]
+        last_move = self.get_gameplay_manager().get_last_move()
 
         event_body = {"type": "board_event", "nr": self.__generated_events_counter,
                       "game_status": status[self.phase_type],
                       "moving_side": self._gameplay_manager.get_moving_side(),
                       "red_clock": self._player_info_manager.player_info[Side.red].timer.to_dict(),
                       "blue_clock": self._player_info_manager.player_info[Side.blue].timer.to_dict(),
+                      "last_move": last_move.to_dict() if last_move else None,
                       "winner": winner
                       }
 
@@ -760,6 +768,8 @@ class TableApi:
                   Side.blue: "blue",
                   None: None}[self.table.get_finished_state_manager().winner]
 
+        last_move = self.table.get_gameplay_manager().get_last_move()
+
         response = {"status": "success",
                     "nr": nr,
                     "game_status": status,
@@ -768,6 +778,7 @@ class TableApi:
                     "red_clock": self.table.get_player_info_manager().player_info[Side.red].timer.to_dict(),
                     "blue_clock": self.table.get_player_info_manager().player_info[Side.blue].timer.to_dict(),
                     "move_list": move_list,
+                    "last_move": last_move.to_dict() if last_move else None,
                     "winner": winner
                     }
         return response

@@ -108,6 +108,17 @@ export class TableModel{
         this.boardModel.set_selected_square_id(-1); // reset any marks
     }
 
+    set_last_move(move){
+        let user_oriented_move = null;
+        if (move){
+            if(appGlobalContext.currentUser.boardrole == "blue_player")
+                user_oriented_move = {from: 99 - move.from, to: 99 - move.to};
+            else
+                user_oriented_move = move;
+        }
+        this.boardModel.boardstate.highlight_mask_manager.set_last_move(user_oriented_move);
+    }
+
 }
 
 class AppGlobalContext{

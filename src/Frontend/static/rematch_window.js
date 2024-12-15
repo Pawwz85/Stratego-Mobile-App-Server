@@ -58,54 +58,55 @@ export class RematchWindowModel {
             this.isUserPlayer = true;
             this.isUserWillingToRematch = this.isBlueWillingForRematch;
         }
-        console.log(this, user)
         this.notify_observers();
 
     }
 }
 
 const defaultRematchWindowConfig = {
-    window_stroke: SVGHorizontalGradient(["red", "white", "blue"]),
+    window_stroke: null,
+    window_rx: 10,
+    window_ry: 10,
     window_stroke_width: "1%",
     window_fill: "black",
     
     label_x: "50%",
     label_y: "20%",
-    label_fill: SVGHorizontalGradient(["red", "blue"]),
+    label_fill: "#C084FC",
 
     red_player_label_x: "25%",
     red_player_label_y: "30%",
     red_player_label_text: "Red Player",
-    red_player_label_fill: SVGHorizontalGradient(["red", "purple"]),
+    red_player_label_fill: SVGHorizontalGradient(["red", "#C084FC"]),
 
     blue_player_label_x: "75%",
     blue_player_label_y: "30%",
     blue_player_label_text: "Blue Player",
-    blue_player_label_fill: SVGHorizontalGradient(["purple", "blue"]),
+    blue_player_label_fill: SVGHorizontalGradient(["#C084FC", "blue"]),
 
     red_player_rematch_status_label_x: "25%",
     red_player_rematch_status_label_y: "45%",
     red_player_rematch_status_label_text: "Wants Rematch",
-    red_player_rematch_status_label_fill: SVGHorizontalGradient(["red", "purple"]),
+    red_player_rematch_status_label_fill: "#C084FC",
 
     blue_player_rematch_status_label_x: "75%",
     blue_player_rematch_status_label_y: "45%",
     blue_player_rematch_status_label_text: "Wants Rematch",
-    blue_player_rematch_status_label_fill: SVGHorizontalGradient(["purple", "blue"]),
+    blue_player_rematch_status_label_fill: "#C084FC",
 
-    toggle_label_x: "35%",
-    toggle_label_y: "75%",
-    toggle_label_fill: SVGHorizontalGradient(["red", "blue"]),
+    toggle_label_x: "50%",
+    toggle_label_y: "60%",
+    toggle_label_fill: "#C084FC",//SVGHorizontalGradient(["red", "blue"]),
     toggle_label_text: "Rematch?",
 
-    toggle_x: "55%",
+    toggle_x: "45%",
     toggle_y: "67.75%",
     toggle_width: "10%",
     toggle_height: "5%",
     toggle_passive_bar_fill: "gray",
-    toggle_active_bar_fill: SVGHorizontalGradient(["#ffffff", "gray"]),
+    toggle_active_bar_fill: SVGHorizontalGradient(["gray", "#C084FC"]),
     toggle_passive_dot_fill:  "white",
-    toggle_active_dot_fill: "gray",
+    toggle_active_dot_fill: "#C084FC",
 }
 
 export class RematchWindowView {
@@ -141,12 +142,13 @@ export class RematchWindowView {
         background.setAttribute("fill", this.config.window_fill);
         background.setAttribute("stroke", this.config.window_stroke);
         background.setAttribute("stroke-width", this.config.window_stroke_width);
+        background.setAttribute("rx", this.config.window_rx);
+        background.setAttribute("ry", this.config.window_ry);
         return background;
     }
 
     //TODO: refactor this function
     update(rematchWindowModel){
-        console.log(rematchWindowModel)
         // step 1. clear element and init blakc background
         this.__clear();
 

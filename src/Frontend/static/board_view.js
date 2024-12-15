@@ -345,7 +345,6 @@ export class BoardView {
   }
 
   set_state(boardstate) {
-    console.log(boardstate)
     this.renderer.set_state(boardstate)
     this.refresh()
     return this.boardElement

@@ -15,7 +15,8 @@ function bind_globals_to_room(room){
     roomLiveImage.playerReadyStatusLiveImage.add_observer(appGlobalContext.seatWindowModel);
     roomLiveImage.winnerLiveImage.add_observer(appGlobalContext.rematchWindowModel);
     roomLiveImage.rematchWillingnessLiveImage.add_observer(appGlobalContext.rematchWindowModel);
-    
+    roomLiveImage.lastMoveLiveImage.add_observer(appGlobalContext.table);
+
     serverConnection.eventHandler = roomLiveImage.get_event_handler();
 
     appGlobalContext.blue_clock = roomLiveImage.timersLiveImage.blue_clock;
@@ -25,6 +26,7 @@ function bind_globals_to_room(room){
     appGlobalContext.seatWindowModel.onSeatRelease = _ => {serverConnection.commandMannager.release_seat();};
     appGlobalContext.seatWindowModel.onReadyChange = value => {serverConnection.commandMannager.set_ready(value);};
     appGlobalContext.rematchWindowModel.onUserRematchWillingnessChange = value => {serverConnection.commandMannager.request_rematch(value)};
+    appGlobalContext.chatModel = roomLiveImage.chatImage.chatModel;
 }
 export function append_game_to_element(element_id){
 

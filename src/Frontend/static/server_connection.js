@@ -32,7 +32,7 @@ class EventHandler{
     }
 }
 
-class GameNodeCommandManager{
+export class GameNodeCommandManager{
     constructor(serverConnection){
         this.serverConnection = serverConnection;
         this.timeout_time = 10000;
@@ -120,7 +120,7 @@ class GameNodeCommandManager{
 /*
     This class manages callbacks associates with given 
 */
-class ServerRequestManager{
+export class ServerRequestManager{
     constructor(){
         this.id_sequence = 0;
         this.requests = new Map(); // map from requests id to request metadata
@@ -213,7 +213,5 @@ export class ServerConnection{
         return promise;
     }
    
-    
-
 }
 

@@ -1,6 +1,6 @@
 import {appGlobalContext} from "./global_context.js"
 import {OnlineGameplayBoardController} from "./gameplay_board_controller.js"
-import {SelectorWithQuantityModel, SelectorWithQuantityView} from "./unit_selector.js"
+import {SelectorWithQuantityModel} from "./unit_selector.js"
 import {SidePanelModel, SidePanelView} from "./board_side_panel.js"
 import {BoardModel, MoveGenerator, BoardState, PieceType, Color, Piece} from "./board_model.js"
 import {BoardView} from "./board_view.js"
