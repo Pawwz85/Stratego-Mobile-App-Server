@@ -211,8 +211,6 @@ def server_game_client(room_id: str | int):
     }
     return flask.render_template("board.html", boot_info=boot_info)
 
-
-# TODO: implement sorting and filtering of the items
 @app.route("/browse_rooms", methods=['GET', 'POST'])
 @login_required
 def browse_room():

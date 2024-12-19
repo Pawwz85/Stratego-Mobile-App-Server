@@ -218,11 +218,6 @@ export class BoardSvgRenderer {
     return result
   }
   render_square(index) {
-    /*
-            TODO:
-            1. This method had have expanded to a slightly above reasonable size, refactor it
-            2. The renderer should also export abbility to render items based on piece type, so can use it in unit selector 
-        */
     let result = document.createElementNS("http://www.w3.org/2000/svg", "svg")
     result.setAttribute("id", "square" + index)
     const square = this.state.squares[index]
@@ -326,7 +321,6 @@ export class BoardView {
 
   set_model(model) {
     if (model == null) {
-      // TODO: check if syntax is correct
       this.model = new BoardModel(new MoveGenerator(), new BoardState())
     } else {
       this.model = model
@@ -335,7 +329,6 @@ export class BoardView {
 
   set_controller(controller) {
     if (controller == null) {
-      // TODO: make the controller be able to handle any event of given square
       this.controller = {
         handle_sq_click(index) {}
       }

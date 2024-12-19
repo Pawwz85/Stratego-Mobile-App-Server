@@ -131,7 +131,6 @@ export class Move {
   }
 }
 
-// Note: this class is not yet completed. TODO: Work on this class once we can load state from server
 export class MoveGenerator {
   constructor() {
     this.state = null

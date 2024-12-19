@@ -229,7 +229,7 @@ export class SetupPhaseComponentsFactory{
                     for(let i = 0; i<100; ++i)
                         boardModel.boardstate.squares[i].highlight = false;
                     boardModel.boardstate.squares[sq].highlight = true;
-                    boardModel.boardstate.notify_observers(); // TODO: implement  
+                    boardModel.boardstate.notify_observers();
                 }
               
             },
@@ -237,7 +237,7 @@ export class SetupPhaseComponentsFactory{
                 if(this.mouse_index == sq){
                     this.mouse_index = null;
                     boardModel.boardstate.squares[sq].highlight = false;
-                    boardModel.boardstate.notify_observers(); // TODO: implement  
+                    boardModel.boardstate.notify_observers();
                 }
             }
         }

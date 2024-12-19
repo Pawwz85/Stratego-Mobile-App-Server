@@ -202,7 +202,6 @@ export class ServerConnection{
         this.socket.on("response", jsonPayload => {con.requestManager.set_response(jsonPayload);
                 console.log(jsonPayload)
         });
-        // TODO: create mechanism to handle server responses
     }
 
     send_request(req, timeout_time){

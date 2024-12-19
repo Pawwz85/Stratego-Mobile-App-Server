@@ -4,7 +4,6 @@ import {SimpleTogglerBuilder, SVGHorizontalGradient} from "./ui_primitives.js";
 
 */
 
-// TODO: connect toggle to rematch functionality 
 export class RematchWindowModel {
 
     constructor(){

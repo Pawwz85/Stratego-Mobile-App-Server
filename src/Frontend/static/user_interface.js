@@ -129,7 +129,7 @@ export class UserInterfaceView {
         const popup_window_y = Math.floor(0.33* board_seg_x);
         this.chat_fragment.setSize(page_x - board_seg_x, board_layout.size);
 
-        // TODO: calculate location of awaiting and finish window.
+
         // Problem we need to get placement of the board, encapsulated by board segment 
         this.side_selector_window.setSize(popup_window_x, popup_window_y);
         this.rematch_window.setSize(popup_window_x, popup_window_y); 

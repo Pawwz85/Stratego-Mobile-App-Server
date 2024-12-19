@@ -15,7 +15,6 @@ import {SetupPhaseComponentsFactory, check_if_setup_is_valid} from "./setup.js"
 
 // copied from old game fragments code, it could be reused here
 
-// TODO: implement class BoardSegmentView
 export class BoardSegmentModel {
     constructor(serverConnection){
         this.game_phase = null; // null, "awaiting", "setup", "gameplay" or "finished"
@@ -121,7 +120,6 @@ export class BoardSegmentModel {
     }   
 }
 
-// TODO: implement this class
 export class BoardSegmentView {
     constructor(segmentModel, width, height){
         this.model = segmentModel;

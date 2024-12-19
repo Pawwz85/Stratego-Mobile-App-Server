@@ -7,29 +7,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="1. Redesigned unit selector using tailwind&#10;2. Now last move on the board is higlighted&#10;3. Fixed bug where UI showed that scouts can walk across lakes">
+    <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="1. Replaced UserDto with UserIdentity. &#10;2. Few grammar corrections and import optimisation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Environment/IEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/IEnvironment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Environment/LocalMessageBrokerServiceBoot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/LocalMessageBrokerServiceBoot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Environment/RedisEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/RedisEnvironment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/TestUtil/UserSimulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestUtil/UserSimulation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_gamenodeApiHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_gamenodeApiHandler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Authenticathion/Authenticator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Authenticathion/Authenticator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Authenticathion/UserDao.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Authenticathion/UserDao.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/IUserRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/IUserRepository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/Room.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Room.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/User.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Frontend/Frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/Frontend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/RoomBrowser.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/RoomBrowser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/login.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/websocket_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/websocket_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/websocket_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/websocket_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameNode/GameManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameNode/GameManager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameNode/GameManagerThread.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameNode/GameManagerThread.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameNode/PrivilegedModeScripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameNode/PrivilegedModeScripts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/InterClusterCommunication/HandleGameNodeMessage.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/InterClusterCommunication/HandleGameNodeMessage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/BoardSegment.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/BoardSegment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/board_model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_view.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/board_view.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/game_fragments.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/rematch_window.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/rematch_window.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/server_connection.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/server_connection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/setup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/setup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Frontend/static/user_interface.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/user_interface.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,30 +54,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Batch.win_start_redis_server_on_wsl.executor": "Run",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_by_signature.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_register_user.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_remove_old_entries.executor": "Run",
-    "Python tests.Python tests in UnitTests.executor": "Run",
-    "Python tests.Python tests in test_SocketManager.py.executor": "Run",
-    "Python.Authenticator.executor": "Run",
-    "Python.Frontend.executor": "Run",
-    "Python.RunGameNode.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Pawwz/IdeaProjects/LogicalGamesTournament",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "configurable.group.editor"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Batch.win_start_redis_server_on_wsl.executor&quot;: &quot;Run&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_by_signature.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_register_user.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_remove_old_entries.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in UnitTests.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_SocketManager.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Authenticator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Frontend.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RunGameNode.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Pawwz/IdeaProjects/LogicalGamesTournament&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;
   }
-}]]></component>
+}</component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
@@ -246,7 +234,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734274248875</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="1. Replaced UserDto with UserIdentity. &#10;2. Few grammar corrections and import optimisation">
+      <option name="closed" value="true" />
+      <created>1734642253402</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1734642253402</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -254,7 +250,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -266,7 +274,8 @@
     <MESSAGE value="1. Redesigned unit selector using tailwind&#10;2. Now last move on the board is higlighted &#10;3. Fixed bug where UI showed that scouts can walk across lakes" />
     <MESSAGE value="1. Redesigned unit selector using tailwind&#10;2. Now last move on the board is higlighted &#10;3. Fixed bug where UI showed that scouts can walk across lakes&#10;4. Removed a bunch of leftover console.log calls" />
     <MESSAGE value="1. Redesigned unit selector using tailwind&#10;2. Now last move on the board is higlighted&#10;3. Fixed bug where UI showed that scouts can walk across lakes" />
-    <option name="LAST_COMMIT_MESSAGE" value="1. Redesigned unit selector using tailwind&#10;2. Now last move on the board is higlighted&#10;3. Fixed bug where UI showed that scouts can walk across lakes" />
+    <MESSAGE value="1. Replaced UserDto with UserIdentity. &#10;2. Few grammar corrections and import optimisation" />
+    <option name="LAST_COMMIT_MESSAGE" value="1. Replaced UserDto with UserIdentity. &#10;2. Few grammar corrections and import optimisation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
