@@ -82,9 +82,9 @@ class TablePhase:
     """
     This class represents a phase in a table's execution. It is initialized with three callables: 1. `phase_init` -
     called at the beginning of the phase to prepare it. 2. `phase_logic` - called during the actual execution of the
-    phase. 3. `phase_finish` - called at the end of the phase to perform any cleanup or finalization tasks. :param
+    phase. 3. `phase_finish` - called at the end of the phase to perform any cleanup or finalization tasks :param
     phase_init: A callable function that should not take any arguments and should be used to initialize the phase.
-    :param phase_logic: A callable function that takes no arguments and performs the logic for this phase. :param
+    :param phase_logic: A callable function that takes no arguments and performs the logic for this phase :param
     phase_finish: A callable function that does not take any arguments and performs cleanup or finalization tasks at
     the end of the phase.
     """
@@ -196,9 +196,9 @@ class SeatManagerWithReadyCommand(SeatManager):
         After this flag is seat, seat manager will wait transmission_time_ms ms to give
         user chance to change their mind.
 
-        :param set_table_to_setup_phase: Callable that sets the table to setup phase. :param job_manager: JobManager
-        instance used for delayed tasks management. :param transmission_time_ms: Delay (in milliseconds) after both
-        players are ready and before game starts. :param on_ready_change: Callback function taking Side and boolean
+        :param set_table_to_setup_phase: Callable that sets the table to 'setup' phase :param job_manager: JobManager
+        instance used for delayed tasks management :param transmission_time_ms: Delay (in milliseconds) after both
+        players are ready and before game starts :param on_ready_change: Callback function taking Side and boolean
         as arguments, called when readiness is changed :param seat_observer: Callback function taking seat ID and
         Side as arguments, called when a seat is released or occupied.
     """

@@ -1,6 +1,5 @@
 import time
 from abc import ABC, abstractmethod
-import os
 
 
 class ILocalMessageBrokerBoot(ABC):

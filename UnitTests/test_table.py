@@ -415,8 +415,8 @@ class TestFinishedGameManager(unittest.TestCase):
         self.execute_rematch = mock.Mock()
         self.rematch_change_callback = mock.Mock()
         self.event_man = Eventmanager(JobManager())
-        self.user1 = User("tester", "123", 1, self.event_man, None)
-        self.user2 = User("tester2", "123", 2, self.event_man, None)
+        self.user1 = User("tester", 1, self.event_man, None)
+        self.user2 = User("tester2", 2, self.event_man, None)
         self.finished_state_manager = FinishedStateManager(self.execute_rematch, self.rematch_change_callback)
 
     def tearDown(self):
@@ -456,8 +456,8 @@ class TestTable(unittest.TestCase):
         self.table_builder.set_seat_observer(self.seat_observer)
         self.table_builder.set_use_readiness(False)
 
-        self.user1 = User("tester", '', 1, self.event_man, None)
-        self.user2 = User("tester2", '', 2, self.event_man, None)
+        self.user1 = User("tester", 1, self.event_man, None)
+        self.user2 = User("tester2", 2, self.event_man, None)
 
     def tearDown(self):
         del self.user1, self.user2

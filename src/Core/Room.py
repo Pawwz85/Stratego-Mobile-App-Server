@@ -549,7 +549,7 @@ class RoomApi:
 
     def __call__(self, user: User, request: dict) -> tuple[bool, str | None] | dict:
         """
-        :param User user: The user object that is requesting an action. :param dict request: The dictionary
+        :param User user: The user object that is requesting an action :param dict request: The dictionary
         containing the specific command and parameters. :return: A tuple containing a boolean flag indicating success
         or failure, and an optional string or dictionary as the response data.
         """

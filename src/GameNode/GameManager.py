@@ -12,7 +12,7 @@ from collections.abc import Callable
 
 from src.Core.JobManager import JobManager, DelayedTask
 from src.Core.Room import Room, RoomApi, IRoomHandle
-from src.Core.User import User, UserDto
+from src.Core.User import User, UserIdentity
 from src.Core.table import Table
 from src.Events.Events import Eventmanager, IEventReceiver
 
@@ -32,9 +32,9 @@ class GameManager:
         self.handle_factory_method = room_handle_factory
         self.enable_privileged_testing_mode = enable_privileged_testing_mode
 
-    def register_user(self, user: UserDto):
+    def register_user(self, user: UserIdentity):
         if user.user_id not in self.users_connected.keys():
-            user_obj = User(user.username, user.password, user.user_id, self.event_manager)
+            user_obj = User(user.username, user.user_id, self.event_manager)
             user_obj.session.endpoints.add(self.eventReceiver)
             self.users_connected[user.user_id] = user_obj
 

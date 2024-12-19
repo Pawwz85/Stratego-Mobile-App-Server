@@ -1,6 +1,18 @@
+import dataclasses
 from abc import ABC, abstractmethod
 
-from src.Core.User import UserDto
+from src.Core.User import UserIdentity
+
+
+@dataclasses.dataclass
+class UserDatabaseObject:
+    username: str
+    password: str
+    user_id: int
+    salt: str
+
+    def to_user_identity(self):
+        return UserIdentity(self.username, self.user_id)
 
 
 class IUserRepository(ABC):
@@ -12,7 +24,7 @@ class IUserRepository(ABC):
         super().__init__()
 
     @abstractmethod
-    def find_user_by_id(self, id: str) -> UserDto | None:
+    def find_user_by_id(self, id: str) -> UserDatabaseObject | None:
         """
         Finds a user by their unique ID.
 
@@ -21,7 +33,7 @@ class IUserRepository(ABC):
         """
 
     @abstractmethod
-    def find_user_by_username(self, username: str) -> UserDto | None:
+    def find_user_by_username(self, username: str) -> UserDatabaseObject | None:
         """
         Finds a user by their username.
 
@@ -30,7 +42,7 @@ class IUserRepository(ABC):
         """
 
     @abstractmethod
-    def add_user(self, user: UserDto) -> bool:
+    def add_user(self, user: UserDatabaseObject) -> bool:
         """
         Adds a new user to the repository.
 
@@ -39,19 +51,10 @@ class IUserRepository(ABC):
         """
 
     @abstractmethod
-    def remove_user(self, user: UserDto) -> bool:
+    def remove_user(self, user: UserDatabaseObject) -> bool:
         """
         Removes an existing user from the repository.
 
         :param user: The details of the user to remove.
         :return: True if the user was removed successfully, False otherwise.
-        """
-
-    @abstractmethod
-    def is_tester(self, user: UserDto) -> bool:
-        """
-        Checks whether a user has tester privileges.
-
-        :param user: The details of the user to check.
-        :return: True if the user is a tester, False otherwise.
         """

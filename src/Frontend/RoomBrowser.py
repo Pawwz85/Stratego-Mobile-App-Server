@@ -5,7 +5,7 @@ from collections.abc import Iterable, Callable
 from dataclasses import dataclass
 from threading import Lock
 
-from src.Core.User import UserDto
+from src.Core.User import UserIdentity
 from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
 from src.InterClusterCommunication.IEventChannelManager import IChannelManager
 
@@ -56,7 +56,7 @@ class GameNodeRoomListCache:
             "type": "browse_rooms"
         }
         print(request)
-        empty_user = UserDto("SYSTEM", "", -1)
+        empty_user = UserIdentity("SYSTEM", -1)
 
         self._game_node_api_handler.on_user_request_dict(empty_user, request, callback=self.__update_room_list)
 

@@ -1,14 +1,12 @@
 import asyncio
-import json
 import threading
-from threading import Thread, Lock
-from redis import Redis
-from websockets import serve, ServerProtocol
+from threading import Lock
+
+from websockets import serve
 from websockets.asyncio.server import Server, ServerConnection
 
 from src.AsyncioWorkerThread import AsyncioWorkerThread
 from src.Authenticathion.Authenticator import Authenticator
-from src.Core.User import UserDto
 from src.Frontend.socket_manager import WebsocketUserSocket, SocketManager
 from src.Frontend.websocket_api import WebsocketStream, WebsocketInfo
 from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler

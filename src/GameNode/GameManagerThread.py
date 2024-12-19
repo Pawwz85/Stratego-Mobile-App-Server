@@ -6,7 +6,7 @@ from typing import Deque
 
 from src.Core.JobManager import JobManager
 from src.Core.Room import IRoomHandle
-from src.Core.User import UserDto
+from src.Core.User import UserIdentity
 from src.Events.Events import IEventReceiver, Eventmanager
 from src.GameNode.GameManager import GameManager
 from src.GracefulThreads import GracefulThread, loop_forever_gracefully
@@ -85,20 +85,20 @@ class GameManagerThread(Thread):
         return result
 
     @staticmethod
-    def parse_request(message: str) -> tuple[UserDto, dict]:
+    def parse_request(message: str) -> tuple[UserIdentity, dict]:
         js = json.loads(message)
         user_json: dict = js["user"]
-        user_dto = UserDto(user_json["username"], user_json["password"], user_json["user_id"])
+        user_identity = UserIdentity(user_json["username"], user_json["user_id"])
         request: dict = js["request"]
-        return user_dto, request
+        return user_identity, request
 
     def _iterate_requests(self):
         reqs = self._read_from_in()
         out: deque[str] = deque()
         for req in reqs:
-            user_dto, request_body = GameManagerThread.parse_request(req)
-            self._game_manager.register_user(user_dto)
-            user = self._game_manager.users_connected[user_dto.user_id]
+            user_identity, request_body = GameManagerThread.parse_request(req)
+            self._game_manager.register_user(user_identity)
+            user = self._game_manager.users_connected[user_identity.user_id]
             response = self._game_manager.api(user, request_body)
             if response is not None:
                 response["response_id"] = request_body["message_id"]

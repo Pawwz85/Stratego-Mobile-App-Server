@@ -13,7 +13,7 @@ class AppLogin:
 
         @self.login_manager.user_loader
         def load_user(user_id: str):
-            user_dto = self.user_dao.find_user_by_id(user_id)
-            if user_dto:
-                return HttpUser.from_dto(user_dto)
+            user = self.user_dao.find_user_by_id(user_id)
+            if user:
+                return HttpUser.from_user_identity(user.to_user_identity())
 

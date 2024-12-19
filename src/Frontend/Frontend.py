@@ -21,7 +21,7 @@ from src.Frontend.RoomBrowser import RoomBrowser, GlobalRoomListCache, RoomInfo
 from src.Frontend.TemporalStorageService import TemporalStorageService
 from src.Frontend.message_processing import UserResponseBufferer
 from src.Frontend.socket_manager import SocketManager, SocketioUserSocket
-from src.Frontend.socketio_socket_management import send_event_to_socketio_clients, send_event_to_user
+from src.Frontend.socketio_socket_management import send_event_to_user
 from src.Frontend.websocket_service import WebsocketService
 from src.InterClusterCommunication.GameNodeAPICallsBuilder import GameNodeApiRequestFactory
 from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
@@ -82,10 +82,9 @@ def login():
     if request.method == 'POST':
         user = authenticator.authenticate(request.form)
         if user is not None:
-            login_user(HttpUser.from_dto(user))
+            login_user(HttpUser.from_user_identity(user))
             flask.flash("Logged in successfully.")
             session["username"] = user.username
-            session["is_tester"] = authenticator.user_repository.is_tester(user)
             return flask.redirect("/")
 
     session.get("username")
@@ -115,7 +114,7 @@ def search_for_room():
 def get_room_info(room_id: str):
     req = GameNodeApiRequestFactory().create_get_room_info_request(room_id)
     user = flask_login.current_user
-    user = user.get_dto()
+    user = user.get_user_identity()
 
     res = response_bufferer.get_parsed_response(user.username, req.get("message_id"))
 
@@ -148,7 +147,7 @@ def create_room():
         control_params = request.form.deepcopy()
         req = GameNodeApiRequestFactory().create_create_room_request(control_params)
         response_id = req.get("message_id")
-        user = flask_login.current_user.get_dto()
+        user = flask_login.current_user.get_user_identity()
         game_node_api_handler.send_request(send_event, req, user)
         return flask.redirect("/create_room/processing/" + response_id)
 
@@ -178,7 +177,7 @@ def join_room_route(room_id: str):
         control_params = request.form.deepcopy()
         req = GameNodeApiRequestFactory().create_join_room_request(control_params, room_id)
         response_id = req.get("message_id")
-        user = flask_login.current_user.get_dto()
+        user = flask_login.current_user.get_user_identity()
         game_node_api_handler.send_request(send_event, req, user)
 
         return flask.redirect("/join_room/processing/" + room_id + "/" + response_id)
@@ -254,7 +253,7 @@ def register():
 
 @socketio.on("request")
 def handle_request_event(ev):
-    user = flask_login.current_user.get_dto()
+    user = flask_login.current_user.get_user_identity()
     game_node_api_handler.on_user_request(user, ev, send_event)
 
 

@@ -1,6 +1,9 @@
 from __future__ import annotations
-from src.Core.IUserRepository import IUserRepository
-from src.Core.User import UserDto
+
+import random
+
+from src.Core.IUserRepository import IUserRepository, UserDatabaseObject
+import string
 import psycopg2
 
 
@@ -16,13 +19,13 @@ class UserDao(IUserRepository):
         self.config = config
         super().__init__()
 
-    def find_user_by_id(self, id: str) -> UserDto | None:
+    def find_user_by_id(self, id: str) -> UserDatabaseObject | None:
         connection: psycopg2._psycopg.connection | None = None
         cursor: psycopg2._psycopg.cursor | None = None
         try:
             connection = self.connection_factory()
             cursor = connection.cursor()
-            sql = "SELECT username, password, id FROM t_users WHERE id = %s;"
+            sql = "SELECT username, password, id, salt FROM t_users WHERE id = %s;"
             data = (id,)
             cursor.execute(sql, data)
             result_tuple = cursor.fetchone()
@@ -32,16 +35,16 @@ class UserDao(IUserRepository):
             if connection is not None:
                 connection.close()
 
-        result = UserDto(*result_tuple) if result_tuple is not None else None
+        result = UserDatabaseObject(*result_tuple) if result_tuple is not None else None
         return result
 
-    def find_user_by_username(self, username: str) -> UserDto | None:
+    def find_user_by_username(self, username: str) -> UserDatabaseObject | None:
         connection: psycopg2._psycopg.connection | None = None
         cursor: psycopg2._psycopg.cursor | None = None
         try:
             connection = self.connection_factory()
             cursor = connection.cursor()
-            sql = "SELECT username, password, id FROM t_users WHERE username = %s;"
+            sql = "SELECT username, password, id, salt FROM t_users WHERE username = %s;"
             data = (username,)
             cursor.execute(sql, data)
             result_tuple = cursor.fetchone()
@@ -51,17 +54,18 @@ class UserDao(IUserRepository):
             if connection is not None:
                 connection.close()
 
-        result = UserDto(*result_tuple) if result_tuple is not None else None
+        result = UserDatabaseObject(*result_tuple) if result_tuple is not None else None
         return result
 
-    def add_user(self, user: UserDto) -> bool:
+    def add_user(self, user: UserDatabaseObject) -> bool:
         connection: psycopg2._psycopg.connection | None = None
         cursor: psycopg2._psycopg.cursor | None = None
+        user.salt = "".join([random.choice(string.ascii_letters) for _ in range(16)])
         try:
             connection = self.connection_factory()
             cursor = connection.cursor()
-            sql = "INSERT INTO t_users (username, password, id, is_tester) VALUES(%s, %s, %s, FALSE);"
-            data = (user.username, user.password, user.user_id)
+            sql = "INSERT INTO t_users (username, password, id, salt) VALUES(%s, %s, %s, %s);"
+            data = (user.username, user.password, user.user_id, user.salt)
             cursor.execute(sql, data)
             result = True
         except psycopg2.errors.Error:
@@ -74,7 +78,7 @@ class UserDao(IUserRepository):
 
         return result
 
-    def remove_user(self, user: UserDto) -> bool:
+    def remove_user(self, user: UserDatabaseObject) -> bool:
         connection: psycopg2._psycopg.connection | None = None
         cursor: psycopg2._psycopg.cursor | None = None
         try:
@@ -93,21 +97,3 @@ class UserDao(IUserRepository):
                 connection.close()
 
         return result
-
-    def is_tester(self, user: UserDto) -> bool:
-        connection: psycopg2._psycopg.connection | None = None
-        cursor: psycopg2._psycopg.cursor | None = None
-        try:
-            connection = self.connection_factory()
-            cursor = connection.cursor()
-            sql = "SELECT is_tester FROM t_users WHERE id = %s;"
-            data = (user.user_id,)
-            cursor.execute(sql, data)
-            result = cursor.fetchone()
-        finally:
-            if cursor is not None:
-                cursor.close()
-            if connection is not None:
-                connection.close()
-
-        return True if result else False

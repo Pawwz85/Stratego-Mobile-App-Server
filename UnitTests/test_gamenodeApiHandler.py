@@ -8,7 +8,7 @@ import redis.asyncio
 
 from Environment.EnvironmentFactory import EnvironmentFactory
 from src.AsyncioWorkerThread import AsyncioWorkerThread
-from src.Core.User import UserDto
+from src.Core.User import UserIdentity
 from src.Frontend.IntermediateRequestIDMapper import IntermediateRequestIDMapper
 from src.Frontend.message_processing import UserResponseBufferer
 from src.GameNode.GameNodeConfigBuilder import GameNodeConfigBuilder
@@ -73,7 +73,7 @@ class TestGameNodeApiHandler(unittest.IsolatedAsyncioTestCase):
 
     def test_send_request_for_empty_request(self):
         req = {}
-        user = UserDto("tester", "pass", 1)
+        user = UserIdentity("tester", 1)
         callback = Mock()
         self._GameNodeHandler.send_request(callback, req, user)
         time.sleep(9)
@@ -87,7 +87,7 @@ class TestGameNodeApiHandler(unittest.IsolatedAsyncioTestCase):
             "message_id": "test",
             "channel": "node"
         }
-        user = UserDto("tester", "pass", 1)
+        user = UserIdentity("tester",  1)
         callback = Mock()
         self._GameNodeHandler.send_request(callback, req, user)
         time.sleep(9)
@@ -101,7 +101,7 @@ class TestGameNodeApiHandler(unittest.IsolatedAsyncioTestCase):
             "message_id": "test",
             "channel": "node"
         }
-        user = UserDto("tester", "pass", 1)
+        user = UserIdentity("tester",  1)
         self._GameNodeHandler.send_request(lambda _, __: None, req, user)
         res = self._response_buffer.get_response("tester", "test")
 
@@ -114,7 +114,7 @@ class TestGameNodeApiHandler(unittest.IsolatedAsyncioTestCase):
             "message_id": "test",
             "channel": "node"
         }
-        user = UserDto("tester", "pass", 1)
+        user = UserIdentity("tester", 1)
         self._GameNodeHandler.send_request(lambda _, __: None, req, user)
         time.sleep(9)
         res = self._response_buffer.get_response("tester", "test")
@@ -127,7 +127,7 @@ class TestGameNodeApiHandler(unittest.IsolatedAsyncioTestCase):
             "message_id": "test",
             "channel": "node"
         }
-        user = UserDto("tester", "pass", 1)
+        user = UserIdentity("tester",  1)
         self._GameNodeHandler.send_request(lambda _, __: None, req.copy(), user)
         time.sleep(7)
         mock = Mock()

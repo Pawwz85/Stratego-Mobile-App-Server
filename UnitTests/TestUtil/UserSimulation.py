@@ -94,7 +94,7 @@ class UserSimulationInterpreter:
 
     def _resolve_user(self, login: str) -> User:
         if login not in self._user_pool.keys():
-            user = User(login, "12345", len(self._user_pool), self.event_manager)
+            user = User(login, len(self._user_pool), self.event_manager)
             user.session.endpoints.add(ConsoleEventReceiver(user.username, self.event_manager))
             self._user_pool[login] = user
         return self._user_pool[login]

@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
 from Environment.LocalMessageBrokerServiceBoot import ILocalMessageBrokerBoot, boot_local_message_broker
-from src.Core.singleton import singleton
 
 
 class IEnvironment(ABC):

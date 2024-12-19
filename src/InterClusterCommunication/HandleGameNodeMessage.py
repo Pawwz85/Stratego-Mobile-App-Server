@@ -2,7 +2,7 @@ import json
 from typing import Callable
 
 from src.AsyncioWorkerThread import AsyncioWorkerThread
-from src.Core.User import UserDto
+from src.Core.User import UserIdentity
 from src.Frontend.IntermediateRequestIDMapper import IntermediateRequestIDMapper
 from src.Frontend.message_processing import UserResponseBufferer, decode_json, check_message_type, UserMessageType
 from src.InterClusterCommunication.IEventChannelManager import IChannelManager
@@ -69,26 +69,26 @@ class GameNodeAPIHandler:
             "error": "Missing value \"room_id\"",
         }
 
-    async def _submit_create_room_command(self, user: UserDto, request: dict):
+    async def _submit_create_room_command(self, user: UserIdentity, request: dict):
         msg = {
-            "user": {"username": user.username, "user_id": user.user_id, "password": user.password},
+            "user": {"username": user.username, "user_id": user.user_id},
             "request": request
         }
         await self._channel_manager.get_request_queue().enqueue_request(json.dumps(msg))
 
-    async def _submit_browse_room_command(self, user: UserDto, request: dict):
+    async def _submit_browse_room_command(self, user: UserIdentity, request: dict):
         ch = request.get("channel", "default")
         msg = {
-            "user": {"username": user.username, "user_id": user.user_id, "password": user.password},
+            "user": {"username": user.username, "user_id": user.user_id},
             "request": request
         }
         await self._channel_manager.get_pub_sub().publish(ch, json.dumps(msg))
 
-    async def _submit_by_room(self, user: UserDto, room_id: str, request: dict):
+    async def _submit_by_room(self, user: UserIdentity, room_id: str, request: dict):
         channel = await self._channel_manager.get_routing_manager().get_routing(room_id)
         print(f"Room {room_id} is available on {channel}")
         msg = {
-            "user": {"username": user.username, "user_id": user.user_id, "password": user.password},
+            "user": {"username": user.username, "user_id": user.user_id},
             "request": request
         }
 
@@ -98,12 +98,12 @@ class GameNodeAPIHandler:
             pass
             # TODO: tell user that there is no such room
 
-    def on_user_request(self, user: UserDto, request: str | dict,
+    def on_user_request(self, user: UserIdentity, request: str | dict,
                         callback: Callable[[str, dict], any]):
         request_json = decode_json(request) if type(request) is str else request
         self.on_user_request_dict(user, request_json, callback=callback)
 
-    def on_user_request_dict(self, user: UserDto, request_json: dict | None, callback: Callable[[str, dict], any],
+    def on_user_request_dict(self, user: UserIdentity, request_json: dict | None, callback: Callable[[str, dict], any],
                              request: str | None = None):
         request_type = check_message_type(request_json)
         request = json.dumps(request_json) if request is None else request
@@ -122,7 +122,7 @@ class GameNodeAPIHandler:
 
             self.send_request(callback, request_json, user)
 
-    def send_request(self, callback: Callable[[str, dict], any] | None, request: dict, user: UserDto):
+    def send_request(self, callback: Callable[[str, dict], any] | None, request: dict, user: UserIdentity):
         request_id = request.get("message_id")
 
         if not request_id:
@@ -139,7 +139,7 @@ class GameNodeAPIHandler:
             result = self._create_room_id_missing_response(request_id)
             callback(user.username, result)
 
-    def _forward_request_to_game_node_(self, request: dict, user: UserDto):
+    def _forward_request_to_game_node_(self, request: dict, user: UserIdentity):
         if request.get("type") == "create_room":
             self._worker_thread.add_task(self._submit_create_room_command(user, request))
         elif request.get("type") == "browse_rooms":
@@ -149,9 +149,9 @@ class GameNodeAPIHandler:
         else:
             raise _MissingFieldRoomID()
 
-    def create_placeholder_response(self, request_id: str, user: UserDto):
+    def create_placeholder_response(self, request_id: str, user: UserIdentity):
         self._user_response_buffer.create_placeholder_response(user.username, request_id)
 
-    def probe_response(self, user: UserDto, request_id: str) -> dict | None:
+    def probe_response(self, user: UserIdentity, request_id: str) -> dict | None:
         raw_res = self._user_response_buffer.get_response(user.username, request_id)
         return json.loads(raw_res) if raw_res else None

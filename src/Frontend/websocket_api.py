@@ -2,7 +2,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from src.Authenticathion.Authenticator import Authenticator
-from src.Core.User import UserDto
+from src.Core.User import UserIdentity
 from src.Frontend.message_processing import decode_json, check_message_type, UserMessageType
 from src.Frontend.socket_manager import IUserSocket, SocketManager
 from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
@@ -11,7 +11,7 @@ from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandl
 @dataclass
 class WebsocketInfo:
     socket: IUserSocket
-    user: UserDto | None  # None in case of users before login
+    user: UserIdentity | None  # None in case of users before login
 
 
 class WebsocketStream:
