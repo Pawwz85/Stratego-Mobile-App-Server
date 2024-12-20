@@ -3,13 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='menu.css')}}">
 </head>
 <body>
-<p>At the moment it is a stub</p>
-<div id="register_form_container">
-    <form name="register_form" method="post" action="/register">
+<div id="register_form_container" class="w-screen h-screen flex flex-col justify-center items-center">
+    <h1 class="text-3xl font-bold mb-4 text-center text-blue-600">Register</h1>
+    <form id="register_form" class="flex flex-row justify-center items-center w-2/3 mx-auto" action="/register" method="post">
+        <!-- Username input field -->
+        <div class="mb-4">
+            <input type="text" name="username" value="{{ val_username }}" id="register_form_username" placeholder="Your Login" class="border bg-white hover:bg-gray-100 focus:outline-none focus:bg-gray-200 px-4 py-2 rounded">
+            <p class="text-red-500 mb-2">{{ err_username }}</p>
+        </div>
+        <!-- Email input field -->
+        <div class="mb-4">
+            <input type="email" name="email" value="{{ val_email }}" id="register_form_email" placeholder="Your Email" class="border bg-white hover:bg-gray-100 focus:outline-none focus:bg-gray-200 px-4 py-2 rounded">
+            <p class="text-red-500 mb-2">{{ err_email }}</p>
+        </div>
+        <!-- Password input field -->
+        <div class="mb-4">
+            <input type="password" name="password" value="{{ val_password }}" id="register_form_password" placeholder="Your Password" class="border bg-white hover:bg-gray-100 focus:outline-none focus:bg-gray-200 px-4 py-2 rounded">
+            <p class="text-red-500 mb-2">{{ err_password }}</p>
 
+        </div>
+           <button type="submit" value="Register" class="border bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Register</button>
     </form>
+     <div>
+            <comment>Already have an account? You can log in</comment>
+            <a id="register_login_link" href="/login" class="text-blue font-bold"> here.</a>
+     </div>
 </div>
+
 </body>
 </html>

@@ -12,7 +12,8 @@ class Authenticator:
     def __init__(self, config: dict):
         self.user_repository: IUserRepository = UserDao(config)
 
-    def hash_password(self, password: str, salt: str):
+    @staticmethod
+    def hash_password(password: str, salt: str):
         salted = password + salt
         password_bytes = salted.encode('utf-8')
         hash_object = hashlib.sha256(password_bytes)
@@ -22,12 +23,14 @@ class Authenticator:
         try:
             username = auth["username"]
             password = auth["password"]
+
             if type(username) is not str or type(password) is not str:
                 return None
 
             result = self.user_repository.find_user_by_username(username)
             print(result)
-            password_hash = self.hash_password(password, result.salt if result.salt else "")
+
+            password_hash = self.hash_password(password, result.salt if result.salt else "") if result else None
 
             if result is None or result.password != password_hash:
                 return None

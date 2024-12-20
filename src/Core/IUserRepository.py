@@ -10,6 +10,7 @@ class UserDatabaseObject:
     password: str
     user_id: int
     salt: str
+    email: str | None
 
     def to_user_identity(self):
         return UserIdentity(self.username, self.user_id)

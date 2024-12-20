@@ -47,40 +47,60 @@ def check_message_type(decoded_json: None | dict) -> UserMessageType:
         return UserMessageType.ill_formatted
 
 
+class TimeConstrainedRecord:
+    def __init__(self, data: any, discard_time_s: float = 10, refresh_on_touch: bool = True):
+        self._data = data
+        self._last_interact: float = time.time()
+        self._discard_time: float = discard_time_s
+        self._refresh_on_touch: bool = refresh_on_touch
+
+    def touch(self):
+        if self._refresh_on_touch:
+            self._last_interact = time.time()
+
+    def is_old(self, now: float | None = None):
+        if now is None:
+            now = time.time()
+        return now - self._last_interact > self._discard_time
+
+    def get_data(self):
+        self.touch()
+        return self._data
+
+
 class ResponseBufferer:
     """
     Class created to cache old server responses to allow application level retries
     """
-    def __init__(self):
-        self.response_buffer: dict[str, str] = dict()
-        self._entry_last_interact: dict[str, float] = dict()
-        self.entry_discard_time_s = 10.0
+    def __init__(self, default_discard_time=10.0):
+        self._entries: dict[str, TimeConstrainedRecord] = dict()
+        self.entry_discard_time_s = default_discard_time
 
     def _remove_entry(self, response_id: str) -> None:
-        self.response_buffer.pop(response_id)
-        self._entry_last_interact.pop(response_id)
+        self._entries.pop(response_id)
 
     def check_for_response(self, response_id: str) -> bool:
-        return response_id in self.response_buffer.keys()
+        return response_id in self._entries.keys()
 
     def get_response(self, response_id: str) -> str | None:
-        result = self.response_buffer.get(response_id)
-        if result:
-            print(self._entry_last_interact[response_id] - time.time())
-            self._entry_last_interact[response_id] = time.time()
-
-        return result
+        result = self._entries.get(response_id)
+        return result.get_data() if result else None
 
     def discard_old_entries(self):
         now = time.time()
-        keys_to_remove = [key for key in self.response_buffer.keys()\
-                          if now - self._entry_last_interact[key] > self.entry_discard_time_s]
+        keys_to_remove = [key for key, record in self._entries.items()
+                          if record.is_old(now)]
         for key in keys_to_remove:
             self._remove_entry(key)
 
-    def add_response(self, response_id: str, response: str):
-        self.response_buffer[response_id] = response
-        self._entry_last_interact[response_id] = time.time()
+    def __len__(self):
+        return len(self._entries)
+
+    def add_response(self, response_id: str, response: str,
+                     discard_time: float | None = None,
+                     refresh_on_touch: bool = True):
+        discard_time = self.entry_discard_time_s if discard_time is None else discard_time
+        self._entries[response_id] = TimeConstrainedRecord(response, discard_time, refresh_on_touch)
 
 
 class UserResponseBufferer:
@@ -88,13 +108,16 @@ class UserResponseBufferer:
         self.user_buffers: dict[str, ResponseBufferer] = dict()
         self.lock = Lock()
 
-    def add_response(self, username: str, response_id: str, response: str):
+    def add_response(self, username: str, response_id: str, response: str,
+                     discard_time: float | None = None,
+                     refresh_on_touch: bool = True
+                     ):
         with self.lock:
             user_buffer = self.user_buffers.get(username)
             if user_buffer is None:
                 user_buffer = ResponseBufferer()
                 self.user_buffers[username] = user_buffer
-            user_buffer.add_response(response_id, response)
+            user_buffer.add_response(response_id, response, discard_time, refresh_on_touch)
 
     def create_placeholder_response(self, username: str, response_id: str):
         placeholder = {
@@ -128,7 +151,7 @@ class UserResponseBufferer:
         with self.lock:
             to_remove = deque()
             for key, buffer in self.user_buffers.items():
-                if len(buffer.response_buffer) > 0:
+                if len(buffer) > 0:
                     buffer.discard_old_entries()
                 else:
                     to_remove.append(key)

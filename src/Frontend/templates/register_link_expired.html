@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='menu.css')}}">
+</head>
+<body>
+    <div class="w-screen h-screen flex flex-col justify-center items-center">
+        <h1 class="text-3xl font-bold mb-4 text-center text-blue-600">Register Link Expired</h1>
+        <p class="text-red-500 mt-4">{{ error }}</p>
+        <a id="register_login_link" href="/register" class="text-blue font-bold">Back to register.</a>
+    </div>
+</body>
+</html>

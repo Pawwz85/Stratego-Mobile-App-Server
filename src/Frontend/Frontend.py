@@ -15,7 +15,7 @@ import login
 from src.AsyncioWorkerThread import AsyncioWorkerThread
 from src.Authenticathion.Authenticator import Authenticator
 from src.Authenticathion.UserDao import UserDao
-from src.Core.User import HttpUser
+from src.Core.User import HttpUser, UserIdentity
 from src.Frontend.IntermediateRequestIDMapper import IntermediateRequestIDMapper
 from src.Frontend.RoomBrowser import RoomBrowser, GlobalRoomListCache, RoomInfo
 from src.Frontend.TemporalStorageService import TemporalStorageService
@@ -26,6 +26,7 @@ from src.Frontend.websocket_service import WebsocketService
 from src.InterClusterCommunication.GameNodeAPICallsBuilder import GameNodeApiRequestFactory
 from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
 from src.InterClusterCommunication.RedisChannelManager import RedisChannelManager
+from src.RegistrationController import RegistrationController
 
 app = Flask(__name__)
 socketio = SocketIO(app, always_connect=True)
@@ -41,6 +42,7 @@ app.config["SECRET_KEY"] = config["secret_key"]
 app_login = login.AppLogin(app, config)
 asyncio_worker = AsyncioWorkerThread()
 user_service = UserDao(config)
+registration_controller = RegistrationController(response_bufferer, user_service, config)
 redis = Redis.from_url(config["redis_url"])
 channel_manager = RedisChannelManager(redis)
 
@@ -211,6 +213,7 @@ def server_game_client(room_id: str | int):
     }
     return flask.render_template("board.html", boot_info=boot_info)
 
+
 @app.route("/browse_rooms", methods=['GET', 'POST'])
 @login_required
 def browse_room():
@@ -246,7 +249,49 @@ def browse_room():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    return flask.render_template('register.html')
+    if request.method == "GET":
+        return flask.render_template('register.html')
+    if request.method == "POST":
+        errors = {}
+
+        username = request.form.get("username")
+        password = request.form.get("password")
+        email = request.form.get("email")
+
+        if username is None or username == "":
+            errors["err_username"] = "Username can not be empty"
+
+        if password is None or password == "":
+            errors["err_password"] = "Password can't be empty"
+
+        if email is None or email == "":
+            errors["err_email"] = "Email can not be none"
+
+        if authenticator.user_repository.find_user_by_username(username) is not None:
+            errors["err_username"] = "Username is already taken"
+
+        if len(errors) == 0:
+            reg_id = registration_controller.create_registration_id(username, password, email)
+            registration_controller.send_mail(username, email, reg_id)
+            return flask.render_template('check_mail.html')
+        else:
+            values = {"val_" + field: request.form.get(field, "") for field in ["username", "password", "email"]}
+            return flask.render_template('register.html', **errors, **values)
+
+
+@app.route("/register/<registration_id>")
+def confirm_registration(registration_id: str):
+    user: UserIdentity | None
+    error: str | None
+    user, error = registration_controller.confirm_registration(registration_id)
+
+    if user is not None:
+        login_user(HttpUser.from_user_identity(user))
+        flask.flash("Logged in successfully.")
+        session["username"] = user.username
+        return flask.redirect("/")
+
+    return flask.render_template("register_link_expired.html", error=error)
 
 
 @socketio.on("request")
@@ -285,7 +330,7 @@ def start_server():
     asyncio_worker.add_task(global_room_list_cache.sync())
     asyncio_worker.start()
 
-    def stop_services(signum, frame):
+    def stop_services(_, __):
         print("stopping...")
         temporal_storage_service.stop()
         asyncio_worker.stop()

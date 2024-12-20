@@ -25,7 +25,7 @@ class UserDao(IUserRepository):
         try:
             connection = self.connection_factory()
             cursor = connection.cursor()
-            sql = "SELECT username, password, id, salt FROM t_users WHERE id = %s;"
+            sql = "SELECT username, password, id, salt, email FROM t_users WHERE id = %s;"
             data = (id,)
             cursor.execute(sql, data)
             result_tuple = cursor.fetchone()
@@ -44,7 +44,7 @@ class UserDao(IUserRepository):
         try:
             connection = self.connection_factory()
             cursor = connection.cursor()
-            sql = "SELECT username, password, id, salt FROM t_users WHERE username = %s;"
+            sql = "SELECT username, password, id, salt, email FROM t_users WHERE username = %s;"
             data = (username,)
             cursor.execute(sql, data)
             result_tuple = cursor.fetchone()
@@ -60,16 +60,24 @@ class UserDao(IUserRepository):
     def add_user(self, user: UserDatabaseObject) -> bool:
         connection: psycopg2._psycopg.connection | None = None
         cursor: psycopg2._psycopg.cursor | None = None
-        user.salt = "".join([random.choice(string.ascii_letters) for _ in range(16)])
         try:
             connection = self.connection_factory()
             cursor = connection.cursor()
-            sql = "INSERT INTO t_users (username, password, id, salt) VALUES(%s, %s, %s, %s);"
-            data = (user.username, user.password, user.user_id, user.salt)
+
+            sql = "select max(id) from t_users"
+            cursor.execute(sql)
+            id_ = cursor.fetchone()
+            id_ = (id_[0] + 1) if id_ else 1
+
+            sql = "INSERT INTO t_users (username, password, salt, email) VALUES(%s, %s,  %s, %s);"
+            data = (user.username, user.password, user.salt, user.email)
             cursor.execute(sql, data)
+
+            connection.commit()
             result = True
-        except psycopg2.errors.Error:
+        except psycopg2.errors.Error as error:
             result = False
+            connection.cancel()
         finally:
             if cursor is not None:
                 cursor.close()
@@ -87,6 +95,7 @@ class UserDao(IUserRepository):
             sql = "DELETE FROM t_users WHERE id = %s;"
             data = (user.user_id,)
             cursor.execute(sql, data)
+            connection.commit()
             result = True
         except psycopg2.errors.Error:
             result = False
@@ -97,3 +106,5 @@ class UserDao(IUserRepository):
                 connection.close()
 
         return result
+
+
