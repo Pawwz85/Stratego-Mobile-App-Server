@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-import random
 
 from src.Core.IUserRepository import IUserRepository, UserDatabaseObject
-import string
 import psycopg2
+
+from src.Core.IUserRoleRepository import UserRole
 
 
 class UserDao(IUserRepository):
@@ -107,4 +107,22 @@ class UserDao(IUserRepository):
 
         return result
 
+    def get_users_by_role(self, role: UserRole) -> list[UserDatabaseObject]:
+        connection: psycopg2._psycopg.connection | None = None
+        cursor: psycopg2._psycopg.cursor | None = None
+        try:
+            connection = self.connection_factory()
+            cursor = connection.cursor()
+            sql = ("SELECT username, password, id, salt, email FROM (t_users JOIN t_user_user_roles ON id = user_id) "
+                   "WHERE username = %s;")
+            data = (role.id,)
+            cursor.execute(sql, data)
+            query_result = cursor.fetchall()
+            result = [UserDatabaseObject(*u) for u in query_result]
+        finally:
+            if cursor is not None:
+                cursor.close()
+            if connection is not None:
+                connection.close()
 
+        return result

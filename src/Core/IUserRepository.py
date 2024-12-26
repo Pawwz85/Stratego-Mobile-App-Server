@@ -1,6 +1,7 @@
 import dataclasses
 from abc import ABC, abstractmethod
 
+from src.Core.IUserRoleRepository import UserRole
 from src.Core.User import UserIdentity
 
 
@@ -58,4 +59,12 @@ class IUserRepository(ABC):
 
         :param user: The details of the user to remove.
         :return: True if the user was removed successfully, False otherwise.
+        """
+
+    @abstractmethod
+    def get_users_by_role(self, role: UserRole) -> list[UserDatabaseObject]:
+        """
+        Retrieves a list of users possessing given role.
+
+        :param role: Role
         """

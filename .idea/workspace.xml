@@ -8,19 +8,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="1. Implemented a registration system.&#10;2. Implemented custom sized message lifespan in response bufferer.&#10;3. Added unit tests for response bufferer">
-      <change afterPath="$PROJECT_DIR$/UnitTests/test_response_bufferer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/check_mail.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Frontend/templates/register_link_expired.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RegistrationController.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Authenticathion/UserRoleDao.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Core/IUserRoleRepository.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Authenticathion/Authenticator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Authenticathion/Authenticator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Authenticathion/UserDao.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Authenticathion/UserDao.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/IUserRepository.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/IUserRepository.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/Frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/Frontend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/message_processing.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/message_processing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/menu.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/static/menu.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/Frontend/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RegistrationController.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/RegistrationController.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,9 +23,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="Python Unit Test" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -57,38 +50,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Batch.win_start_redis_server_on_wsl.executor": "Run",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_by_signature.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_register_user.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_remove_old_entries.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_refreshes_msg.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_response.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_response_time_out.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_turn_off_refresh_on_touch.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_default_timed_out.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_get_not_existing_response.executor": "Run",
-    "Python tests.Python tests in UnitTests.executor": "Run",
-    "Python tests.Python tests in test_SocketManager.py.executor": "Run",
-    "Python.Authenticator.executor": "Run",
-    "Python.Frontend.executor": "Run",
-    "Python.RunGameNode.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Pawwz/IdeaProjects/LogicalGamesTournament",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "configurable.group.editor"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Batch.win_start_redis_server_on_wsl.executor&quot;: &quot;Run&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_by_signature.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_register_user.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_remove_old_entries.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_refreshes_msg.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_response.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_response_time_out.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_turn_off_refresh_on_touch.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_default_timed_out.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_get_not_existing_response.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in UnitTests.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_SocketManager.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Authenticator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Frontend.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RunGameNode.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Pawwz/IdeaProjects/LogicalGamesTournament&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;
   }
-}]]></component>
+}</component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
@@ -96,7 +89,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_default_timed_out">
+  <component name="RunManager" selected="Python.RunGameNode">
     <configuration name="Frontend" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
@@ -119,19 +112,26 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_response_bufferer.TestResponseBufferer" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="RunGameNode" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_response_bufferer.TestResponseBufferer&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RunGameNode.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
     <configuration name="Python tests for test_response_bufferer.TestUserResponseBufferer" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
@@ -182,10 +182,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.Frontend" />
+        <item itemvalue="Python.RunGameNode" />
         <item itemvalue="Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_default_timed_out" />
         <item itemvalue="Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer" />
         <item itemvalue="Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_get_not_existing_response" />
-        <item itemvalue="Python tests.Python tests for test_response_bufferer.TestResponseBufferer" />
       </list>
     </recent_temporary>
   </component>
@@ -253,7 +253,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734643466493</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="1. Implemented a registration system.&#10;2. Implemented custom sized message lifespan in response bufferer.&#10;3. Added unit tests for response bufferer">
+      <option name="closed" value="true" />
+      <created>1734735531622</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1734735531622</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
