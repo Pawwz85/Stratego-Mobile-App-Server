@@ -4,8 +4,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import Mock
 
-import src.GameNode.ConfigLoader as ConfigLoader
-from src.GameNode.ConfigLoader import ConfigLoaderStrategy
+import src.ConfigLoader as ConfigLoader
+from src.ConfigLoader import ConfigLoaderStrategy
 
 
 class IConfigLoaderFactoryTestCase(unittest.TestCase):
@@ -15,7 +15,7 @@ class IConfigLoaderFactoryTestCase(unittest.TestCase):
 
         def __init__(self):
             super().__init__()
-            self.allowed_strategies = {ConfigLoader.ConfigLoaderStrategy.LoadFromDefaultJsonFile}
+            self.allowed_strategies = {ConfigLoader.ConfigLoaderStrategy.LoadFromCustomJsonFile}
 
     def setUp(self):
         self.factory = self.MockedConfigFactory()

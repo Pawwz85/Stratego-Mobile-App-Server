@@ -2,28 +2,23 @@ from __future__ import annotations
 
 
 from src.Core.IUserRepository import IUserRepository, UserDatabaseObject
-import psycopg2
 
+import pep249
 from src.Core.IUserRoleRepository import UserRole
+from src.DatabaseConnection.IConnectionFactory import IDatabaseConnectionFactory
 
 
 class UserDao(IUserRepository):
-    def __init__(self, config: dict):
-        self.connection_factory = lambda: psycopg2.connect(
-            dbname=config["db_name"],
-            host=config["db_host"],
-            password=config["db_password"],
-            port=config["db_port"],
-            user=config["db_user"]
-        )
+    def __init__(self, config: dict, connection_factory: IDatabaseConnectionFactory):
+        self.connection_factory: IDatabaseConnectionFactory = connection_factory
         self.config = config
         super().__init__()
 
     def find_user_by_id(self, id: str) -> UserDatabaseObject | None:
-        connection: psycopg2._psycopg.connection | None = None
-        cursor: psycopg2._psycopg.cursor | None = None
+        connection: pep249.Connection | None = None
+        cursor: pep249.Cursor | None = None
         try:
-            connection = self.connection_factory()
+            connection = self.connection_factory.get_connection()
             cursor = connection.cursor()
             sql = "SELECT username, password, id, salt, email FROM t_users WHERE id = %s;"
             data = (id,)
@@ -39,10 +34,10 @@ class UserDao(IUserRepository):
         return result
 
     def find_user_by_username(self, username: str) -> UserDatabaseObject | None:
-        connection: psycopg2._psycopg.connection | None = None
-        cursor: psycopg2._psycopg.cursor | None = None
+        connection: pep249.Connection | None = None
+        cursor: pep249.Cursor | None = None
         try:
-            connection = self.connection_factory()
+            connection = self.connection_factory.get_connection()
             cursor = connection.cursor()
             sql = "SELECT username, password, id, salt, email FROM t_users WHERE username = %s;"
             data = (username,)
@@ -58,10 +53,10 @@ class UserDao(IUserRepository):
         return result
 
     def add_user(self, user: UserDatabaseObject) -> bool:
-        connection: psycopg2._psycopg.connection | None = None
-        cursor: psycopg2._psycopg.cursor | None = None
+        connection: pep249.Connection | None = None
+        cursor: pep249.Cursor | None = None
         try:
-            connection = self.connection_factory()
+            connection = self.connection_factory.get_connection()
             cursor = connection.cursor()
 
             sql = "select max(id) from t_users"
@@ -75,9 +70,8 @@ class UserDao(IUserRepository):
 
             connection.commit()
             result = True
-        except psycopg2.errors.Error as error:
+        except BaseException:
             result = False
-            connection.cancel()
         finally:
             if cursor is not None:
                 cursor.close()
@@ -87,17 +81,17 @@ class UserDao(IUserRepository):
         return result
 
     def remove_user(self, user: UserDatabaseObject) -> bool:
-        connection: psycopg2._psycopg.connection | None = None
-        cursor: psycopg2._psycopg.cursor | None = None
+        connection: pep249.Connection | None = None
+        cursor: pep249.Cursor | None = None
         try:
-            connection = self.connection_factory()
+            connection = self.connection_factory.get_connection()
             cursor = connection.cursor()
             sql = "DELETE FROM t_users WHERE id = %s;"
             data = (user.user_id,)
             cursor.execute(sql, data)
             connection.commit()
             result = True
-        except psycopg2.errors.Error:
+        except BaseException:
             result = False
         finally:
             if cursor is not None:
@@ -108,10 +102,10 @@ class UserDao(IUserRepository):
         return result
 
     def get_users_by_role(self, role: UserRole) -> list[UserDatabaseObject]:
-        connection: psycopg2._psycopg.connection | None = None
-        cursor: psycopg2._psycopg.cursor | None = None
+        connection: pep249.Connection | None = None
+        cursor: pep249.Cursor | None = None
         try:
-            connection = self.connection_factory()
+            connection = self.connection_factory.get_connection()
             cursor = connection.cursor()
             sql = ("SELECT username, password, id, salt, email FROM (t_users JOIN t_user_user_roles ON id = user_id) "
                    "WHERE username = %s;")

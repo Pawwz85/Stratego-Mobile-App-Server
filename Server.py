@@ -1,4 +1,3 @@
-import json
 import os
 import signal
 import time
@@ -11,41 +10,43 @@ from flask_login import login_user
 from flask_socketio import SocketIO, join_room, leave_room
 from redis.asyncio import Redis
 
-import login
+import src.Server.login as login
 from src.AsyncioWorkerThread import AsyncioWorkerThread
 from src.Authenticathion.Authenticator import Authenticator
 from src.Authenticathion.UserDao import UserDao
 from src.Core.User import HttpUser, UserIdentity
-from src.Frontend.IntermediateRequestIDMapper import IntermediateRequestIDMapper
-from src.Frontend.RoomBrowser import RoomBrowser, GlobalRoomListCache, RoomInfo
-from src.Frontend.TemporalStorageService import TemporalStorageService
-from src.Frontend.message_processing import UserResponseBufferer
-from src.Frontend.socket_manager import SocketManager, SocketioUserSocket
-from src.Frontend.socketio_socket_management import send_event_to_user
-from src.Frontend.websocket_service import WebsocketService
+from src.Server.IntermediateRequestIDMapper import IntermediateRequestIDMapper
+from src.Server.RoomBrowser import RoomBrowser, GlobalRoomListCache, RoomInfo
+from src.Server.TemporalStorageService import TemporalStorageService
+from src.Server.message_processing import UserResponseBufferer
+from src.Server.socket_manager import SocketManager, SocketioUserSocket
+from src.Server.socketio_socket_management import send_event_to_user
+from src.Server.websocket_service import WebsocketService
 from src.InterClusterCommunication.GameNodeAPICallsBuilder import GameNodeApiRequestFactory
 from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
 from src.InterClusterCommunication.RedisChannelManager import RedisChannelManager
 from src.RegistrationController import RegistrationController
+from src.Server.ServerCLI import parse_config_from_cli
+from src.DatabaseConnection.ConcreteDatabaseConnectionFactory import ConcreteDatabaseConnectionFactory
 
+config = parse_config_from_cli()
 app = Flask(__name__)
 socketio = SocketIO(app, always_connect=True)
-
 send_event = lambda username, e: send_event_to_user(socketio, username=username, e=e)
 
 response_bufferer = UserResponseBufferer()
 socket_manager = SocketManager()
-with open('../../Config/secret_config.properties') as file:
-    config = json.load(file)
+
 app.config["SECRET_KEY"] = config["secret_key"]
 
-app_login = login.AppLogin(app, config)
+database_connection_abstract_factory = ConcreteDatabaseConnectionFactory(config)
+user_service = UserDao(config, database_connection_abstract_factory.get_connection_factory())
+
+app_login = login.AppLogin(app, user_service)
 asyncio_worker = AsyncioWorkerThread()
-user_service = UserDao(config)
 registration_controller = RegistrationController(response_bufferer, user_service, config)
 redis = Redis.from_url(config["redis_url"])
 channel_manager = RedisChannelManager(redis)
-
 
 game_node_api_handler = GameNodeAPIHandler(
     IntermediateRequestIDMapper(),
@@ -59,7 +60,7 @@ websocket_service = WebsocketService(config, game_node_api_handler, socket_manag
 global_room_list_cache = GlobalRoomListCache(game_node_api_handler, channel_manager)
 room_browser = RoomBrowser(global_room_list_cache)
 
-authenticator = Authenticator(config)
+authenticator = Authenticator(user_service)
 
 
 def login_required(route):

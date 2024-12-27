@@ -1,6 +1,6 @@
 import time
 
-from src.GameNode.ConfigLoader import ConfigLoaderStrategy, JsonConfigLoaderFactory
+from src.ConfigLoader import ConfigLoaderStrategy, JsonConfigLoaderFactory
 import argparse
 from Environment.EnvironmentFactory import EnvironmentFactory
 
@@ -18,9 +18,9 @@ def main(args):
         print(kwargs)
         factory = JsonConfigLoaderFactory()
     else:
-        conf_load_strategy = ConfigLoaderStrategy.LoadFromDefaultJsonFile
+        conf_load_strategy = ConfigLoaderStrategy.LoadFromCustomJsonFile
         args_ = ()
-        kwargs = {}
+        kwargs = {"file": "Config/game_node_config.properties"}
         factory = JsonConfigLoaderFactory()
 
     config = factory.build_config(conf_load_strategy, *args_, **kwargs)

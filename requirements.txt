@@ -3,7 +3,9 @@ fakeredis
 flask
 flask-socketio
 flask-security-too
-psycopg2
+pep249abc # for static typig purposes
+psycopg2 # used if server is deployed as a internet service
 websockets
 setproctitle
+
 # coverage # for unit testing

@@ -3,8 +3,8 @@ from dataclasses import dataclass
 
 from src.Authenticathion.Authenticator import Authenticator
 from src.Core.User import UserIdentity
-from src.Frontend.message_processing import decode_json, check_message_type, UserMessageType
-from src.Frontend.socket_manager import IUserSocket, SocketManager
+from src.Server.message_processing import decode_json, check_message_type, UserMessageType
+from src.Server.socket_manager import IUserSocket, SocketManager
 from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
 
 

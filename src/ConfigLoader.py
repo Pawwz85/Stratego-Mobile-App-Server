@@ -5,8 +5,6 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from pathlib import Path
 
-_Default_Config = "Config/game_node_config.properties"
-
 
 class _StrategyNotInFactoryDomainException(Exception):
     pass
@@ -24,7 +22,6 @@ class _ConfigLoader(ABC):
 
 
 class ConfigLoaderStrategy(Enum):
-    LoadFromDefaultJsonFile = 0
     LoadFromCustomJsonFile = 1
     LoadFromJsonString = 2
 
@@ -83,15 +80,11 @@ class JsonConfigLoaderFactory(IConfigLoaderFactory):
     def __init__(self):
         super().__init__()
         self.allowed_strategies = {ConfigLoaderStrategy.LoadFromJsonString,
-                                   ConfigLoaderStrategy.LoadFromCustomJsonFile,
-                                   ConfigLoaderStrategy.LoadFromDefaultJsonFile}
+                                   ConfigLoaderStrategy.LoadFromCustomJsonFile}
 
     def _build_loader(self, strategy: ConfigLoaderStrategy, *args, **kwargs) -> _ConfigLoader:
 
-        if strategy is ConfigLoaderStrategy.LoadFromDefaultJsonFile:
-            return JsonFileConfigLoader().set_path(Path(_Default_Config))
-        elif strategy is ConfigLoaderStrategy.LoadFromCustomJsonFile:
+        if strategy is ConfigLoaderStrategy.LoadFromCustomJsonFile:
             return JsonFileConfigLoader().set_path(kwargs["file"])
         else:
             return JsonStringConfigLoader().set_string(kwargs["json_string"])
-

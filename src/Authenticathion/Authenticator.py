@@ -9,8 +9,8 @@ from src.Core.User import UserIdentity
 
 class Authenticator:
 
-    def __init__(self, config: dict):
-        self.user_repository: IUserRepository = UserDao(config)
+    def __init__(self, user_repository: IUserRepository):
+        self.user_repository: IUserRepository = user_repository
 
     @staticmethod
     def hash_password(password: str, salt: str):

@@ -1,6 +1,6 @@
 import time
 import unittest
-from src.Frontend.message_processing import ResponseBufferer, UserResponseBufferer
+from src.Server.message_processing import ResponseBufferer, UserResponseBufferer
 
 
 class TestResponseBufferer(unittest.TestCase):

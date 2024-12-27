@@ -7,8 +7,11 @@ from websockets.asyncio.server import Server, ServerConnection
 
 from src.AsyncioWorkerThread import AsyncioWorkerThread
 from src.Authenticathion.Authenticator import Authenticator
-from src.Frontend.socket_manager import WebsocketUserSocket, SocketManager
-from src.Frontend.websocket_api import WebsocketStream, WebsocketInfo
+from src.Authenticathion.UserDao import UserDao
+from src.DatabaseConnection.ConcreteDatabaseConnectionFactory import ConcreteDatabaseConnectionFactory, \
+    SupportedDatabases
+from src.Server.socket_manager import WebsocketUserSocket, SocketManager
+from src.Server.websocket_api import WebsocketStream, WebsocketInfo
 from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
 
 
@@ -18,7 +21,8 @@ class WebsocketService:
                  socket_manager: SocketManager, worker: AsyncioWorkerThread):
         self.stop_flag = threading.Event()
         self.lock = Lock()
-        self.auth = Authenticator(config)
+        user_service = UserDao(config, ConcreteDatabaseConnectionFactory(config).get_connection_factory())
+        self.auth = Authenticator(user_service)
         self.worker = worker
         self._stream = WebsocketStream(api_handler, self.auth, socket_manager)
 

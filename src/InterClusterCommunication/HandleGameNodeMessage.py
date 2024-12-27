@@ -3,8 +3,8 @@ from typing import Callable
 
 from src.AsyncioWorkerThread import AsyncioWorkerThread
 from src.Core.User import UserIdentity
-from src.Frontend.IntermediateRequestIDMapper import IntermediateRequestIDMapper
-from src.Frontend.message_processing import UserResponseBufferer, decode_json, check_message_type, UserMessageType
+from src.Server.IntermediateRequestIDMapper import IntermediateRequestIDMapper
+from src.Server.message_processing import UserResponseBufferer, decode_json, check_message_type, UserMessageType
 from src.InterClusterCommunication.IEventChannelManager import IChannelManager
 
 

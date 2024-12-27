@@ -2,8 +2,8 @@ import time
 from threading import Thread
 
 from src import GracefulThreads
-from src.Frontend.message_processing import UserResponseBufferer
-from src.Frontend.socket_manager import SocketManager
+from src.Server.message_processing import UserResponseBufferer
+from src.Server.socket_manager import SocketManager
 
 
 @GracefulThreads.GracefulThread

@@ -9,8 +9,8 @@ import redis.asyncio
 from Environment.EnvironmentFactory import EnvironmentFactory
 from src.AsyncioWorkerThread import AsyncioWorkerThread
 from src.Core.User import UserIdentity
-from src.Frontend.IntermediateRequestIDMapper import IntermediateRequestIDMapper
-from src.Frontend.message_processing import UserResponseBufferer
+from src.Server.IntermediateRequestIDMapper import IntermediateRequestIDMapper
+from src.Server.message_processing import UserResponseBufferer
 from src.GameNode.GameNodeConfigBuilder import GameNodeConfigBuilder
 from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
 from src.InterClusterCommunication.IEventChannelManager import IPubSub

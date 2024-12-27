@@ -8,7 +8,7 @@ from src.Core.IUserRepository import IUserRepository, UserDatabaseObject
 from string import ascii_letters, digits
 
 from src.Core.User import UserIdentity
-from src.Frontend.message_processing import UserResponseBufferer
+from src.Server.message_processing import UserResponseBufferer
 
 
 class RegistrationController:
@@ -16,16 +16,16 @@ class RegistrationController:
         self._store = store
         self._repo = repository
         self._config = config
-        self._connection = smtplib.SMTP(config["smtp_host"], config["smtp_port"])
 
     def send_mail(self, username: str, email_address: str, registration_id: str):
+        connection = smtplib.SMTP(self._config["smtp_host"], self._config["smtp_port"])
         msg = email.message.EmailMessage()
         msg["From"] = "SYSTEM@" + self._config["domain_name"]
         msg["To"] = email_address
         msg["Subject"] = "Your email verification link"
         link = "".join(["www.", self._config["domain_name"], "/register/", registration_id])
         msg.set_content(f"Hello {username}! Your registration link is {link} The link expires in 5 minutes.")
-        self._connection.send_message(msg)
+        connection.send_message(msg)
 
     def create_registration_id(self, username: str, password: str, email: str) -> str:
         salt = "".join(random.choice(ascii_letters + digits) for _ in range(10))

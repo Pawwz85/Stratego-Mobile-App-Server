@@ -1,7 +1,7 @@
 import time
 import unittest
 from unittest.mock import Mock
-from src.Frontend.socket_manager import SocketManager, IUserSocket, SocketType
+from src.Server.socket_manager import SocketManager, IUserSocket, SocketType
 
 
 class UserSocketMock(IUserSocket):
