@@ -7,73 +7,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="Added current database backup">
-      <change afterPath="$PROJECT_DIR$/src/DatabaseConnection/ConcreteDatabaseConnectionFactory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/DatabaseConnection/IConnectionFactory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Server/ServerCLI.py" afterDir="false" />
+    <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="- Small refactoring on folder structure&#10;- Added support for SQLite">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GenerateSecrets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ToolsAndUtilitty/ConfigManager/ConfigFileSchema.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/pythonProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pythonProject.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RunGameNode.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunGameNode.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_SocketManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_SocketManager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_config_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_config_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_gamenodeApiHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_gamenodeApiHandler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_response_bufferer.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_response_bufferer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Authenticathion/Authenticator.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Authenticathion/Authenticator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Authenticathion/UserDao.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Authenticathion/UserDao.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Authenticathion/UserRoleDao.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Authenticathion/UserRoleDao.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/Frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/Server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/IntermediateRequestIDMapper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/IntermediateRequestIDMapper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/RoomBrowser.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/RoomBrowser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/TemporalStorageService.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/TemporalStorageService.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/login.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/message_processing.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/message_processing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/socket_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/socket_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/socketio_socket_management.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/socketio_socket_management.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/BoardSegment.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/BoardSegment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/PieceEncoder.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/PieceEncoder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/background.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/background.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_model.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/board_model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_side_panel.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/board_side_panel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/board_view.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/board_view.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/boot.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/boot.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/chat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/clock.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/clock.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/gameplay_board_controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/gameplay_board_controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/global_context.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/global_context.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/input.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/input.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/menu.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/menu.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/player_info.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/player_info.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/rematch_window.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/rematch_window.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/room_live_image.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/room_live_image.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/room_ui_manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/room_ui_manager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/server_connection.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/server_connection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/setup.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/setup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/side_selector.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/side_selector.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/ui_primitives.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/ui_primitives.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/unit_selector.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/unit_selector.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/static/user_interface.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/user_interface.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/board.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/board.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/chat_template.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/templates/chat_template.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/check_mail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/check_mail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/create_room.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/create_room.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/loading_screen.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/loading_screen.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/register_link_expired.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/register_link_expired.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/room_browser.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/room_browser.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/room_not_found.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/room_not_found.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/room_preview.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/room_preview.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/room_search.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/room_search.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/stratego_board.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/stratego_board.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/unit_selector.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/unit_selector.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/templates/unit_selector.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/templates/unit_selector.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/websocket_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/websocket_api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Frontend/websocket_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/websocket_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameNode/ConfigLoader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ConfigLoader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/InterClusterCommunication/HandleGameNodeMessage.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/InterClusterCommunication/HandleGameNodeMessage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RegistrationController.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/RegistrationController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dll/StrategoMoveGenerator.so" beforeDir="false" afterPath="$PROJECT_DIR$/dll/StrategoMoveGenerator.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/StrategoDll.sln" beforeDir="false" afterPath="$PROJECT_DIR$/src/StrategoMoveGenerator/StrategoDll.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/StrategoDll.vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/StrategoMoveGenerator/StrategoDll.vcxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/StrategoDll.vcxproj.filters" beforeDir="false" afterPath="$PROJECT_DIR$/src/StrategoMoveGenerator/StrategoDll.vcxproj.filters" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/bitboards.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/StrategoMoveGenerator/bitboards.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/bitboards.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/StrategoMoveGenerator/bitboards.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/dllmain.cpp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,40 +56,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Batch.win_start_redis_server_on_wsl.executor&quot;: &quot;Run&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_by_signature.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_register_user.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_remove_old_entries.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_config_loader.IConfigLoaderFactoryTestCase.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_refreshes_msg.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_response.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_response_time_out.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_turn_off_refresh_on_touch.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_default_timed_out.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_get_not_existing_response.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in UnitTests.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in test_SocketManager.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Authenticator.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Frontend.executor&quot;: &quot;Run&quot;,
-    &quot;Python.RunGameNode.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Server.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Pawwz/IdeaProjects/LogicalGamesTournament&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.editor&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Batch.win_start_redis_server_on_wsl.executor": "Run",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.executor": "Run",
+    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_by_signature.executor": "Run",
+    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user.executor": "Run",
+    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_register_user.executor": "Run",
+    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_remove_old_entries.executor": "Run",
+    "Python tests.Python tests for test_config_loader.IConfigLoaderFactoryTestCase.executor": "Run",
+    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.executor": "Run",
+    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_refreshes_msg.executor": "Run",
+    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_response.executor": "Run",
+    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_response_time_out.executor": "Run",
+    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_turn_off_refresh_on_touch.executor": "Run",
+    "Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.executor": "Run",
+    "Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_default_timed_out.executor": "Run",
+    "Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_get_not_existing_response.executor": "Run",
+    "Python tests.Python tests in UnitTests.executor": "Run",
+    "Python tests.Python tests in test_SocketManager.py.executor": "Run",
+    "Python.Authenticator.executor": "Run",
+    "Python.ConfigManager.executor": "Run",
+    "Python.Frontend.executor": "Run",
+    "Python.GenerateSecrets.executor": "Run",
+    "Python.RunGameNode.executor": "Run",
+    "Python.Server.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/Pawwz/IdeaProjects/LogicalGamesTournament",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "configurable.group.editor"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Pawwz\Desktop\Stratego - server\Python_Implementation\pythonProject" />
@@ -157,8 +105,8 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in UnitTests">
-    <configuration name="Frontend" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.GenerateSecrets">
+    <configuration name="ConfigFileSchema" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -167,11 +115,33 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/Frontend" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/ToolsAndUtilitty/ConfigManager" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Frontend/Frontend.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\Pawwz\Desktop\Stratego - server\Python_Implementation\pythonProject\src\ToolsAndUtilitty\ConfigManager\ConfigFileSchema.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="GenerateSecrets" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="pythonProject" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/GenerateSecrets.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -224,21 +194,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_config_loader.IConfigLoaderFactoryTestCase" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="pythonProject" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_config_loader.IConfigLoaderFactoryTestCase&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="Python tests in UnitTests" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
@@ -256,11 +211,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.GenerateSecrets" />
+        <item itemvalue="Python.ConfigFileSchema" />
         <item itemvalue="Python tests.Python tests in UnitTests" />
         <item itemvalue="Python.Server" />
         <item itemvalue="Python.RunGameNode" />
-        <item itemvalue="Python tests.Python tests for test_config_loader.IConfigLoaderFactoryTestCase" />
-        <item itemvalue="Python.Frontend" />
       </list>
     </recent_temporary>
   </component>
@@ -352,7 +307,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735236697140</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="- Small refactoring on folder structure&#10;- Added support for SQLite">
+      <option name="closed" value="true" />
+      <created>1735335026765</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1735335026765</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -389,6 +352,7 @@
     <MESSAGE value="1. Implemented a registration system.&#10;2. Implemented custom sized message lifespan in response bufferer.&#10;3. Added unit tests for response bufferer" />
     <MESSAGE value="Added support for user roles, allowing to implement Role Based Access Control in the future" />
     <MESSAGE value="Added current database backup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added current database backup" />
+    <MESSAGE value="- Small refactoring on folder structure&#10;- Added support for SQLite" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Small refactoring on folder structure&#10;- Added support for SQLite" />
   </component>
 </project>
