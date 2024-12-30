@@ -5,7 +5,7 @@ from src.Authenticathion.Authenticator import Authenticator
 from src.Core.User import UserIdentity
 from src.Server.message_processing import decode_json, check_message_type, UserMessageType
 from src.Server.socket_manager import IUserSocket, SocketManager
-from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
+from src.Core.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
 
 
 @dataclass

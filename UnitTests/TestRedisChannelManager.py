@@ -3,7 +3,7 @@ import asyncio
 import fakeredis
 
 from UnitTests.test_ichannel_manager import TestPubSub, TestChannelRouting, TestChannelGrouping
-from src.InterClusterCommunication.RedisChannelManager import RedisGroupManager, RedisPubSub, RedisRoutingManager
+from src.Core.InterClusterCommunication.RedisChannelManager import RedisGroupManager, RedisPubSub, RedisRoutingManager
 
 
 class RedisPubSubTest(TestPubSub):

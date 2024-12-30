@@ -3,7 +3,7 @@ import pathlib
 import string
 import random
 
-from src.ToolsAndUtilitty.ConfigManager.ConfigFileSchema import ConfigFileSchema, ConfigFile, entry_schema
+from src.ToolsAndUtilitty.ConfigManager.ConfigFileSchema import ConfigFileSchema, ConfigFile, entry_schema, JSONConfigController
 
 REDIS_URL = 'redis://127.0.0.1:6379'
 REQUEST_QUEUE_NAME = 'request_queue'
@@ -40,39 +40,7 @@ schema.add_schema("smtp_host", entry_schema(SMTP_HOST))
 schema.add_schema("smtp_port", entry_schema(SMTP_PORT))
 
 
-class SecretConfigController:
-    def __init__(self, config_: ConfigFile):
-        self._config = config_
-
-        if not config.check_if_exists():
-            config.generate()
-
-    def touch(self, *args, **kwargs):
-        """
-            This function does intentionally nothing, however it can be used if you want only to ensure that some
-            config file exists.
-        """
-
-    def set_variable(self, args):
-        """
-            This method sets given key in the config file to provided value and saves the changes
-        """
-        self._config.load()
-        content = self._config.get_content()
-        self._config.set_content({**content, args.key: args.value})
-        self._config.save()
-
-    def _bulk_value_set(self, changes: dict):
-        """
-            Private method that executes bulk changes in config file, used when executing bigger queries
-        """
-        self._config.load()
-        content = self._config.get_content()
-        for k, v in changes.items():
-            content[k] = v
-        self._config.set_content(content)
-        self._config.save()
-
+class SecretConfigController(JSONConfigController):
     def set_db(self, args):
         query = {
                "db_type": args.type,

@@ -11,17 +11,27 @@ from src.Core.singleton import singleton
 class EnvironmentFactory:
 
     def __init__(self):
-        self._testing_env = RedisEnvironment("redis://127.0.0.1:6379",
-                                             RedisServerBootManager.get_instance(
-                                                 Path("Environment/scripts/win_start_redis_server_on_wsl.bat")
-                                                 .absolute(), "redis://127.0.0.1:6379"))
-        self._staging_env = RedisEnvironment("redis://127.0.0.1:6379")
+        pass
 
     def get_testing_env(self):
-        return self._testing_env
+        return RedisEnvironment("redis://127.0.0.1:6379",
+                         RedisServerBootManager.get_instance(
+                             Path("Environment/scripts/win_start_redis_server_on_wsl.bat")
+                             .absolute(), "redis://127.0.0.1:6379"))
 
     def get_staging_env(self):
-        return self._staging_env
+        return RedisEnvironment("redis://127.0.0.1:6379")
+
+    def create_environment(self, config: dict):
+        env = config.get("environment")
+
+        if env == "test":
+            return self.get_testing_env()
+        elif env == "staging":
+            return self.get_staging_env()
+        elif env == "deployment":
+            return RedisEnvironment(config.get("redis_url", "redis://127.0.0.1:6379"))
+        return self.get_testing_env()
 
     @staticmethod
     def get_instance(*args, **kwargs) -> EnvironmentFactory:

@@ -6,8 +6,8 @@ from dataclasses import dataclass
 from threading import Lock
 
 from src.Core.User import UserIdentity
-from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
-from src.InterClusterCommunication.IEventChannelManager import IChannelManager
+from src.Core.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
+from src.Core.InterClusterCommunication.IEventChannelManager import IChannelManager
 
 
 @dataclass

@@ -1,0 +1,41 @@
+FROM python:3
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+
+# generate default configuration
+RUN [ "python", "GenerateSecrets.py", "touch" ]
+
+# Db identification variables
+ARG db_type=SQLite
+ARG db_name=stratego_db
+ARG db_host=127.0.0.1
+ARG db_port=25
+
+# Load db-related environment variables and update the config
+RUN python GenerateSecrets.py db --type $db_type --name $db_name --host $db_host --port $db_port
+
+# Db authorisation variables
+ARG db_user=db_user
+ARG db_password=NoPassword
+
+# Pass db credentials to server config file
+RUN python GenerateSecrets.py db-cred --user $db_user --password $db_password
+
+ARG redis_host=redis
+ARG redis_port=6379
+
+# Set redis url
+RUN python GenerateSecrets.py set redis_url redis://${redis_host}:${redis_port}
+
+# Path to generated secrets
+ENV cnf_file=Config//secret_config.properties
+
+# Run server
+CMD python Server.py --json-file ${cnf_file}
+
+# Expose html port
+EXPOSE 5000
+
+# Expose websocket port
+EXPOSE 5001

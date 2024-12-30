@@ -99,6 +99,41 @@ class ConfigFile:
         self.save()
 
 
+class JSONConfigController:
+    def __init__(self, config_: ConfigFile):
+        self._config = config_
+        if not self._config.check_if_exists():
+            self._config.generate()
+
+    def touch(self, *args, **kwargs):
+        """
+            This function does intentionally nothing, however it can be used if you want only to ensure that some
+            config file exists.
+        """
+
+    def set_variable(self, args):
+        """
+            This method sets given key in the config file to provided value and saves the changes.
+
+            :param args: argparse namespace, containing fields 'key' and 'value'
+        """
+        self._config.load()
+        content = self._config.get_content()
+        self._config.set_content({**content, args.key: args.value})
+        self._config.save()
+
+    def _bulk_value_set(self, changes: dict):
+        """
+            Private method that executes bulk changes in config file, used when executing bigger queries
+        """
+        self._config.load()
+        content = self._config.get_content()
+        for k, v in changes.items():
+            content[k] = v
+        self._config.set_content(content)
+        self._config.save()
+
+
 if __name__ == "__main__":
     schema = ConfigFileSchema()
     schema.add_schema("test", entry_schema(lambda: "".join([random.choice("123") for _ in range(12)])))

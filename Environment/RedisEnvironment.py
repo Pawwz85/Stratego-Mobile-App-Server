@@ -11,7 +11,7 @@ import setproctitle
 from Environment.LocalMessageBrokerServiceBoot import ILocalMessageBrokerBoot
 from src.Core.singleton import singleton
 from src.GameNode.GameNode import GameNode
-from src.InterClusterCommunication.RedisChannelManager import RedisChannelManager
+from src.Core.InterClusterCommunication.RedisChannelManager import RedisChannelManager
 
 
 @singleton

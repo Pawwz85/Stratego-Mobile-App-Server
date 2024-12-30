@@ -8,18 +8,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="- Small refactoring on folder structure&#10;- Added support for SQLite">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GenerateSecrets.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ToolsAndUtilitty/ConfigManager/ConfigFileSchema.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/pythonProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pythonProject.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile-game-node" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile-redis" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile-server" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GameNodeConfigManager.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Core/InterClusterCommunication/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dll/StrategoMoveGenerator.so" beforeDir="false" afterPath="$PROJECT_DIR$/dll/StrategoMoveGenerator.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/StrategoDll.sln" beforeDir="false" afterPath="$PROJECT_DIR$/src/StrategoMoveGenerator/StrategoDll.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/StrategoDll.vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/StrategoMoveGenerator/StrategoDll.vcxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/StrategoDll.vcxproj.filters" beforeDir="false" afterPath="$PROJECT_DIR$/src/StrategoMoveGenerator/StrategoDll.vcxproj.filters" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/bitboards.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/StrategoMoveGenerator/bitboards.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/bitboards.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/StrategoMoveGenerator/bitboards.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StrategoMoveGenerator/dllmain.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/game_node_config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Config/game_node_config.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Environment/EnvironmentFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/EnvironmentFactory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Environment/RedisEnvironment.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment/RedisEnvironment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Environment/scripts/database.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GenerateSecrets.py" beforeDir="false" afterPath="$PROJECT_DIR$/GenerateSecrets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RunGameNode.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunGameNode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server.py" beforeDir="false" afterPath="$PROJECT_DIR$/Server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/TestRedisChannelManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/TestRedisChannelManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/test_gamenodeApiHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_gamenodeApiHandler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitTests/test_ichannel_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_ichannel_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/cstratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/cstratego.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameNode/GameNode.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameNode/GameNode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/InterClusterCommunication/GameNodeAPICallsBuilder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/InterClusterCommunication/GameNodeAPICallsBuilder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/InterClusterCommunication/HandleGameNodeMessage.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/InterClusterCommunication/HandleGameNodeMessage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/InterClusterCommunication/IEventChannelManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/InterClusterCommunication/IEventChannelManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/InterClusterCommunication/RedisChannelManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/InterClusterCommunication/RedisChannelManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/InterClusterCommunication/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/RoomBrowser.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/RoomBrowser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/websocket_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/websocket_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/websocket_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/websocket_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ToolsAndUtilitty/ConfigManager/ConfigFileSchema.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ToolsAndUtilitty/ConfigManager/ConfigFileSchema.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,44 +72,45 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Batch.win_start_redis_server_on_wsl.executor": "Run",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_by_signature.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_register_user.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_remove_old_entries.executor": "Run",
-    "Python tests.Python tests for test_config_loader.IConfigLoaderFactoryTestCase.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_refreshes_msg.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_response.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_response_time_out.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_turn_off_refresh_on_touch.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_default_timed_out.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_get_not_existing_response.executor": "Run",
-    "Python tests.Python tests in UnitTests.executor": "Run",
-    "Python tests.Python tests in test_SocketManager.py.executor": "Run",
-    "Python.Authenticator.executor": "Run",
-    "Python.ConfigManager.executor": "Run",
-    "Python.Frontend.executor": "Run",
-    "Python.GenerateSecrets.executor": "Run",
-    "Python.RunGameNode.executor": "Run",
-    "Python.Server.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Pawwz/IdeaProjects/LogicalGamesTournament",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "configurable.group.editor"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Batch.win_start_redis_server_on_wsl.executor&quot;: &quot;Run&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_by_signature.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_register_user.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_remove_old_entries.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_config_loader.IConfigLoaderFactoryTestCase.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_refreshes_msg.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_response.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_response_time_out.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_turn_off_refresh_on_touch.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_default_timed_out.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_get_not_existing_response.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in UnitTests.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_SocketManager.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Authenticator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ConfigManager.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Frontend.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GenerateSecrets.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RunGameNode.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Server.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Pawwz/IdeaProjects/LogicalGamesTournament&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Pawwz\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Core" />
       <recent name="C:\Users\Pawwz\Desktop\Stratego - server\Python_Implementation\pythonProject" />
       <recent name="C:\Users\Pawwz\Desktop\Stratego - server\Python_Implementation\pythonProject\src" />
     </key>
@@ -105,7 +122,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python.GenerateSecrets">
+  <component name="RunManager" selected="Python tests.Python tests in UnitTests">
     <configuration name="ConfigFileSchema" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
@@ -211,18 +228,18 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.GenerateSecrets" />
-        <item itemvalue="Python.ConfigFileSchema" />
-        <item itemvalue="Python tests.Python tests in UnitTests" />
         <item itemvalue="Python.Server" />
+        <item itemvalue="Python.GenerateSecrets" />
         <item itemvalue="Python.RunGameNode" />
+        <item itemvalue="Python tests.Python tests in UnitTests" />
+        <item itemvalue="Python.ConfigFileSchema" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-09665e90c3a7-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.15026.15" />
+        <option value="bundled-python-sdk-c69650fc56ca-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.15619.17" />
       </set>
     </attachedChunks>
   </component>

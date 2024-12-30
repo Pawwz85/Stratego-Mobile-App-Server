@@ -1,0 +1,15 @@
+FROM python:3
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+
+# Generate config file and set redis url
+ARG redis_url="redis:6379"
+RUN python GameNodeConfigManager.py touch
+RUN python GameNodeConfigManager.py set redis_url ${redis_url}
+
+
+ARG environment=deployment
+ENV environment=${environment}
+# Run game node
+CMD python RunGameNode.py --environment ${environment}

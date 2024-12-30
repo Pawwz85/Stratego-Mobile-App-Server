@@ -1,5 +1,6 @@
 import time
 
+from Environment.RedisEnvironment import RedisEnvironment
 from src.ConfigLoader import ConfigLoaderStrategy, JsonConfigLoaderFactory
 import argparse
 from Environment.EnvironmentFactory import EnvironmentFactory
@@ -24,7 +25,14 @@ def main(args):
         factory = JsonConfigLoaderFactory()
 
     config = factory.build_config(conf_load_strategy, *args_, **kwargs)
-    env = EnvironmentFactory.get_instance().get_testing_env()
+
+    environments_builder = {
+        "deployment": lambda: EnvironmentFactory.get_instance().create_environment(config),
+        "staging": EnvironmentFactory.get_instance().get_staging_env,
+        "test": EnvironmentFactory.get_instance().get_testing_env,
+    }
+
+    env = environments_builder.get(args.environment, environments_builder["test"])()
     with env:
         print("Creating game node...")
         env.create_game_node(config)
@@ -38,5 +46,6 @@ if __name__ == '__main__':
     parser_config = subparsers.add_parser("config", help="Configure a game node")
     parser_config.add_argument("--json-file", help="Specify a JSON file containing the configuration")
     parser_config.add_argument("--json-string", help="Specify a JSON string containing the configuration")
+    parser_config.add_argument("--environment", default="test", help="Environment")
     args = parser_config.parse_args()
     main(args)

@@ -64,7 +64,7 @@ def load_cstratego_dll(path: str):
 class CStrategoMoveGenLibrary:
     def __init__(self):
         try:
-            self.cstrategodll = load_cstratego_dll("../dll/StrategoMoveGenerator")
+            self.cstrategodll = load_cstratego_dll("dll/StrategoMoveGenerator")
         except OSNotSupported:
             self.cstrategodll = None
         except FileNotFoundError:

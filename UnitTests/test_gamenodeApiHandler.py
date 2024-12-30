@@ -12,9 +12,9 @@ from src.Core.User import UserIdentity
 from src.Server.IntermediateRequestIDMapper import IntermediateRequestIDMapper
 from src.Server.message_processing import UserResponseBufferer
 from src.GameNode.GameNodeConfigBuilder import GameNodeConfigBuilder
-from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
-from src.InterClusterCommunication.IEventChannelManager import IPubSub
-from src.InterClusterCommunication.RedisChannelManager import RedisChannelManager
+from src.Core.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
+from src.Core.InterClusterCommunication.IEventChannelManager import IPubSub
+from src.Core.InterClusterCommunication.RedisChannelManager import RedisChannelManager
 
 
 testing_environment = EnvironmentFactory.get_instance().get_testing_env()

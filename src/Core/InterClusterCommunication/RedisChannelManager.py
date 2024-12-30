@@ -4,7 +4,7 @@ from typing import Callable
 
 from redis.asyncio import Redis
 
-from src.InterClusterCommunication.IEventChannelManager import IChannelManager, IChannelRouting, IChannelGrouping, \
+from src.Core.InterClusterCommunication.IEventChannelManager import IChannelManager, IChannelRouting, IChannelGrouping, \
     IPubSub, IRequestQueueClient, IRequestQueueWorker
 
 

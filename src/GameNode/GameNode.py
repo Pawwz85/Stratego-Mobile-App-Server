@@ -13,7 +13,7 @@ from threading import Lock
 
 from src.Core.Room import IRoomHandle
 from src.GameNode.GameManagerThread import GameManagerThread
-from src.InterClusterCommunication.IEventChannelManager import IChannelManager
+from src.Core.InterClusterCommunication.IEventChannelManager import IChannelManager
 
 
 class PubSubSyncHandle(IRoomHandle):

@@ -22,9 +22,9 @@ from src.Server.message_processing import UserResponseBufferer
 from src.Server.socket_manager import SocketManager, SocketioUserSocket
 from src.Server.socketio_socket_management import send_event_to_user
 from src.Server.websocket_service import WebsocketService
-from src.InterClusterCommunication.GameNodeAPICallsBuilder import GameNodeApiRequestFactory
-from src.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
-from src.InterClusterCommunication.RedisChannelManager import RedisChannelManager
+from src.Core.InterClusterCommunication.GameNodeAPICallsBuilder import GameNodeApiRequestFactory
+from src.Core.InterClusterCommunication.HandleGameNodeMessage import GameNodeAPIHandler
+from src.Core.InterClusterCommunication.RedisChannelManager import RedisChannelManager
 from src.RegistrationController import RegistrationController
 from src.Server.ServerCLI import parse_config_from_cli
 from src.DatabaseConnection.ConcreteDatabaseConnectionFactory import ConcreteDatabaseConnectionFactory

@@ -3,7 +3,7 @@ import unittest
 from abc import ABC
 from unittest.mock import Mock
 
-from src.InterClusterCommunication.IEventChannelManager import (IChannelGrouping, IChannelRouting, IPubSub)
+from src.Core.InterClusterCommunication.IEventChannelManager import (IChannelGrouping, IChannelRouting, IPubSub)
 
 
 # noinspection PyUnreachableCode
