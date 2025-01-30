@@ -1,9 +1,9 @@
 import random
 import unittest
 import unittest.mock as mock
-from TestUtil.MainLoopStub import MainLoopStub
-from TestUtil.UserSimulation import UserSimulationInterpreter
-from TestUtil.GameplayScenarioGenerator import GameplayScenarioGenerator
+from UnitTests.TestUtil.MainLoopStub import MainLoopStub
+from UnitTests.TestUtil.UserSimulation import UserSimulationInterpreter
+from UnitTests.TestUtil.GameplayScenarioGenerator import GameplayScenarioGenerator
 from UnitTests.TestUtil.stratego_helpers import generate_random_setup, rand_move, FastWinPosition, \
     setup_to_protocol_form
 from src.Core.table import *

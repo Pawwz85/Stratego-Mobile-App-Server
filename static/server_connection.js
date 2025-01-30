@@ -122,7 +122,7 @@ export class GameNodeCommandManager{
 */
 export class ServerRequestManager{
     constructor(){
-        this.id_sequence = 0;
+        this.id_sequence = Date.now(); // get sequence now number from date, 
         this.requests = new Map(); // map from requests id to request metadata
         setInterval(() => this.__remove_old_entries(), 10000);
         

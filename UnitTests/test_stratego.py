@@ -3,7 +3,7 @@ import unittest
 
 import src.Core.stratego as stratego
 import src.Core.stratego_gamestate
-from TestUtil.GameplayScenarioGenerator import GameplayScenarioGenerator
+from UnitTests.TestUtil.GameplayScenarioGenerator import GameplayScenarioGenerator
 
 """
     This file checks a bunch of features in stratego.py

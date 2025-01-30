@@ -223,7 +223,9 @@ class SeatManagerWithReadyCommand(SeatManager):
     def _phase_logic(self):
         """Main game logic in active phase."""
         if self._readiness[Side.red] and self._readiness[Side.blue] and self._transmission_task is None:
-            task = DelayedTask(lambda: self._set_table_to_setup_phase(), self._transmission_time_ms)
+            task = self._player_info_manager.count_down_both_clocks(
+                self._transmission_time_ms,
+                lambda: self._set_table_to_setup_phase())
             self.job_manager.add_delayed_task(task)
             self._transmission_task = task
 
@@ -544,8 +546,8 @@ class Table:
         self.kill()
 
     def __change_phase(self, phase: TablePhase):
-        self.__phase.finish()
         self.__job.cancel()
+        self.__phase.finish()
 
         self.__phase = phase
         self.__phase.init()

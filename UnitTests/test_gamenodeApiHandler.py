@@ -58,6 +58,7 @@ class TestGameNodeApiHandler(unittest.IsolatedAsyncioTestCase):
         coro = self.setup_pub_sub(self._channel_manager.get_pub_sub(), self._GameNodeHandler.handle_game_node_message)
         self._worker.add_task(coro)
         self._worker.start()
+        time.sleep(1.5)  # wait for node to start
 
     def tearDown(self):
         self._worker.stop()
@@ -128,9 +129,10 @@ class TestGameNodeApiHandler(unittest.IsolatedAsyncioTestCase):
             "channel": "node"
         }
         user = UserIdentity("tester",  1)
-        self._GameNodeHandler.send_request(lambda _, __: None, req.copy(), user)
-        time.sleep(7)
+        self._GameNodeHandler.send_request(lambda _, __: print(_, __), req.copy(), user)
+        time.sleep(9)
         mock = Mock()
         self._GameNodeHandler.on_user_request_dict(user, req.copy(), mock)
         args, kwargs = mock.call_args
+        print(args, kwargs)
         self.assertEqual(args[1]["status"], "success")
