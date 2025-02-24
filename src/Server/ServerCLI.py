@@ -24,7 +24,7 @@ def parse_config_from_cli():
     else:
         conf_load_strategy = ConfigLoaderStrategy.LoadFromCustomJsonFile
         args_ = ()
-        kwargs = {"file": '../../Config/secret_config.properties'}
+        kwargs = {"file": 'Config/secret_config.properties'}
         factory = JsonConfigLoaderFactory()
 
     return factory.build_config(conf_load_strategy, *args_, **kwargs)

@@ -52,30 +52,21 @@ class PlayerInfoManager:
     """
        This class manages players info.
     """
+
     def __init__(self):
         self.player_info = {s: PlayerInfo() for s in Side}
         self.on_player_info_change: Callable[[Side, PlayerInfo], any] = lambda x, y: None
 
     @abstractmethod
-    def __sync_task_with_timer(self, func: Callable, timers: list[Timer]) -> Callable:
-        def _(*args, **kwargs):
-            for timer in timers:
-                timer.mode = TimerMode.PAUSED
-                timer.value = 0
+    def __sync_task_with_timer(self, func: Callable, timers: list[Timer], time_ms: int) -> DelayedTask:
+        tasks: list[DelayedTask] = list(map(lambda timer: timer.count_down(time_ms, lambda: None), timers))
 
-            func(*args, **kwargs)
-
-        return _
+        return DelayedTask(func, time_ms)
 
     def count_down_both_clocks(self, delay: int, on_time_runs_down: Callable) -> DelayedTask:
         result = DelayedTask(on_time_runs_down, delay)
         timers = [self.player_info[s].timer for s in Side]
-        result.cancel = self.__sync_task_with_timer(result.cancel, timers)
-        for timer in timers:
-            timer.mode = TimerMode.COUNT_DOWN
-            timer.value = floor(1000*time.time()) + delay
-
-        return result
+        return self.__sync_task_with_timer(on_time_runs_down, timers, delay)
 
 
 class TablePhase:
@@ -522,7 +513,7 @@ class Table:
                  seat_manager_constructor: Callable[[Callable], SeatManager],
                  player_info_manager: PlayerInfoManager,
                  event_channels: dict[Side | None, Callable[[dict], any]],
-                 event_broadcast:  Callable[[dict], any]):
+                 event_broadcast: Callable[[dict], any]):
         self.job_manager = job_manager
         self.phase_type: TableGamePhase = TableGamePhase.awaiting
 

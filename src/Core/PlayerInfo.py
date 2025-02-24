@@ -42,7 +42,6 @@ class Timer:
         if self.__last_task is not None:
             self.__last_task.cancel()
             self.__last_task = None
-            self.mode = TimerMode.PAUSED
             self.value = 0
 
     def count_down(self, time_ms, on_time_runs_down: Callable) -> DelayedTask:
@@ -60,6 +59,15 @@ class Timer:
         self.mode = TimerMode.PAUSED
         self.value = time_ms
         self.onChange()
+
+    def get_value(self):
+        """
+            Returns the value the user should see on the clock.
+        """
+        if self.mode == TimerMode.PAUSED:
+            return self.value
+        else:
+            return self.value - floor(1000*time.time())
 
     def to_dict(self) -> dict[str, str | int]:
         return {

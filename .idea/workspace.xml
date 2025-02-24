@@ -7,16 +7,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="Now app can be started using docker-compose">
-      <change afterPath="$PROJECT_DIR$/src/Frontend/static/user_interface.js" afterDir="false" />
+    <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="small bugfixes">
+      <change afterPath="$PROJECT_DIR$/UnitTests/test_MessageSystem.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Core/InterClusterCommunication/RoomMessageCode.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile-redis" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_gamenodeApiHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_gamenodeApiHandler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_move_generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_move_generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_stratego.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_stratego.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitTests/test_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/UnitTests/test_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Core/PlayerInfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/PlayerInfo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/server_connection.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/server_connection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/ServerCLI.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ServerCLI.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,8 +52,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Batch.start.executor": "Run",
+    "Batch.win_rebuild_and_run_containers.executor": "Run",
     "Batch.win_start_redis_server_on_wsl.executor": "Run",
     "DefaultHtmlFileTemplate": "HTML File",
+    "Python tests.Python tests for test_MessageSystem.TestMessageSystem.test_callback_unregistering.executor": "Run",
+    "Python tests.Python tests for test_MessageSystem.TestMessageSystem.test_id_sequence.executor": "Run",
+    "Python tests.Python tests for test_MessageSystem.TestMessageSystem.test_message_system_receivers_ignore_unsubscribed_channel.executor": "Run",
+    "Python tests.Python tests for test_MessageSystem.TestMessageSystem.test_message_system_single_message.executor": "Run",
     "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.executor": "Run",
     "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_by_signature.executor": "Run",
     "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user.executor": "Run",
@@ -85,6 +88,7 @@
     "Python.ConfigManager.executor": "Run",
     "Python.Frontend.executor": "Run",
     "Python.GenerateSecrets.executor": "Run",
+    "Python.RoomMessageCode.executor": "Run",
     "Python.RunGameNode.executor": "Run",
     "Python.Server.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
@@ -92,7 +96,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Pawwz/IdeaProjects/LogicalGamesTournament",
+    "last_opened_file_path": "C:/Users/Pawwz/Desktop/Stratego - server/Python_Implementation/pythonProject/Environment/scripts/win_rebuild_and_run_containers.bat",
     "run.code.analysis.last.selected.profile": "pProject Default",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
@@ -111,65 +115,80 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler">
-    <configuration name="Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python tests.Python tests in UnitTests">
+    <configuration name="start" type="BatchConfigurationType" factoryName="Batch" temporary="true">
       <module name="pythonProject" />
-      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_gamenodeApiHandler.TestGameNodeApiHandler&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <option name="SCRIPT_NAME" value="./Environment/scripts/win_rebuild_and_run_containers.bat" />
+      <option name="PARAMETERS" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_on_user_request_responds_with_cached_response" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="RoomMessageCode" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/Core/InterClusterCommunication" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_gamenodeApiHandler.TestGameNodeApiHandler.test_on_user_request_responds_with_cached_response&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Core/InterClusterCommunication/RoomMessageCode.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_send_request_create_a_placeholder_response_in_buffer" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="RunGameNode" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_gamenodeApiHandler.TestGameNodeApiHandler.test_send_request_create_a_placeholder_response_in_buffer&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RunGameNode.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_send_request_saves_result_to_a_response_buffer" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+    <configuration name="Server" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_gamenodeApiHandler.TestGameNodeApiHandler.test_send_request_saves_result_to_a_response_buffer&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Server.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
     <configuration name="Python tests in UnitTests" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
@@ -178,7 +197,7 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/UnitTests" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
@@ -187,13 +206,20 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Batch.start" />
+      <item itemvalue="Python.RunGameNode" />
+      <item itemvalue="Python.Server" />
+      <item itemvalue="Python.RoomMessageCode" />
+      <item itemvalue="Python tests.Python tests in UnitTests" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler" />
-        <item itemvalue="Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_send_request_saves_result_to_a_response_buffer" />
-        <item itemvalue="Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_on_user_request_responds_with_cached_response" />
+        <item itemvalue="Python.RunGameNode" />
         <item itemvalue="Python tests.Python tests in UnitTests" />
-        <item itemvalue="Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_send_request_create_a_placeholder_response_in_buffer" />
+        <item itemvalue="Python.Server" />
+        <item itemvalue="Batch.start" />
+        <item itemvalue="Python.RoomMessageCode" />
       </list>
     </recent_temporary>
   </component>
@@ -301,7 +327,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735565987510</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="small bugfixes">
+      <option name="closed" value="true" />
+      <created>1738228918082</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1738228918082</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -340,6 +374,7 @@
     <MESSAGE value="Added current database backup" />
     <MESSAGE value="- Small refactoring on folder structure&#10;- Added support for SQLite" />
     <MESSAGE value="Now app can be started using docker-compose" />
-    <option name="LAST_COMMIT_MESSAGE" value="Now app can be started using docker-compose" />
+    <MESSAGE value="small bugfixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="small bugfixes" />
   </component>
 </project>
