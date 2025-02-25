@@ -1,10 +1,14 @@
 import { appGlobalContext } from "./global_context.js";
 import {SVGHorizontalGradient, SimpleButtonWithText, SimpleTogglerBuilder} from "./ui_primitives.js";
+import {defaultFormatTime} from "./clock.js"
+
 export class SideSelectorSeatModel{
   constructor(color){
     this.color = color;
     this.ownerUsername = null;
     
+    this.start_date = null;
+
     this.blocked = false;
     this.ready = false;
     this.isUserOwner = false;
@@ -73,8 +77,6 @@ export class SideSelectorSeatModel{
 }
 
 const defaultSideSelectorViewConfig = {
-  btn_width: 100,
-  btn_height: 25,
   btn_x: "15%",
   btn_y: "50%",
   btn_text_if_user_owner: "Release",
@@ -83,7 +85,7 @@ const defaultSideSelectorViewConfig = {
   btn_passive_color: "#777777",
   btn_hover_color: "#AAAAAA",
   btn_blocked_color: "gray",
-  btn_config: {rx: "8", ry:"8", height:"40"},
+  btn_config: {rx: "8", ry:"8", height:"20", width: 75},
 
   toggle_x: "55%",
   toggle_y: "82.5%",
@@ -257,8 +259,6 @@ export class SideSelectorView{
     label.setAttributeNS(null, 'text-anchor', "middle");
     label.setAttribute("fill", this.config.label_fill)
 
-    btn.width = this.config.btn_width;
-    btn.height = this.config.btn_height;
     btn.element.setAttribute('y', this.config.btn_y);
     btn.element.setAttribute('x', this.config.btn_x);
     btn.setSize(btn.width, btn.height);
@@ -296,11 +296,15 @@ export class SideSelectorView{
 
 export class SeatSelectorWindowModel{
   constructor(){
+
     this.redSeat = new SideSelectorSeatModel("red");
     this.blueSeat = new SideSelectorSeatModel("blue");
+
     this.onClaimSeat = color => {};
     this.onSeatRelease = color => {};
     this.onReadyChange = value => {};
+    this.__onStartDateChanged = date => {};
+  
     this.redSeat.onClaimSeat = () => {this.onClaimSeat("red");};
     this.blueSeat.onClaimSeat = () => {this.onClaimSeat("blue");};
     this.redSeat.onReleaseSeat = () => {this.onSeatRelease("red");};
@@ -319,10 +323,61 @@ export class SeatSelectorWindowModel{
   }
 
   update_ready_status(statuses){
-    this.redSeat.update_ready_status(statuses)
-    this.blueSeat.update_ready_status(statuses)
+    this.redSeat.update_ready_status(statuses);
+    this.blueSeat.update_ready_status(statuses);
+    this.__onStartDateChanged(statuses.start_date);
   }
 }
+
+
+const defaultTimeToStartTimerConfig = {
+  defaultText: "Waiting...",
+  fill: "red",
+  tick_rate: 1000,
+  timeFormater: defaultFormatTime,
+  x: "0",
+  y: "0"
+}
+
+
+class TimeToStartTimer{
+  constructor(config = {}){
+    this.time_to_start = null;
+    this.element = null;
+    this.__config = {...defaultTimeToStartTimerConfig, ...config};
+    this.__init_element();
+    setInterval(this.__tick, this.__config.tick_rate, this);
+    this.__tick(this);
+  }
+
+  __init_element(){
+    this.element = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    this.element.setAttributeNS(null, "fill", this.__config.fill);
+    this.element.setAttributeNS(null, "x", this.__config.x);
+    this.element.setAttributeNS(null, "y", this.__config.y);
+    this.element.setAttributeNS(null, "text-anchor", "middle");
+    this.element.setAttribute("unselectable", "on");
+    this.element.style.pointerEvents = "none";
+    this.element.style.userSelect = "none";
+    this.element.textContent = this.__config.defaultText;
+  }
+
+  __tick(instance){
+    const This = instance;
+    if(This.time_to_start == null){
+      This.element.textContent = This.__config.defaultText;
+    } else {
+      This.time_to_start = Math.max(This.time_to_start - This.__config.tick_rate, 0);
+      This.element.textContent = This.formatTime(This.time_to_start);
+    }
+  }
+
+  formatTime(value){
+    return "Game starts in " + Math.floor(value/1000);
+  }
+
+}
+
 
 const defaultSideSelectorWindowConfig = {
   win_rx: 10,
@@ -349,6 +404,8 @@ export class SeatSelectorWindowView{
     this.config = {...defaultSideSelectorWindowConfig, ...config};
     this.redSeatView = new SideSelectorView(model.redSeat, {...defaultSideSelectorViewConfigForRed, ...config.red_seat_view_config});
     this.blueSeatView = new SideSelectorView(model.blueSeat, {...defaultSideSelectorViewConfigForBlue, ...config.blue_seat_view_config});
+    this.timeToStartTimer = new TimeToStartTimer({x:"50%", y:"50%", defaultText:"", fill: SVGHorizontalGradient(["red", "blue"])});
+    model.__onStartDateChanged = (date => {this.timeToStartTimer.time_to_start = date;});
     this.window = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.__init_window();
   }
@@ -385,6 +442,7 @@ export class SeatSelectorWindowView{
     this.window.append(background);
     this.window.append(this.redSeatView.element);
     this.window.append(this.blueSeatView.element);
+    this.window.append(this.timeToStartTimer.element);
     this.window.append(label);
 
     this.__compose();

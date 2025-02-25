@@ -50,8 +50,8 @@ export class SimpleButtonWithText{
         const textNode = document.createElementNS("http://www.w3.org/2000/svg", "text");
         group.setAttributeNS("http://www.w3.org/2000/svg", "viewBox", "0 0 100 100");
         rect.setAttribute("fill", this.config.passiveColor);
-        rect.setAttribute("width", this.config.width );
-        rect.setAttribute("height", this.config.height);
+        rect.setAttribute("width", this.config.width  + "%");
+        rect.setAttribute("height", this.config.height + "%");
         rect.setAttribute("rx", this.config.rx);
         rect.setAttribute("ry", this.config.ry);
 
@@ -64,8 +64,8 @@ export class SimpleButtonWithText{
 
 
         textNode.textContent = this.config.text;
-        textNode.setAttribute( "x", this.config.width/2 +"px");
-        textNode.setAttribute( "y", (this.config.height - this.config.textHeight)/2 + "px");
+        textNode.setAttribute( "x", this.config.width/2 +"%");
+        textNode.setAttribute( "y", (this.config.height - this.config.textHeight)/2 + "%");
         textNode.setAttribute("fill", this.config.text_fill);
         textNode.setAttributeNS(null, "dy", ".4em");
         textNode.setAttributeNS(null, "text-anchor", "middle");

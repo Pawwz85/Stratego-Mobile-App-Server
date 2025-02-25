@@ -453,7 +453,8 @@ class PlayerReadyStatusLiveImage{
         this.roomId = roomId;
         this.is_red_player_ready = false;
         this.is_blue_player_ready = false;
-        this.observers = []
+        this.start_date = null;
+        this.observers = [];
     }
 
     handleReadyEvent(event){
@@ -471,6 +472,7 @@ class PlayerReadyStatusLiveImage{
             this.is_blue_player_ready = event.value;
         }
 
+        this.start_date = (typeof(event.start_date) == "number")?event.start_date:null;
         this.notify_observers()
     }
 
@@ -489,6 +491,9 @@ class PlayerReadyStatusLiveImage{
                 }
                 this.is_red_player_ready = value.red_player;
                 this.is_blue_player_ready = value.blue_player;
+                this.start_date = (typeof(value.start_date) == "number")?value.start_date:null;
+
+
                 tmp.notify_observers()
             }
         )
@@ -509,7 +514,8 @@ class PlayerReadyStatusLiveImage{
         const tmp = this;
         const msg = {
             red_player: tmp.is_red_player_ready,
-            blue_player: tmp.is_blue_player_ready
+            blue_player: tmp.is_blue_player_ready,
+            start_date: this.start_date
         }
    
         for(let ob of this.observers){

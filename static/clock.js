@@ -41,11 +41,42 @@ export class Clock{
     }
 }
 
+export function defaultFormatTime(time_ms){
+    if (time_ms < 10000){
+        // Player has less than 10s, display remaing time in form ss.m
+        let seconds = Math.floor(time_ms/1000);
+        let remainder = time_ms - 1000*seconds;
+        let hundreths_of_seconds =  Math.floor(remainder/100);
+        return "" + seconds + "." + hundreths_of_seconds;
+    } else {
+        let minutes = Math.floor(time_ms/60000);
+        let seconds = Math.floor((time_ms - 60000*minutes)/1000)
+
+        if (seconds < 10)
+            seconds = "0" + seconds;
+
+        return "" + minutes + ":" + seconds;
+    }
+}
+
+const defaultSimpleClockConfig = {
+    x: "0",
+    y: "0",
+    width: "100",
+    height: "50",
+    fill: "black",
+
+    text_color: "white",
+    text_dy: ".4em",
+    format_time: defaultFormatTime
+}
+
 export class SimpleClock{
-    constructor(){
+    constructor(config = {}){
         this.time_left_ms = 0;
         this.__rect = null;
         this.__text = null;
+        this.config = {...defaultSimpleClockConfig, ...config};
         this.element = this.__init_element();
     }
 
@@ -56,14 +87,14 @@ export class SimpleClock{
        this.__rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
        this.__text = document.createElementNS("http://www.w3.org/2000/svg", "text");
        
-       this.__rect.setAttributeNS(null, "x", "0");
-       this.__rect.setAttributeNS(null, "width", "100")
-       this.__rect.setAttributeNS(null, "height", "50");
-       this.__rect.setAttributeNS(null, "fill", "black");
+       this.__rect.setAttributeNS(null, "x", this.config.x);
+       this.__rect.setAttributeNS(null, "width", this.config.width)
+       this.__rect.setAttributeNS(null, "height", this.config.height);
+       this.__rect.setAttributeNS(null, "fill", this.config.fill);
 
        this.__text.setAttributeNS(null, "x", "50%");
        this.__text.setAttributeNS(null, "y", "50%");
-       this.__text.setAttribute("fill", "white");
+       this.__text.setAttribute("fill", this.config.text_color);
        this.__text.setAttributeNS(null, "dy", ".4em");
        this.__text.setAttributeNS(null, "text-anchor", "middle");
        this.__text.setAttribute("unselectable", "on");
@@ -80,21 +111,6 @@ export class SimpleClock{
     }
 
     format_time(time_ms){
-
-        if (time_ms < 10000){
-            // Player has les than 10s, display remaing time in form ss.m
-            let seconds = Math.floor(time_ms/1000);
-            let remainder = time_ms - 1000*seconds;
-            let hundreths_of_seconds =  Math.floor(remainder/100);
-            return "" + seconds + "." + hundreths_of_seconds;
-        } else {
-            let minutes = Math.floor(time_ms/60000);
-            let seconds = Math.floor((time_ms - 60000*minutes)/1000)
-
-            if (seconds < 10)
-                seconds = "0" + seconds;
-
-            return "" + minutes + ":" + seconds;
-        }
+        return this.config.format_time(time_ms)
     }
 }

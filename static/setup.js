@@ -1,7 +1,7 @@
 import {SelectorWithQuantityModel, SelectorWithQuantityTemplateBasedView} from "./unit_selector.js"
 import {SidePanelModel, SidePanelView} from "./board_side_panel.js"
 import {PieceType, Piece} from "./board_model.js"
-
+import {SimpleButtonWithText} from "./ui_primitives.js"
 
 
 export function check_if_setup_is_valid(setup){
@@ -255,4 +255,126 @@ export class SetupPhaseComponentsFactory{
 
         return view;
     }
+}
+
+
+export class SetupSubmitionWindowModel {
+    constructor() {
+        this.setup = null;
+        this.submitted = false;
+        this.onSubmit = s => {};
+        this._observers = [];
+    }
+
+    notify_observers(){
+        for(let o of this._observers)
+            o.update(this);
+    }
+
+    submit(){
+        if(this.setup != null){
+            this.onSubmit(this.setup);
+            this.submitted = true;
+        }
+
+        this.notify_observers();
+    }
+
+    add_observer(observer){
+        this._observers.push(observer);
+        observer.update(this);
+    }
+
+    set_setup(setup){
+        this.setup = setup;
+        this.submitted = false;
+        this.notify_observers();
+    }
+
+}
+
+const defaultSetupSubmitionWindowConfig = {
+    win_rx: 10,
+    win_ry: 10,
+  
+    stroke: null,
+    stroke_width: "0%",
+    background_fill: "black",
+
+    defaultText: "Submit Setup",
+    defaultButtonColor: "red",
+
+    afterSubmitText: "Submmited.",
+    afterSubmitColor: "grey"
+}
+
+export class SetupSubmitionWindow{
+
+    constructor(model = new SetupSubmitionWindowModel(), config={}){
+        this._model = model;
+        this._config = {...defaultSetupSubmitionWindowConfig, config};
+        this.window = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        this.button = new SimpleButtonWithText({
+           text: this._config.defaultText,
+           x: "5%",
+           y: "5%",
+           rx: 0,
+           ry: 0,
+           width: "90",
+           height: "90"
+        });
+
+        this.button.onClick = () => {model.submit()};
+        this.__init_window();
+
+        model.add_observer(this);
+    };
+
+    __init_window(){
+        const bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        bg.setAttribute("height", "100%");
+        bg.setAttribute("width", "100%");
+        bg.setAttribute("fill", this._config.background_fill);
+        bg.setAttribute("stroke", this._config.stroke);
+        bg.setAttribute("stroke-width", this._config.stroke_width);
+        bg.setAttribute("rx", this._config.win_rx);
+        bg.setAttribute("ry", this._config.win_ry);
+
+        this.button.element.setAttribute("x", "6.25%");
+        this.button.element.setAttribute("y", "5%");
+
+        this.window.append(bg, this.button.element);
+    };
+
+    update(model){
+        
+        if(model.setup == null){
+            this.window.style.display = "none";
+            return;
+        }
+        this.window.style.display = "block";
+        
+        if(model.submitted){
+            this.button.config = {
+                ...this.button.config,
+                text: this._config.afterSubmitText,
+                passiveColor:   this._config.afterSubmitColor
+            };
+            this.button.clickable = false;
+        } else {
+            this.button.config = {
+                ...this.button.config,
+                text: this._config.defaultText,
+                passiveColor:   this._config.defaultButtonColor
+            };
+            this.button.clickable = true;
+        }
+        
+        this.button.refresh();
+    }
+
+    setSize(width, height){
+        this.window.style.width = width + "px";
+        this.window.style.height = height + "px";
+    }    
 }

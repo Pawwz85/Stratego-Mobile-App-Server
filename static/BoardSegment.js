@@ -26,6 +26,8 @@ export class BoardSegmentModel {
         this.boardController = null;
         this.observer = null; // this class should have at max 1 observer (probably a view)
         
+        // register method for sending setup
+        appGlobalContext.submitSetupWindowModel.onSubmit = setup => {serverConnection.commandMannager.send_setup(setup)};
 
         this.send_setup = () => {
 
@@ -36,7 +38,7 @@ export class BoardSegmentModel {
             const setup = extract_setup(this.boardModel, this.user_role=="blue_player");
             console.log(setup)
             if(check_if_setup_is_valid(this.boardModel.boardstate))
-                serverConnection.commandMannager.send_setup(setup);
+                appGlobalContext.submitSetupWindowModel.set_setup(setup);
         }
 
         this.__setupPhaseComponentsFactory = new SetupPhaseComponentsFactory("red", this.send_setup);

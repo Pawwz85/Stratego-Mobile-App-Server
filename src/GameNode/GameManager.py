@@ -96,6 +96,7 @@ class GameManagerApi:
             return ver_result
 
         table_factory = (Table.Builder(self.game_manager.job_manager)
+                         .set_start_timer(10000)
                          .set_setup_time(math.ceil(60 * 1000 * time_setup))
                          .set_time_control(math.ceil(60 * 1000 * time_control), math.ceil(1000 * increment))
                          )

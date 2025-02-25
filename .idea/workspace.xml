@@ -7,13 +7,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="small bugfixes">
+    <list default="true" id="dbe00207-db5a-4440-87e4-2fbd6588b301" name="Changes" comment="- Added a timer that allows user to tell when the fame will start">
       <change afterPath="$PROJECT_DIR$/UnitTests/test_MessageSystem.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Core/InterClusterCommunication/RoomMessageCode.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Core/PlayerInfo.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/PlayerInfo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/protocole.odt" beforeDir="false" afterPath="$PROJECT_DIR$/protocole.odt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Core/table.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Server/ServerCLI.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ServerCLI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameNode/GameManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameNode/GameManager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/BoardSegment.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/BoardSegment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/clock.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/clock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/global_context.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/global_context.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/room_live_image.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/room_live_image.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/setup.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/setup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/side_selector.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/side_selector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/ui_primitives.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/ui_primitives.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/user_interface.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/user_interface.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,57 +57,57 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Batch.start.executor": "Run",
-    "Batch.win_rebuild_and_run_containers.executor": "Run",
-    "Batch.win_start_redis_server_on_wsl.executor": "Run",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python tests.Python tests for test_MessageSystem.TestMessageSystem.test_callback_unregistering.executor": "Run",
-    "Python tests.Python tests for test_MessageSystem.TestMessageSystem.test_id_sequence.executor": "Run",
-    "Python tests.Python tests for test_MessageSystem.TestMessageSystem.test_message_system_receivers_ignore_unsubscribed_channel.executor": "Run",
-    "Python tests.Python tests for test_MessageSystem.TestMessageSystem.test_message_system_single_message.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_by_signature.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_register_user.executor": "Run",
-    "Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_remove_old_entries.executor": "Run",
-    "Python tests.Python tests for test_config_loader.IConfigLoaderFactoryTestCase.executor": "Run",
-    "Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.executor": "Run",
-    "Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_on_user_request_responds_with_cached_response.executor": "Run",
-    "Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_send_request_create_a_placeholder_response_in_buffer.executor": "Run",
-    "Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_send_request_saves_result_to_a_response_buffer.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_refreshes_msg.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_response.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_response_time_out.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_turn_off_refresh_on_touch.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_default_timed_out.executor": "Run",
-    "Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_get_not_existing_response.executor": "Run",
-    "Python tests.Python tests in UnitTests.executor": "Run",
-    "Python tests.Python tests in test_SocketManager.py.executor": "Run",
-    "Python tests.Python tests in test_room.py.executor": "Run",
-    "Python tests.Unittests for UnitTests.test_move_generator.TestPythonMoveGen.executor": "Run",
-    "Python tests.Unittests for UnitTests.test_move_generator.executor": "Run",
-    "Python tests.Unittests for test_move_generator.TestCMoveGen.executor": "Run",
-    "Python.Authenticator.executor": "Run",
-    "Python.ConfigManager.executor": "Run",
-    "Python.Frontend.executor": "Run",
-    "Python.GenerateSecrets.executor": "Run",
-    "Python.RoomMessageCode.executor": "Run",
-    "Python.RunGameNode.executor": "Run",
-    "Python.Server.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Pawwz/Desktop/Stratego - server/Python_Implementation/pythonProject/Environment/scripts/win_rebuild_and_run_containers.bat",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Batch.start.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.win_rebuild_and_run_containers.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.win_start_redis_server_on_wsl.executor&quot;: &quot;Run&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python tests.Python tests for test_MessageSystem.TestMessageSystem.test_callback_unregistering.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_MessageSystem.TestMessageSystem.test_id_sequence.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_MessageSystem.TestMessageSystem.test_message_system_receivers_ignore_unsubscribed_channel.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_MessageSystem.TestMessageSystem.test_message_system_single_message.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_by_signature.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_emit_multiple_sockets_for_single_user.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_register_user.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_SocketManager.SocketManagerTestCase.test_remove_old_entries.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_config_loader.IConfigLoaderFactoryTestCase.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_on_user_request_responds_with_cached_response.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_send_request_create_a_placeholder_response_in_buffer.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_gamenodeApiHandler.TestGameNodeApiHandler.test_send_request_saves_result_to_a_response_buffer.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_refreshes_msg.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_get_response.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_response_time_out.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestResponseBufferer.test_turn_off_refresh_on_touch.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_default_timed_out.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_response_bufferer.TestUserResponseBufferer.test_get_not_existing_response.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in UnitTests.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_SocketManager.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_room.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Unittests for UnitTests.test_move_generator.TestPythonMoveGen.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Unittests for UnitTests.test_move_generator.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Unittests for test_move_generator.TestCMoveGen.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Authenticator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ConfigManager.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Frontend.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GenerateSecrets.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RoomMessageCode.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RunGameNode.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Server.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Pawwz/Desktop/Stratego - server/Python_Implementation/pythonProject/Environment/scripts/win_rebuild_and_run_containers.bat&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Pawwz\Desktop\Stratego - server\Python_Implementation\pythonProject\src\Core" />
@@ -115,7 +122,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in UnitTests">
+  <component name="RunManager" selected="Batch.start">
     <configuration name="start" type="BatchConfigurationType" factoryName="Batch" temporary="true">
       <module name="pythonProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -215,10 +222,10 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.RunGameNode" />
-        <item itemvalue="Python tests.Python tests in UnitTests" />
         <item itemvalue="Python.Server" />
+        <item itemvalue="Python.RunGameNode" />
         <item itemvalue="Batch.start" />
+        <item itemvalue="Python tests.Python tests in UnitTests" />
         <item itemvalue="Python.RoomMessageCode" />
       </list>
     </recent_temporary>
@@ -335,7 +342,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738228918082</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="- Fixed bug where timer would not load if user refreshed the page during setup phase&#10;- Fixed the bug where timer would show 0 before player would make their first move">
+      <option name="closed" value="true" />
+      <created>1740359189732</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1740359189732</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -375,6 +390,7 @@
     <MESSAGE value="- Small refactoring on folder structure&#10;- Added support for SQLite" />
     <MESSAGE value="Now app can be started using docker-compose" />
     <MESSAGE value="small bugfixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="small bugfixes" />
+    <MESSAGE value="- Fixed bug where timer would not load if user refreshed the page during setup phase&#10;- Fixed the bug where timer would show 0 before player would make their first move" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Fixed bug where timer would not load if user refreshed the page during setup phase&#10;- Fixed the bug where timer would show 0 before player would make their first move" />
   </component>
 </project>

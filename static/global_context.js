@@ -3,6 +3,8 @@ import { SeatSelectorWindowModel } from "./side_selector.js";
 import { GeneralChatModel } from "./chat.js";
 import {Clock} from "./clock.js"
 import {RematchWindowModel} from "./rematch_window.js"
+import {SetupSubmitionWindowModel} from "./setup.js"
+
 export class User{
     constructor(){
         this.profilePicture = null;
@@ -131,6 +133,8 @@ class AppGlobalContext{
         this.userService = new UserService();
 
         this.rematchWindowModel = new RematchWindowModel();
+        this.submitSetupWindowModel = new SetupSubmitionWindowModel();
+
         this.red_clock = new Clock(100);
         this.blue_clock = new Clock(100);
         this.userList = [];

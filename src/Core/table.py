@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import time
 from enum import Enum
-from math import floor
 from typing import Callable
 
 from src.Core.GameInstanceFactory import GameInstanceFactory
@@ -196,7 +195,7 @@ class SeatManagerWithReadyCommand(SeatManager):
 
     def __init__(self, set_table_to_setup_phase: Callable,
                  job_manager: JobManager, transmission_time_ms: int,
-                 on_ready_change: Callable[[Side, bool], any],
+                 on_ready_change: Callable[[Side, bool, ...], any],
                  seat_observer: Callable[[int, Side], any],
                  player_info_manager: PlayerInfoManager):
         super().__init__(set_table_to_setup_phase, seat_observer, player_info_manager)
@@ -205,6 +204,7 @@ class SeatManagerWithReadyCommand(SeatManager):
         self._transmission_task: DelayedTask | None = None
         self.job_manager = job_manager
         self._transmission_time_ms = transmission_time_ms
+        self._start_clock = Timer()
 
     def _phase_init(self, clear_seats: bool = True):
         """Initialize phase."""
@@ -214,9 +214,8 @@ class SeatManagerWithReadyCommand(SeatManager):
     def _phase_logic(self):
         """Main game logic in active phase."""
         if self._readiness[Side.red] and self._readiness[Side.blue] and self._transmission_task is None:
-            task = self._player_info_manager.count_down_both_clocks(
-                self._transmission_time_ms,
-                lambda: self._set_table_to_setup_phase())
+            callback = self._set_table_to_setup_phase
+            task = self._start_clock.count_down(self._transmission_time_ms, callback)
             self.job_manager.add_delayed_task(task)
             self._transmission_task = task
 
@@ -234,7 +233,7 @@ class SeatManagerWithReadyCommand(SeatManager):
             if v == user_id:
                 self.seats[k] = None
                 self._readiness[k] = False
-                self._on_ready_change(k, False)
+                self._on_ready_change(k, False, start_date=self.get_start_date())
 
         if self._transmission_task is not None:
             self._transmission_task.cancel()
@@ -252,7 +251,7 @@ class SeatManagerWithReadyCommand(SeatManager):
             self._transmission_task.cancel()
             self._transmission_task = None
         self._readiness[side] = value
-        self._on_ready_change(side, value)
+        self._on_ready_change(side, value, start_date=self.get_start_date())
         return True, None
 
     def get_readiness(self):
@@ -260,9 +259,15 @@ class SeatManagerWithReadyCommand(SeatManager):
         result = {
             "status": "success",
             "red_player": self._readiness[Side.red],
-            "blue_player": self._readiness[Side.blue]
+            "blue_player": self._readiness[Side.blue],
+            "start_date": self.get_start_date()
         }
         return result
+
+    def get_start_date(self):
+        if self._readiness[Side.red] and self._readiness[Side.blue]:
+            return self._transmission_time_ms
+        return None
 
 
 class SetupManager:
@@ -305,7 +310,11 @@ class SetupManager:
         self.__job_manager.add_delayed_task(self.__setup_timeout_task)
 
     def __phase_logic(self):
-        pass
+        blue_submitted = self.setups[Side.blue] is not None
+        red_submitted = self.setups[Side.red] is not None
+
+        if blue_submitted and red_submitted:
+            self.__set_table_to_gameplay_mode(game_state_from_setups(self.setups[Side.red], self.setups[Side.blue]))
 
     def __phase_finish(self):
         if self.__setup_timeout_task is not None:
@@ -451,11 +460,12 @@ class Table:
             self.__player_info_manager = PlayerInfoManager()
 
         def get_sm_constructor(self):
-            def __on_ready_change(side: Side, value: bool):
+            def __on_ready_change(side: Side, value: bool, start_date: int | None = None):
                 event = {
                     "type": "ready_event",
                     "side": "red" if side is Side.red else "blue",
-                    "value": value
+                    "value": value,
+                    "start_date": start_date
                 }
                 self.__event_broadcast(event)
 
