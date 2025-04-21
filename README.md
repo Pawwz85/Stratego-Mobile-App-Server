@@ -33,3 +33,11 @@ If you wish to run this app locally:
 4. Visit localhost:8123, to see the app running
 5. You can login on one of two predefined accounts "tester" and "tester2" via password "123"
 ---
+
+## Screenshoots
+![image](https://github.com/user-attachments/assets/2b3f2361-8828-4c7c-b7b9-cc29ca328ff5)
+
+![image](https://github.com/user-attachments/assets/588aecad-1592-463d-b6b2-000c78919059)
+
+![image](https://github.com/user-attachments/assets/21851ccf-c26f-4ee5-8dfd-7c8b56d5b5a7)
+
