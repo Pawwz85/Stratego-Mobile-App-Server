@@ -19,7 +19,7 @@ Thanks to this design, one could easily place this app behind a load balancer.
 
 ## Websocket Protocol
 
-Check the \`protocol.odt\` file. Note: The registration mechanism has not yet been implemented.
+Check the \`protocol.odt\` file. 
 
 ## Running the App Locally
 
@@ -31,4 +31,5 @@ If you wish to run this app locally:
    docker-compose up
    ```
 4. Visit localhost:8123, to see the app running
+5. You can login on one of two predefined accounts "tester" and "tester2" via password "123"
 ---
